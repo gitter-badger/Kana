@@ -1,11 +1,15 @@
 package com.zaheylu.kana;
 
-import java.io.File;
+import static com.zaheylu.CodeLibary.*;
+
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -16,7 +20,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import static com.zaheylu.CodeLibary.*;
 
 
 public class ReadXMLVocabulary {
@@ -24,15 +27,10 @@ public class ReadXMLVocabulary {
 	private SAXParserFactory factory;
 	private SAXParser saxParser;
 
-
 	private final String emptyEntry = String.valueOf(new char[] {
 			(char) 10, (char) 9, (char) 9 });
 
-	public ReadXMLVocabulary() throws ParserConfigurationException, SAXException {
-		factory = SAXParserFactory.newInstance();
-		saxParser = factory.newSAXParser();
 
-	}
 
 	private class VocHandler extends DefaultHandler {
 		public TVocabulary list;
@@ -103,7 +101,7 @@ public class ReadXMLVocabulary {
 			if (qName.equalsIgnoreCase("ENTRY")) {
 				if (tmpWord.getKana().compareTo(emptyEntry) != 0) {
 					list.add(tmpWord);
-					System.out.println("Loaded Word: " + tmpWord.getEngl());
+					System.out.print(tmpWord.getEngl() + ", ");
 				} else System.out.print("[]");
 			}
 		}
@@ -148,23 +146,19 @@ public class ReadXMLVocabulary {
 				present = false;
 			}
 		}
-		
-		public void startDocument() throws SAXException {
-	        System.out.println("start document   : ");
-	    }
 
-	    public void endDocument() throws SAXException {
-	        System.out.println("end document     : ");
-	    }
+		public void startDocument() throws SAXException {
+		}
+
+		public void endDocument() throws SAXException {
+		}
 	}// end class voc handler
 
 
-
-	public TVocabulary loadVocabulary(String path) throws SAXException, IOException, ParserConfigurationException {
-		File file = new File(path);
-		InputStream inputStream = new FileInputStream(file);
+	private TVocabulary loadVocabulary(InputStream inputStream) throws ParserConfigurationException, SAXException, UnsupportedEncodingException {
+		factory = SAXParserFactory.newInstance();
+		saxParser = factory.newSAXParser();
 		Reader reader = new InputStreamReader(inputStream, "UTF-8");
-
 		InputSource is = new InputSource(reader);
 		is.setEncoding("UTF-8");
 		VocHandler handler = new VocHandler();
@@ -173,16 +167,15 @@ public class ReadXMLVocabulary {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*for (int n = list.size() - 1; n > -1; n--) {
-			if (list.get(n).getJp().length() == 3) {
-				if (list.get(n).getJp().equalsIgnoreCase(String.valueOf(new char[] {
-						(char) 10, (char) 9, (char) 9 }))) {
-					list.remove(n);
-
-				}
-			}
-
-		}*/
 		return handler.list;
+	}
+
+
+	public TVocabulary loadVocabulary(URL path) throws IOException, ParserConfigurationException, SAXException {
+		return loadVocabulary(path.openStream());
+	}
+
+	public TVocabulary loadVocabulary(String path) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException  {
+		return loadVocabulary(new FileInputStream(path));
 	}
 }

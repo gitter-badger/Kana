@@ -1,7 +1,7 @@
 package com.zaheylu.kana;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,18 +17,26 @@ import org.xml.sax.SAXException;
 
 
 public class ReadXMLEntryNames {
-	private String path;
 
-	public ReadXMLEntryNames(String path) {
-		this.path = path;
+	public ReadXMLEntryNames() {
+
 	}
 
-	public ArrayList<String> load() throws ParserConfigurationException, SAXException, IOException {
-		System.out.println("Loading names from " + path);
-		File fXmlFile = new File(path);
+
+
+	public ArrayList<String> load(String path) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		Document doc = dBuilder.parse(fXmlFile);
+		return load(dBuilder.parse(path));
+	}
+
+	public ArrayList<String> load(URL path) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		return load(dBuilder.parse(path.openStream()));
+	}
+
+	private ArrayList<String> load(Document doc) throws ParserConfigurationException, SAXException, IOException {
 
 		doc.getDocumentElement().normalize();
 
@@ -41,7 +49,7 @@ public class ReadXMLEntryNames {
 
 			Node nNode = nList.item(temp);
 
-			// 
+			//
 
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -51,11 +59,10 @@ public class ReadXMLEntryNames {
 				for (int n = 0; n < eElement.getElementsByTagName("name").getLength(); n++) {
 					String s = eElement.getElementsByTagName("name").item(n).getTextContent();
 					list.add(s);
-					System.out.println(s);
+					System.out.print(s + ", ");
 				}
 			}
 		}
-		System.out.println("Completed Loading names from " + path);
 		return list;
 	}
 }

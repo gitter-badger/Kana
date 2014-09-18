@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.zaheylu.JCheckDialog;
-import com.zaheylu.ReadXMLUTF8FileSAX;
 
 
 public class KanaWindow extends JFrame {
@@ -197,40 +197,47 @@ public class KanaWindow extends JFrame {
 
 		loadXMLs();
 
-
 		this.setVisible(true);
 	}
 
 	private void loadXMLs() {
-		System.out.println("XML Loading...");
-		/* 	AS LONG IT DOESN'T SERVE ANY PURPOSE THERE'S NO NEED TO IMPLEMENT IT... JUST ANOTHER BUG CATCHER... ALSO: TODO: IMPLEMENT USERS
-		ReadXMLUsers reader = new ReadXMLUsers(path + "users.xml");
-		try {
-			reader.load();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			System.out.println("Could not load Users.");
-			e.printStackTrace();
-		}
-		*/
+		System.out.print("\tXML Loading started.\n\nGroups:\n");
+		loadGroups("Groups.xml");
+		System.out.print("\n\nVocabulary:\n");
+		loadVocabulary("Vocabulary.xml");
+		System.out.print("\n\n\tXML Loading closed.\n");
+	}
 
+
+
+
+	private void loadGroups(String fileName) {
 		try {
-			ReadXMLEntryNames reader = new ReadXMLEntryNames(path + "Groups.xml");
-			groups = new TGroups(reader.load());
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			System.out.println("Could not load Groups.");
-			e.printStackTrace();
+			ReadXMLEntryNames reader = new ReadXMLEntryNames();
+			if (new File(path + fileName).exists()) {
+				groups = new TGroups(reader.load(path + fileName));
+			} else {
+				groups = new TGroups(reader.load(KanaWindow.class.getResource("/lib/" + fileName)));
+			}
+
+		} catch (ParserConfigurationException | SAXException | IOException err) {
+			err.printStackTrace();
 		}
+	}
+
+	private void loadVocabulary(String fileName) {
 
 		try {
 			ReadXMLVocabulary vocReader = new ReadXMLVocabulary();
-			vocabulary = vocReader.loadVocabulary(path + "vocabulary.xml");
+			if (new File(path + fileName).exists()) {
+				vocabulary = vocReader.loadVocabulary(path + fileName);
+			} else {
+				vocabulary = vocReader.loadVocabulary(KanaWindow.class.getResource("/lib/" + fileName));
+			}
+
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			System.out.println("Could not load Vocabulary.");
 			e.printStackTrace();
 		}
-
-		System.out.println("\nXML Loading closed.");
-
 	}
 
 
@@ -244,16 +251,6 @@ public class KanaWindow extends JFrame {
 	private class MntmLoadActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 
-			try {
-				ReadXMLEntryNames reader = new ReadXMLEntryNames(path + "users.xml");
-				reader.load();
-				ReadXMLUTF8FileSAX reader2 = new ReadXMLUTF8FileSAX(path + "users.xml");
-				reader2.load();
-
-			} catch (ParserConfigurationException | SAXException | IOException e) {
-				e.printStackTrace();
-				System.out.println("Could not load user file. Creating new Profile");
-			}
 
 		}
 	}
