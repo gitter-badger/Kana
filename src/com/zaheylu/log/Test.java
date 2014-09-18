@@ -1,12 +1,12 @@
 package com.zaheylu.log;
 
-public class LogTest {
+public class Test {
 
 	public static void main(String[] args) {
-		new LogTest();
+		new Test();
 	}
 
-	public LogTest() {
+	public Test() {
 		Log.enableLogOutput();
 		Log.setLog("1", "a");
 		Log.setLog("1", "a");

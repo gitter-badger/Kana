@@ -12,3 +12,6 @@
 # Script files
 *.iss
 *.bat
+
+# Test files
+Test.java
