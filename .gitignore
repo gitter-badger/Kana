@@ -12,6 +12,7 @@
 # Script files
 *.iss
 *.bat
+*.sh
 
 # Test files
 Test.java
