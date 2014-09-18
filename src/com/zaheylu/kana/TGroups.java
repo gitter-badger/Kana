@@ -38,4 +38,12 @@ public class TGroups {
 		return result;
 	}
 
+	public String[] toStringArray(TVocabulary vocabulary) {
+		String[] result = new String[groups.size()];
+		for (int n = 0; n < groups.size(); n++) {
+			result[n] = groups.get(n) + " (" + vocabulary.size(n) + " words)";
+		}
+		return result;
+	}
+
 }

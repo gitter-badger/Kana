@@ -25,11 +25,31 @@ public class TVocabulary {
 		return result;
 	}
 
+	public ArrayList<TWord> getFiltered(int filter) {
+		ArrayList<TWord> result = new ArrayList<TWord>();
+		for (int i = 0; i < words.size(); i++) {
+			int iGroup = words.get(i).getGroup();
+			if (iGroup == filter) result.add(words.get(i));
+		}
+		return result;
+	}
+
+
+
 	public TWord get(int i) {
 		return words.get(i);
 	}
 
 	public int size() {
 		return words.size();
+	}
+
+	public int size(int group) {
+		int result = 0;
+		for (int i = 0; i < words.size(); i++) {
+			int iGroup = words.get(i).getGroup();
+			if (iGroup == group) result++;
+		}
+		return result;
 	}
 }

@@ -59,7 +59,6 @@ public class ReadXMLEntryNames {
 				for (int n = 0; n < eElement.getElementsByTagName("name").getLength(); n++) {
 					String s = eElement.getElementsByTagName("name").item(n).getTextContent();
 					list.add(s);
-					System.out.print(s + ", ");
 				}
 			}
 		}

@@ -18,6 +18,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import com.zaheylu.log.Log;
+
 public class KanaCharacterChoose extends JDialog {
 	public KanaCharacterChoose() {
 		// choose(2);
@@ -57,6 +59,7 @@ public class KanaCharacterChoose extends JDialog {
 
 	public int[] choose(int mode) {
 
+		Log.event("CharacterChoose");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 220, 165);
 		setModal(true);
@@ -185,11 +188,12 @@ public class KanaCharacterChoose extends JDialog {
 
 	private class BtnHelpActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			showmessage("Items are loaded from '" + System.getProperty("user.home") + "\\Documents\\kana\\vocabulary.xml'"
-					+ "\nYou can add any vocabulary by easily editing this file using the standard xml format."
-					+ "\nThough you might want to use notepad++ for editing because most text editors out there do not support UTF-8 w/o BOM encoding"
-					+ "\n\nAlso it is recommended to keep a copy the file in case you edited anything "
-					+ "because it gets overwritten with every update if you check the 'databases' component to be installed during the installation.");
+			showmessage("The Vocabulary is loaded into the program by xml files containing the vocabulary"
+					+ "\nThese xml files are located in '" + Log.getLog("Path.Vocabulary") + "'" 
+					+ "\nYou can edit these files if you wish to make changes to the vocabulary."
+					+ "\n\nImportant note for editing files: The Vocabulary.xml in 'UTF-8 w/o BOM encoding'."
+					+ "\nBe sure to maintain this encoding type because else it won't work."
+					+ "\nNotepad++ is recommended for editing.");
 		}
 	}
 

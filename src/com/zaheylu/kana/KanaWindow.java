@@ -10,10 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -33,36 +33,42 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.zaheylu.JCheckDialog;
+import com.zaheylu.log.Log;
 
 
 public class KanaWindow extends JFrame {
 
-	private String path = System.getProperty("user.home") + "\\Documents\\kana\\";
+	private String path;
 	private int[] options;
-	private JMenuBar menuBar;
+
 	private JPanel panelType;
 	private JPanel panelChoose;
 	private JPanel panelVocabulary;
+
 	private JLabel lblType;
 	private JLabel lblTypeHelp;
 	private JTextField tfType;
 	private JTextField tfTypeTmp;
-	private JLabel lblVocHelp;
-	private JLabel lblVoc;
+
 	private JTextField tfVoc;
+	private JLabel lblVocHelp;
+	private JLabel lblVocHira;
+	private JLabel lblVocKata;
+	private JLabel lblVoc;
 	private JLabel lblVocComment;
 
 	private TVocabulary vocabulary;
 	private TGroups groups;
 	private TWord currentVoc;
 	private ArrayList<TWord> currentWordPool;
-	private JLabel lblVocHira;
-	private JLabel lblVocKata;
 	private ArrayList<String> possibleAnswers;
-	private JFrame thisFrame = this;
+	private KanaWindow thisFrame = this;
 
 
 	public KanaWindow() {
+		this.path = System.getProperty("user.home") + "\\Documents\\kana\\";
+		Log.setLog("Path.User", path);
+
 		ImageIcon icon = new ImageIcon(KanaWindow.class.getResource("/res/kana_small.png"));
 		setIconImage(icon.getImage());
 		this.setSize(634, 317);
@@ -86,12 +92,24 @@ public class KanaWindow extends JFrame {
 		getContentPane().add(panelType);
 		panelType.setLayout(null);
 
+		Log.event("initComponents");
+		initComponents();
+
+		showPanel(null);
+
+		loadXMLs();
+
+		Log.event("showWindow");
+		this.setVisible(true);
+	}
+
+	private void initComponents() {
 
 		tfType = new JTextField();
 		tfTypeTmp = new JTextField();
 		TfTypeKeyListener tmp = new TfTypeKeyListener(tfType.getDocument(), tfTypeTmp.getDocument());
 		tfTypeTmp.getDocument().addDocumentListener(tmp);
-		tfType.addKeyListener((KeyListener) tmp);
+		tfType.addKeyListener(tmp);
 		tfType.getDocument().addDocumentListener(tmp);
 		tfType.setBounds(10, 221, 194, 20);
 		tfType.setColumns(10);
@@ -152,7 +170,7 @@ public class KanaWindow extends JFrame {
 		lblPressEnter.setBounds(496, 218, 68, 14);
 		panelVocabulary.add(lblPressEnter);
 
-		menuBar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
 		JMenu mnProgram = new JMenu("Program");
@@ -192,32 +210,28 @@ public class KanaWindow extends JFrame {
 		JMenuItem mntmCheckForUpdates = new JMenuItem("Check for Updates");
 		mntmCheckForUpdates.addActionListener(new MntmCheckForUpdatesActionListener());
 		mnInfo.add(mntmCheckForUpdates);
-
-		showPanel(null);
-
-		loadXMLs();
-
-		this.setVisible(true);
 	}
 
 	private void loadXMLs() {
-		System.out.print("\tXML Loading started.\n\nGroups:\n");
+		Log.event("loadXML");
+
 		loadGroups("Groups.xml");
-		System.out.print("\n\nVocabulary:\n");
 		loadVocabulary("Vocabulary.xml");
-		System.out.print("\n\n\tXML Loading closed.\n");
 	}
 
-
-
-
 	private void loadGroups(String fileName) {
+		Log.event("Load Groups");
 		try {
 			ReadXMLEntryNames reader = new ReadXMLEntryNames();
 			if (new File(path + fileName).exists()) {
-				groups = new TGroups(reader.load(path + fileName));
+				String path = this.path + fileName;
+				Log.setLog("Path.Group", path);
+				groups = new TGroups(reader.load(path));
 			} else {
-				groups = new TGroups(reader.load(KanaWindow.class.getResource("/lib/" + fileName)));
+				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
+				Log.setLog("Path.Group", path);
+				groups = new TGroups(reader.load(path));
+				Log.setLog("Loaded.Group", groups);
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException err) {
@@ -226,21 +240,24 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void loadVocabulary(String fileName) {
-
+		Log.event("Load Vocabulary");
 		try {
 			ReadXMLVocabulary vocReader = new ReadXMLVocabulary();
 			if (new File(path + fileName).exists()) {
-				vocabulary = vocReader.loadVocabulary(path + fileName);
+				String path = this.path + fileName;
+				Log.setLog("Path.Vocabulary", path);
+				vocabulary = vocReader.loadVocabulary(path);
 			} else {
-				vocabulary = vocReader.loadVocabulary(KanaWindow.class.getResource("/lib/" + fileName));
+				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
+				Log.setLog("Path.Vocabulary", path);
+				vocabulary = vocReader.loadVocabulary(path);
+				Log.setLog("Loaded.Vocabulary", vocabulary);
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	private class MntmExitActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
@@ -250,7 +267,6 @@ public class KanaWindow extends JFrame {
 
 	private class MntmLoadActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-
 
 		}
 	}
@@ -339,7 +355,7 @@ public class KanaWindow extends JFrame {
 			if (vocabulary != null) if (vocabulary.size() > 0) {
 				options = new KanaCharacterChoose().choose(2);
 				if (options[0] != -1) {
-					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArray(), 2).choose();
+					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArray(vocabulary), 2).choose();
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
 						currentWordPool = vocabulary.getFiltered(choices);
 						showPanel(panelVocabulary);
@@ -428,6 +444,7 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void newType() {
+		Log.event("newType");
 		int val;
 		if (options[0] != 3) {
 			do {
@@ -441,7 +458,7 @@ public class KanaWindow extends JFrame {
 	}
 
 	public void newVocabulary() {
-
+		Log.event("newVocabulary");
 		// SELECT A NEW WORD
 		int val;
 		do {
@@ -479,11 +496,13 @@ public class KanaWindow extends JFrame {
 	}
 
 	public void newChoose() {
+		Log.event("newChoose");
 		showmessage("Sorry, this choosing thing is not implemented,\n'cause I really didn't think anybody would use it. I won't be using it either."
 				+ "\n\nFeel free to contact me if you want this to be implemented.\nIt wouldn't imply much effort really.");
 	}
 
 	public void showPanel(JPanel panel) {
+		Log.event("showPanel");
 		panelVocabulary.setVisible(false);
 		panelType.setVisible(false);
 		panelChoose.setVisible(false);
@@ -492,10 +511,12 @@ public class KanaWindow extends JFrame {
 	}
 
 	public void f5() {
+		Log.event("Repaint");
 		this.repaint();
 	}
 
 	public ArrayList<String> getPossibleAnswers(String arg) {
+		Log.event("getPossibleAnswers");
 		ArrayList<String> result = new ArrayList<String>();
 		for (int n = 0; n < vocabulary.size(); n++)
 			for (int m = 0; m < vocabulary.get(n).getEngl().size(); m++) {

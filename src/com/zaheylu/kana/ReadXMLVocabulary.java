@@ -101,8 +101,7 @@ public class ReadXMLVocabulary {
 			if (qName.equalsIgnoreCase("ENTRY")) {
 				if (tmpWord.getKana().compareTo(emptyEntry) != 0) {
 					list.add(tmpWord);
-					System.out.print(tmpWord.getEngl() + ", ");
-				} else System.out.print("[]");
+				}
 			}
 		}
 

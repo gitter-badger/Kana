@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.zaheylu.log.Log;
+
 public class JCheckDialog extends JDialog {
 
 	private JCheckBox[] boxes;
@@ -101,6 +103,7 @@ public class JCheckDialog extends JDialog {
 	}
 
 	public ArrayList<Integer> choose() {
+		Log.event("ChooseCheck");
 		this.setVisible(true);
 		return choices;
 	}
