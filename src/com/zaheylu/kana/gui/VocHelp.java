@@ -1,6 +1,6 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.gui;
 
-import static com.zaheylu.CodeLibary.*;
+import static com.zaheylu.snippets.CodeLibary.*;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -9,6 +9,9 @@ import java.awt.event.KeyListener;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import com.zaheylu.kana.KanaLib;
+import com.zaheylu.kana.words.TWord;
 
 public class VocHelp extends JDialog {
 

@@ -2,7 +2,7 @@ package com.zaheylu.log;
 
 import java.util.ArrayList;
 
-import com.zaheylu.ToString;
+import com.zaheylu.snippets.ToString;
 
 public class Log {
 	private static ArrayList<LogEntry> log = new ArrayList<LogEntry>();

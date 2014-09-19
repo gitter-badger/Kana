@@ -27,7 +27,7 @@ public class Version {
 
 	private static final String LOCALE_ID = "$0407";
 
-	public Version() {
+	public static void loadVersion() {
 		try {
 			MAJOR_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version1"))).readLine());
 			MINOR_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version2"))).readLine());

@@ -1,6 +1,4 @@
-package com.zaheylu.kana;
-
-import static com.zaheylu.CodeLibary.*;
+package com.zaheylu.kana.gui;
 
 import java.awt.Desktop;
 import java.awt.FlowLayout;
@@ -16,48 +14,68 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import static com.zaheylu.snippets.CodeLibary.showmessage;
+import com.zaheylu.kana.Version;
+
 public class KanaAbout extends JDialog {
 
 	private final JPanel panel2 = new JPanel();
 
-
-
 	public KanaAbout() {
 		ImageIcon icon = new ImageIcon(KanaWindow.class.getResource("/res/kana_small.png"));
 		setIconImage(icon.getImage());
-		setBounds(100, 100, 372, 300);
+		setBounds(100, 100, 525, 294);
 		getContentPane().setLayout(null);
 		{
 			JPanel panel1 = new JPanel();
-			panel1.setBounds(0, 0, 131, 229);
+			panel1.setBounds(0, 0, 335, 222);
 			getContentPane().add(panel1);
 			setLocationRelativeTo(null);
 			panel1.setBorder(new EmptyBorder(5, 5, 5, 5));
-			panel1.setLayout(new GridLayout(9, 1, 0, 10));
+			panel1.setLayout(new GridLayout(10, 1, 0, 3));
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			setModal(true);
-			JLabel label = new JLabel("");
-			panel1.add(label);
 			{
-				JLabel lblKanaTrainer = new JLabel("Kana Trainer");
-				panel1.add(lblKanaTrainer);
+				JPanel panel = new JPanel();
+				panel1.add(panel);
 			}
 			{
-				JLabel lblVersion = new JLabel("Version " + Version.getShortVersion());
-				panel1.add(lblVersion);
-			}
-			{
-				JLabel lblKanaTrainerBy = new JLabel("Written By Zaheylu");
-				panel1.add(lblKanaTrainerBy);
+				JLabel lblProgram = new JLabel("Kana Trainer " + Version.getShortVersion() + " by Zaheylu ");
+				panel1.add(lblProgram);
 			}
 
-			JLabel lblSnailsBySkype = new JLabel("Snails By Skype");
-			panel1.add(lblSnailsBySkype);
+			JLabel lblHttpGit = new JLabel("http://zaheylu.github.io/Kana/");
+			panel1.add(lblHttpGit);
 
-			JLabel lblBeatsByDre = new JLabel("Beats By Dre");
-			panel1.add(lblBeatsByDre);
+			JLabel lblHttpSetup = new JLabel("http://hafnehau.square7.ch/kana/");
+			panel1.add(lblHttpSetup);
+			{
+				JPanel panel = new JPanel();
+				panel1.add(panel);
+			}
+			{
+				JLabel lblCopyright = new JLabel("Copyright (C) 2014 Simon Lange");
+				panel1.add(lblCopyright);
+			}
+			{
+				JPanel panel = new JPanel();
+				panel1.add(panel);
+			}
+			{
+				JLabel lblLicence1 = new JLabel("This is free software.");
+				panel1.add(lblLicence1);
+			}
+			{
+				JLabel lblLicence2 = new JLabel("Licenced under GNU GENERAL PUBLIC LICENSE Version 2");
+				panel1.add(lblLicence2);
+			}
+			{
+				JLabel lblLicence3 = new JLabel("http://www.gnu.org/licenses/gpl-2.0.html");
+				panel1.add(lblLicence3);
+			}
+			
 		}
-		panel2.setBounds(135, 0, 221, 229);
+		panel2.setBounds(258, 0, 300, 222);
 		panel2.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(panel2);
 		panel2.setLayout(new GridLayout(0, 1, 0, 0));
@@ -67,7 +85,7 @@ public class KanaAbout extends JDialog {
 
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 229, 356, 33);
+			buttonPane.setBounds(0, 223, 509, 33);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane);
 			{
@@ -84,6 +102,7 @@ public class KanaAbout extends JDialog {
 				buttonPane.add(contactButton);
 			}
 		}
+	
 		setVisible(true);
 	}
 

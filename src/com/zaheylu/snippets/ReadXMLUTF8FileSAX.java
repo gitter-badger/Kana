@@ -1,4 +1,4 @@
-package com.zaheylu;
+package com.zaheylu.snippets;
 
 import java.io.File;
 import java.io.FileInputStream;

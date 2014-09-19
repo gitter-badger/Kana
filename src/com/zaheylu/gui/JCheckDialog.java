@@ -1,4 +1,4 @@
-package com.zaheylu;
+package com.zaheylu.gui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

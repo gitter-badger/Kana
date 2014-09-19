@@ -1,6 +1,5 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.gui;
 
-import static com.zaheylu.CodeLibary.*;
 import static com.zaheylu.kana.KanaLib.*;
 
 import java.awt.Color;
@@ -32,8 +31,17 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import com.zaheylu.JCheckDialog;
+import com.zaheylu.gui.JCheckDialog;
+import com.zaheylu.kana.KanaCharacterChoose;
+import com.zaheylu.kana.Version;
+import com.zaheylu.kana.words.TGroups;
+import com.zaheylu.kana.words.TVocabulary;
+import com.zaheylu.kana.words.TWord;
+import com.zaheylu.kana.xml.ReadXMLEntryNames;
+import com.zaheylu.kana.xml.ReadXMLVocabulary;
 import com.zaheylu.log.Log;
+
+import static com.zaheylu.snippets.CodeLibary.*;
 
 
 public class KanaWindow extends JFrame {

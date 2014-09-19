@@ -1,4 +1,4 @@
-package com.zaheylu;
+package com.zaheylu.snippets;
 
 import java.awt.Canvas;
 import java.awt.Font;

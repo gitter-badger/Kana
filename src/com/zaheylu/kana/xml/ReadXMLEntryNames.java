@@ -1,4 +1,4 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.xml;
 
 import java.io.IOException;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.words;
 
 import java.util.ArrayList;
 

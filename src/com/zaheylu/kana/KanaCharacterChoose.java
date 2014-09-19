@@ -1,7 +1,5 @@
 package com.zaheylu.kana;
 
-import static com.zaheylu.CodeLibary.*;
-
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -18,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import static com.zaheylu.snippets.CodeLibary.showmessage;
 import com.zaheylu.log.Log;
 
 public class KanaCharacterChoose extends JDialog {

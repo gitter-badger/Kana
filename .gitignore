@@ -13,6 +13,7 @@
 *.iss
 *.bat
 *.sh
+*.ant
 
 # Test files
 Test.java
