@@ -774,9 +774,22 @@
 	</entry>
 	<entry>
 		<group>4</group>
+		<kana>おねがいします</kana>
+		<engl>Please</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>4</group>
+		<kana>ください</kana>
+		<engl>Please give me</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>4</group>
 		<kana>いらっしゃいませ</kana>
 		<engl>Welcome</engl>
 	</entry>
+	
 	<entry>
 		<group>4</group>
 		<kana>じゃあ</kana>
@@ -988,12 +1001,22 @@
 		<kana>まいばん</kana>
 		<engl>Every night</engl>
 	</entry>
-	<entry type="verb">
+	<entry>
 		<group>5</group>
 		<kanji>行く</kanji>
 		<kana>いく</kana>
 		<present>行きます</present>
 		<engl>Go</engl>
 		<comment>destination に/へ</comment>
+	</entry>
+	<entry>
+		<group></group>
+		<kanji></kanji>
+		<kana></kana>
+		<romaji></romaji>
+		<present></present>
+		<engl></engl>
+		<engl></engl>
+		<comment></comment>
 	</entry>
 </Dictionary>

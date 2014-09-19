@@ -98,6 +98,18 @@ public class TWord {
 	public boolean hasPresent() {
 		return (present != null);
 	}
+	
+	private boolean hasKana() {
+		return (kana != null);
+	}
+	
+	private boolean hasEngl() {
+		return (engl.size() > 0);
+	}
+
+	public boolean isValid() {
+		return ((hasKana() || hasKanji()) && hasEngl());
+	}
 
 
 }

@@ -518,7 +518,7 @@ public class KanaWindow extends JFrame {
 
 	public void f5() {
 		Log.event("Repaint");
-		this.repaint();
+		//this.repaint();
 	}
 
 	public ArrayList<String> getPossibleAnswers(String arg) {

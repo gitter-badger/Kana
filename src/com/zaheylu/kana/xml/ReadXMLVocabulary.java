@@ -23,17 +23,17 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TVocabulary;
 import com.zaheylu.kana.words.TWord;
-
-
+import com.zaheylu.log.Log;
 
 public class ReadXMLVocabulary {
 
 	private SAXParserFactory factory;
 	private SAXParser saxParser;
 
-	private final String emptyEntry = String.valueOf(new char[] {
-			(char) 10, (char) 9, (char) 9 });
-
+	// private final String emptyEntry = String.valueOf(new char[] {
+	// (char) 10, (char) 9, (char) 9 });
+	private final String c9 = String.valueOf((char) 9);
+	private final String c10 = String.valueOf((char) 10);
 
 
 	private class VocHandler extends DefaultHandler {
@@ -46,10 +46,28 @@ public class ReadXMLVocabulary {
 		private boolean kanji = false;
 		private boolean group = false;
 		private boolean present = false;
+		private boolean valid = false;
+		private boolean validIdentifier = false;
 		private TWord tmpWord;
+		private int nErr;
 
 		public VocHandler() {
+
+			init();
+		}
+
+		public void init() {
 			list = new TVocabulary();
+			nErr = 0;
+		}
+
+		public int getErrorCount() {
+			return nErr;
+		}
+
+		public boolean isValid(String s) {
+			if (s.contains(c9) || s.contains(c10)) return false;
+			return true;
 		}
 
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -64,6 +82,7 @@ public class ReadXMLVocabulary {
 				}
 			} else if (qName.equalsIgnoreCase("ENTRY")) {
 				tmpWord = new TWord();
+				valid = true;
 				/*
 				 * if (attributes.getValue("type") != null) {
 				 * if (attributes.getValue("type").equalsIgnoreCase("VERB")) tmpWord.setVerb(true);
@@ -74,79 +93,99 @@ public class ReadXMLVocabulary {
 
 			if (qName.equalsIgnoreCase("ENGL")) {
 				engl = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("KANA")) {
 				kana = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("ROMAJI")) {
 				romaji = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("COMMENT")) {
 				comment = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("KANJI")) {
 				kanji = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("GROUP")) {
 				group = true;
+				validIdentifier = true;
 			} else
 
 			if (qName.equalsIgnoreCase("PRESENT")) {
 				present = true;
+				validIdentifier = true;
 			}
 		}
 
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			if (qName.equalsIgnoreCase("ENTRY")) {
-				if (tmpWord.getKana().compareTo(emptyEntry) != 0) {
+				if (valid && tmpWord.isValid()) {
 					list.add(tmpWord);
-				}
+				} else nErr++;
 			}
 		}
 
 		public void characters(char ch[], int start, int length) throws SAXException {
 			if (entry) {
 				entry = false;
-			} else
+			} else {
+				String s = new String(ch, start, length);
+				if (validIdentifier) if (!(isValid(s))) {
+					valid = false;
+				}
+				if (valid) {
+					if (kana) {
+						tmpWord.setKana(s);
+						kana = false;
+						validIdentifier = false;
+					} else
 
-			if (kana) {
-				tmpWord.setKana(new String(ch, start, length));
-				kana = false;
-			} else
+					if (engl) {
+						tmpWord.addEngl(s);
+						engl = false;
+						validIdentifier = false;
+					} else
 
-			if (engl) {
-				tmpWord.addEngl(new String(ch, start, length));
-				engl = false;
-			} else
+					if (romaji) {
+						tmpWord.setRomaji(s);
+						romaji = false;
+						validIdentifier = false;
+					} else
 
-			if (romaji) {
-				tmpWord.setRomaji(new String(ch, start, length));
-				romaji = false;
-			} else
+					if (comment) {
+						tmpWord.setComment(s);
+						comment = false;
+						validIdentifier = false;
+					} else
 
-			if (comment) {
-				tmpWord.setComment(new String(ch, start, length));
-				comment = false;
-			} else
+					if (kanji) {
+						tmpWord.setKanji(s);
+						kanji = false;
+						validIdentifier = false;
+					}
 
-			if (kanji) {
-				tmpWord.setKanji(new String(ch, start, length));
-				kanji = false;
-			}
+					if (group) {
+						tmpWord.setGroup(s);
+						group = false;
+						validIdentifier = false;
+					} else
 
-			if (group) {
-				tmpWord.setGroup(new String(ch, start, length));
-				group = false;
-			} else
-
-			if (present) {
-				tmpWord.setPresent(new String(ch, start, length));
-				present = false;
+					if (present) {
+						tmpWord.setPresent(s);
+						present = false;
+						validIdentifier = false;
+					}
+				}
 			}
 		}
 
@@ -165,11 +204,13 @@ public class ReadXMLVocabulary {
 		InputSource is = new InputSource(reader);
 		is.setEncoding("UTF-8");
 		VocHandler handler = new VocHandler();
+		handler.init();
 		try {
 			saxParser.parse(is, handler);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		if (handler.getErrorCount() > 0) Log.setLog("Vocabulary.Loading.Err.Count", handler.getErrorCount());
 		return handler.list;
 	}
 
@@ -178,7 +219,7 @@ public class ReadXMLVocabulary {
 		return loadVocabulary(path.openStream());
 	}
 
-	public TVocabulary loadVocabulary(String path) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException  {
+	public TVocabulary loadVocabulary(String path) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException {
 		return loadVocabulary(new FileInputStream(path));
 	}
 }
