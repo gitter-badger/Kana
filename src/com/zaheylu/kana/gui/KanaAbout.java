@@ -1,5 +1,7 @@
 package com.zaheylu.kana.gui;
 
+import static com.zaheylu.snippets.CodeLibary.*;
+
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,8 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import static com.zaheylu.snippets.CodeLibary.showmessage;
-import com.zaheylu.kana.Version;
+import com.zaheylu.kana.version.Version;
 
 public class KanaAbout extends JDialog {
 
@@ -31,6 +32,7 @@ public class KanaAbout extends JDialog {
 			panel1.setBounds(0, 0, 335, 222);
 			getContentPane().add(panel1);
 			setLocationRelativeTo(null);
+			setResizable(false);
 			panel1.setBorder(new EmptyBorder(5, 5, 5, 5));
 			panel1.setLayout(new GridLayout(10, 1, 0, 3));
 			setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

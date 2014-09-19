@@ -1,4 +1,4 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.version;
 
 import java.io.BufferedReader;
 import java.io.IOException;

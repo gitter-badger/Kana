@@ -1,5 +1,7 @@
 package com.zaheylu.kana.xml;
 
+import static com.zaheylu.snippets.CodeLibary.*;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,10 +20,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.zaheylu.kana.Version;
+import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TVocabulary;
 import com.zaheylu.kana.words.TWord;
-import static com.zaheylu.snippets.CodeLibary.showmessage;
 
 
 

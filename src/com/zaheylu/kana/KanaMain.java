@@ -1,6 +1,7 @@
 package com.zaheylu.kana;
 
 import com.zaheylu.kana.gui.KanaWindow;
+import com.zaheylu.kana.version.Version;
 import com.zaheylu.log.Log;
 
 public class KanaMain {

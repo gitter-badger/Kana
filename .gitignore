@@ -1,6 +1,7 @@
 # Directories
 /bin
 /output
+/.externalToolBuilders
 
 # Compiled Object files
 *.class
