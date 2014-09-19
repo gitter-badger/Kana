@@ -448,7 +448,7 @@ public class KanaWindow extends JFrame {
 		int val;
 		if (options[0] != 3) {
 			do {
-				val = randInt(0, getAlphabet().length - 1);
+				val = randInt(getAlphabet().length - 1);
 			} while (convert(getAlphabet()[val], 0, options[0]) == lblType.getText());
 			lblType.setText(convert(getAlphabet()[val], 0, options[0]));
 			tfType.requestFocus();
@@ -462,7 +462,7 @@ public class KanaWindow extends JFrame {
 		// SELECT A NEW WORD
 		int val;
 		do {
-			val = randInt(0, currentWordPool.size() - 1);
+			val = randInt(currentWordPool.size() - 1);
 		} while (currentWordPool.get(val) == currentVoc && currentWordPool.size() > 1);
 		currentVoc = currentWordPool.get(val);
 		String from, to;
@@ -472,12 +472,12 @@ public class KanaWindow extends JFrame {
 			if (currentVoc.hasKanji()) from = currentVoc.getKanji();
 			else from = currentVoc.getKana();
 			if (currentVoc.hasPresent()) from += " / " + currentVoc.getPresent();
-			to = currentVoc.getEngl().get(randInt(0, currentVoc.getEngl().size() - 1));
+			to = currentVoc.getEngl().get(randInt(currentVoc.getEngl().size() - 1));
 			lblVocHira.setText("");
 			lblVocKata.setText("");
 
 		} else {
-			from = currentVoc.getEngl().get(randInt(0, currentVoc.getEngl().size() - 1));
+			from = currentVoc.getEngl().get(randInt(currentVoc.getEngl().size() - 1));
 			to = currentVoc.getKana();
 			possibleAnswers = getPossibleAnswers(from);
 		}
@@ -497,8 +497,7 @@ public class KanaWindow extends JFrame {
 
 	public void newChoose() {
 		Log.event("newChoose");
-		showmessage("Sorry, this choosing thing is not implemented,\n'cause I really didn't think anybody would use it. I won't be using it either."
-				+ "\n\nFeel free to contact me if you want this to be implemented.\nIt wouldn't imply much effort really.");
+		showmessage("This feature is not implemented yet.\nI would kindly like to apologize for the inconvenience this may cause.");
 	}
 
 	public void showPanel(JPanel panel) {

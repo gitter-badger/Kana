@@ -7,11 +7,12 @@ public class Version {
 
 	private static final byte MAJOR_VERSION = 0;
 	private static final byte MINOR_VERSION = 2;
-	private static final byte RELEASE_VERSION = 1;
-	private static final int BUILD_VERSION = 65;
+	private static final byte RELEASE_VERSION = 2;
+	private static final int BUILD_VERSION = 1;
 	private static final String ANNEX = "";
 	private static final String ANNEX2 = "";
 	private static final int VOCVERSION = 3;
+	private static final int LOGVERSION = 1;
 	
 	private static final boolean DEBUG_BUILD = true;
 	private static final boolean SPECIAL_BUILD = false;
@@ -21,9 +22,6 @@ public class Version {
 	
 
 	private static final String LOCALE_ID = "$0407";
-		
-	
-	
 	
 	
 	public static String getVersion() {
@@ -96,6 +94,10 @@ public class Version {
 	
 	public static int getVocVersion() {
 		return VOCVERSION;
+	}
+	
+	public static int getLogVersion() {
+		return LOGVERSION;
 	}
 	
 	

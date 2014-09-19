@@ -11,24 +11,21 @@ public class CodeLibary {
 
 	private static Random rand = new Random();
 
-	public static int getHighest(int[] arg) {
-		int result = arg[0];
-		for (int n = 0; n < arg.length; n++)
-			if (arg[n] > result) result = arg[n];
-		return result;
-	}
-
 	public static int getStringWidth(Font font, String txt) {
 		Canvas c = new Canvas();
 		return c.getFontMetrics(font).stringWidth(txt);
 	}
 
 	public static void showmessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg, "Message", 0);
+		JOptionPane.showMessageDialog(null, msg, null, JOptionPane.PLAIN_MESSAGE);
 	}
 
 	public static int randInt(int min, int max) {
 		return rand.nextInt((max - min) + 1) + min;
+	}
+
+	public static int randInt(int max) {
+		return rand.nextInt((max) + 1);
 	}
 
 	public static void strechLbl(JLabel lbl) {
