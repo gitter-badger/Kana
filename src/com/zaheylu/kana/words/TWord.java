@@ -12,7 +12,20 @@ public class TWord {
 	private String present;
 	private int group;
 
-
+	public static TWord getDummyTWord(int i) {
+		TWord result = new TWord();
+		result.setComment(String.valueOf(i));
+		result.setGroup(String.valueOf(i));
+		result.setKana(String.valueOf(i));
+		result.setKanji(String.valueOf(i));
+		result.setPresent(String.valueOf(i));
+		result.setRomaji(String.valueOf(i));
+		result.addEngl(String.valueOf(i));
+		result.addEngl(String.valueOf(i));
+		
+		return result;
+	}
+	
 	public TWord() {
 		engl = new ArrayList<String>();
 		group = 0;

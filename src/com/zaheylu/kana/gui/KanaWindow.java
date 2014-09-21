@@ -33,7 +33,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import com.zaheylu.gui.JCheckDialog;
-import com.zaheylu.kana.KanaCharacterChoose;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
 import com.zaheylu.kana.words.TVocabulary;
@@ -41,6 +40,7 @@ import com.zaheylu.kana.words.TWord;
 import com.zaheylu.kana.xml.ReadXMLEntryNames;
 import com.zaheylu.kana.xml.ReadXMLVocabulary;
 import com.zaheylu.log.Log;
+import com.zaheylu.snippets.CodeLibary;
 
 
 public class KanaWindow extends JFrame {
@@ -58,7 +58,7 @@ public class KanaWindow extends JFrame {
 	private JTextField tfTypeTmp;
 
 	private JTextField tfVoc;
-	private JLabel lblVocHelp;
+	//private JLabel lblVocHelp;
 	private JLabel lblVocHira;
 	private JLabel lblVocKata;
 	private JLabel lblVoc;
@@ -66,10 +66,16 @@ public class KanaWindow extends JFrame {
 
 	private TVocabulary vocabulary;
 	private TGroups groups;
-	private TWord currentVoc;
+	private TWord currentWord;
 	private ArrayList<TWord> currentWordPool;
 	private ArrayList<String> possibleAnswers;
+
 	private KanaWindow thisFrame = this;
+
+	private int examIndex;
+	private ArrayList<TWord> examCorrect;
+	private ArrayList<TWord> examWrong;
+	private int[] examOrder;
 
 
 	public KanaWindow() {
@@ -143,13 +149,13 @@ public class KanaWindow extends JFrame {
 		tfVoc.setColumns(10);
 		panelVocabulary.add(tfVoc);
 
-		lblVocHelp = new JLabel("A");
+		/*lblVocHelp = new JLabel("A");
 		lblVocHelp.setForeground(Color.RED);
 		lblVocHelp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVocHelp.setFont(new Font("MS Gothic", Font.BOLD, 120));
 		lblVocHelp.setBounds(0, 11, 608, 126);
 		lblVocHelp.setVisible(false);
-		panelVocabulary.add(lblVocHelp);
+		panelVocabulary.add(lblVocHelp);*/
 
 		lblVoc = new JLabel("B");
 		lblVoc.setBounds(0, 11, 608, 126);
@@ -361,12 +367,13 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			if (vocabulary != null) if (vocabulary.size() > 0) {
 				options = new KanaCharacterChoose().choose(2);
-				if (options[0] != -1) {
+				if (options[0] != KanaCharacterChoose.CANCEL) {
 					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArray(vocabulary), 2).choose();
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
 						currentWordPool = vocabulary.getFiltered(choices);
 						showPanel(panelVocabulary);
-						newVocabulary();
+						if (options[1] == KanaCharacterChoose.EXAM) newExam();
+						else newVocabulary();
 					}
 				}
 			} else {
@@ -404,21 +411,20 @@ public class KanaWindow extends JFrame {
 		}
 
 		public void keyReleased(KeyEvent arg0) {
-			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
-				lblVocHelp.setVisible(false);
-			}
 			if (arg0.getKeyCode() == KeyEvent.VK_S && arg0.isControlDown() && (!(arg0.isShiftDown())) && (!(arg0.isAltDown()))) {
 				tfVoc.setText("");
 				lblVocHira.setText("");
 				lblVocKata.setText("");
-				newVocabulary();
+				if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(false);
+				else newVocabulary();
 			}
 			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 				if (options[0] == 1) {
-					for (int n = 0; n < currentVoc.getEngl().size(); n++) {
-						if (equalsIgnoreCase(currentVoc.getEngl().get(n), tfVoc.getText())) {
+					for (int n = 0; n < currentWord.getEngl().size(); n++) {
+						if (equalsIgnoreCase(currentWord.getEngl().get(n), tfVoc.getText())) {
 							tfVoc.setText("");
-							newVocabulary();
+							if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
+							else newVocabulary();
 						}
 					}
 				} else {
@@ -429,7 +435,8 @@ public class KanaWindow extends JFrame {
 								tfVoc.setText("");
 								lblVocHira.setText("");
 								lblVocKata.setText("");
-								newVocabulary();
+								if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
+								else newVocabulary();
 							}
 						}
 					}
@@ -443,8 +450,7 @@ public class KanaWindow extends JFrame {
 
 		public void keyPressed(KeyEvent arg0) {
 			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
-				// lblVocHelp.setVisible(true);
-				new VocHelp(frame, currentVoc, groups.get(currentVoc.getGroup()));
+				new VocHelp(frame, currentWord, groups.get(currentWord.getGroup()));
 			}
 		}
 
@@ -453,7 +459,7 @@ public class KanaWindow extends JFrame {
 	private void newType() {
 		Log.event("newType");
 		int val;
-		if (options[0] != 3) {
+		if (options[0] != KanaCharacterChoose.KANJI) {
 			do {
 				val = randInt(getAlphabet().length - 1);
 			} while (convert(getAlphabet()[val], 0, options[0]) == lblType.getText());
@@ -464,50 +470,79 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
-	public void newVocabulary() {
-		Log.event("newVocabulary");
-		// SELECT A NEW WORD
-		int val;
-		do {
-			val = randInt(currentWordPool.size() - 1);
-		} while (currentWordPool.get(val) == currentVoc && currentWordPool.size() > 1);
-		currentVoc = currentWordPool.get(val);
-		String from, to;
+	private void newExam() {
+		Log.event("Exam.Started");
+		examIndex = -1;
+		examCorrect = new ArrayList<TWord>();
+		examWrong = new ArrayList<TWord>();
+		examOrder = CodeLibary.randomOrder(currentWordPool.size());
+		newExamWord();
+	}
 
+	private void newExamAnswer(boolean pass) {
+		if (pass) examCorrect.add(currentWord);
+		else examWrong.add(currentWord);
+		newExamWord();
+	}
+
+	private void newExamWord() {
+		examIndex++;
+		if (examIndex != currentWordPool.size()) {
+			currentWord = currentWordPool.get(examOrder[examIndex]);
+			showVoc(currentWord);
+		} else {
+			showPanel(null);
+			new KanaResult(thisFrame, examWrong, examCorrect);
+		}
+
+	}
+
+	private void showVoc(TWord word) {
+		Log.event("newVocabulary");
+		String from;//, to;
 		// CALCULATE TRANSLATION AND POSSIBLE ANSWERS
 		if (options[0] == 1) {
-			if (currentVoc.hasKanji()) from = currentVoc.getKanji();
-			else from = currentVoc.getKana();
-			if (currentVoc.hasPresent()) from += " / " + currentVoc.getPresent();
-			to = currentVoc.getEngl().get(randInt(currentVoc.getEngl().size() - 1));
+			if (word.hasKanji()) from = currentWord.getKanji();
+			else from = word.getKana();
+			if (word.hasPresent()) from += " / " + word.getPresent();
+			//to = word.getEngl().get(randInt(word.getEngl().size() - 1));
 			lblVocHira.setText("");
 			lblVocKata.setText("");
 
 		} else {
-			from = currentVoc.getEngl().get(randInt(currentVoc.getEngl().size() - 1));
-			to = currentVoc.getKana();
+			from = word.getEngl().get(randInt(word.getEngl().size() - 1));
+			//to = word.getKana();
 			possibleAnswers = getPossibleAnswers(from);
 		}
 		// SET TEXT
 		lblVoc.setText(from);
-		strechLbl(lblVoc);
-		lblVocHelp.setText(to);
-		strechLbl(lblVocHelp);
-		if (currentVoc.hasComment()) lblVocComment.setText("(" + currentVoc.getComment() + ")");
+		strechFont(lblVoc);
+		/*lblVocHelp.setText(to);
+		strechObject(lblVocHelp);*/
+		if (word.hasComment()) lblVocComment.setText("(" + word.getComment() + ")");
 		else lblVocComment.setText("");
-		strechLbl(lblVocComment);
+		strechFont(lblVocComment);
 
 		// FOCUS TEXTFIELD
 		tfVoc.requestFocus();
 
 	}
 
-	public void newChoose() {
+	private void newVocabulary() {
+		int val;
+		do {
+			val = randInt(currentWordPool.size() - 1);
+		} while (currentWordPool.get(val) == currentWord && currentWordPool.size() > 1);
+		currentWord = currentWordPool.get(val);
+		showVoc(currentWord);
+	}
+
+	private void newChoose() {
 		Log.event("newChoose");
 		showmessage("This feature is not implemented yet.\nI would kindly like to apologize for the inconvenience this may cause.");
 	}
 
-	public void showPanel(JPanel panel) {
+	private void showPanel(JPanel panel) {
 		Log.event("showPanel");
 		panelVocabulary.setVisible(false);
 		panelType.setVisible(false);
@@ -516,12 +551,12 @@ public class KanaWindow extends JFrame {
 		f5();
 	}
 
-	public void f5() {
+	private void f5() {
 		Log.event("Repaint");
-		//this.repaint();
+		this.repaint();
 	}
 
-	public ArrayList<String> getPossibleAnswers(String arg) {
+	private ArrayList<String> getPossibleAnswers(String arg) {
 		Log.event("getPossibleAnswers");
 		ArrayList<String> result = new ArrayList<String>();
 		for (int n = 0; n < vocabulary.size(); n++)

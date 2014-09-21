@@ -2,12 +2,14 @@ package com.zaheylu.kana.gui;
 
 import static com.zaheylu.snippets.CodeLibary.*;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import com.zaheylu.kana.KanaLib;
@@ -21,11 +23,11 @@ public class VocHelp extends JDialog {
 		JLabel result = new JLabel(txt);
 		result.setBounds(5, y, width - 5, height);
 		result.setFont(font);
-		strechLbl(result);
+		strechFont(result);
 		return result;
 	}
 
-	public VocHelp(JFrame frame, TWord word, String group) {
+	public VocHelp(Component frame, TWord word, String group) {
 		int cY = 0;
 		getContentPane().setLayout(null);
 		// kanji
@@ -71,12 +73,33 @@ public class VocHelp extends JDialog {
 		}
 
 
-		this.setTitle("Group: " + group);
+		if (group != null) this.setTitle("Group: " + group);
 		this.setSize(width, cY + 40);
 		this.setLocationRelativeTo(frame);
 		this.setModal(true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.setResizable(false);
+		this.addMouseListener(new MouseListener() {
+
+			public void mouseClicked(MouseEvent arg0) {
+
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+
+			}
+
+			public void mousePressed(MouseEvent arg0) {
+				dispose();
+			}
+
+			public void mouseReleased(MouseEvent arg0) {
+			}
+		});
 		this.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) {
 				dispose();

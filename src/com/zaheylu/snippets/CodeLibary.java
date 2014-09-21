@@ -28,25 +28,43 @@ public class CodeLibary {
 		return rand.nextInt((max) + 1);
 	}
 
-	public static void strechLbl(JLabel lbl) {
-		Font font = lbl.getFont();
-		String text = lbl.getText();
-
-		int stringWidth = lbl.getFontMetrics(font).stringWidth(text);
-		int componentWidth = lbl.getWidth();
-
-		double widthRatio = (double) componentWidth / (double) stringWidth;
-
-		int newFontSize = (int) (font.getSize() * widthRatio) - 1;
-		int componentHeight = lbl.getHeight();
-
-		// Pick a new font size so it will not be larger than the height of label.
-		int fontSizeToUse = Math.min(newFontSize, componentHeight);
-
-		// Set the label's font size to the newly determined size.
-		lbl.setFont(new Font(font.getName(), font.getStyle(), fontSizeToUse));
+	public static int[] randomOrder(int number) {
+		int[] result = new int[number];
+		int[] helper = new int[number];
+		for (int n = 0; n < number; n++) {
+			helper[n] = n;
+		}
+		for (int n = 0; n < number; n++) {
+			int random = randInt(number - n - 1);
+			result[n] = helper[random];
+			int exchange = helper[random];
+			helper[random] = helper[number - n - 1];
+			helper[number - n - 1] = exchange;
+		}
+		return result;
 	}
 
+	public static void strechFont(Object obj) {
+		if (obj instanceof JLabel) {
+			Font font = ((JLabel) obj).getFont();
+			String text = ((JLabel) obj).getText();
+			int stringWidth = ((JLabel) obj).getFontMetrics(font).stringWidth(text);
+			int componentWidth = ((JLabel) obj).getWidth();
+			int componentHeight = ((JLabel) obj).getHeight();
+			((JLabel) obj).setFont(new Font(font.getName(), font.getStyle(), calcTextRatio(stringWidth, componentWidth, componentHeight, font)));
+		}
+	}
+
+	private static int calcTextRatio(int stringWidth, int componentWidth, int componentHeight, Font font) {
+		double widthRatio = (double) componentWidth / (double) stringWidth;
+		int newFontSize = (int) (font.getSize() * widthRatio) - 1;
+		return Math.min(newFontSize, componentHeight);
+	}
+
+	public static int boolToInt(boolean bool) {
+		if (bool) return 1;
+		else return 0;
+	}
 
 
 }

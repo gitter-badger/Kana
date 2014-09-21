@@ -1,4 +1,6 @@
-package com.zaheylu.kana;
+package com.zaheylu.kana.gui;
+
+import static com.zaheylu.snippets.CodeLibary.*;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -9,15 +11,15 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import static com.zaheylu.snippets.CodeLibary.showmessage;
 import com.zaheylu.log.Log;
+import com.zaheylu.snippets.CodeLibary;
 
 public class KanaCharacterChoose extends JDialog {
 	public KanaCharacterChoose() {
@@ -37,14 +39,15 @@ public class KanaCharacterChoose extends JDialog {
 	private JPanel panelChar2;
 	private JPanel panelChar1;
 
-	private static final int HIRAGANA = 1;
-	private static final int KATAKANA = 2;
-	private static final int KANJI = 3;
-	private static final int TYPE = 1;
-	private static final int CHOOSE = 2;
-	private static final int CANCEL = -1;
-	private static final int JPTOEN = 1;
-	private static final int ENTOJP = 2;
+	public static final int HIRAGANA = 1;
+	public static final int KATAKANA = 2;
+	public static final int KANJI = 3;
+	public static final int TYPE = 1;
+	public static final int CHOOSE = 2;
+	public static final int CANCEL = -1;
+	public static final int JPTOEN = 1;
+	public static final int ENTOJP = 2;
+	public static final int EXAM = 1;
 
 
 	private int[] choice = {
@@ -53,15 +56,17 @@ public class KanaCharacterChoose extends JDialog {
 	private final JRadioButton rdbtnJpToEn = new JRadioButton("JP to EN");
 	private final JRadioButton rdbtnEnToJp = new JRadioButton("EN to JP");
 	private final ButtonGroup buttonGroup_2 = new ButtonGroup();
-	private final JButton btnHelp = new JButton("Info on 'Vocabulary'");
+	private final JButton btnHelp = new JButton("How to use");
+	private final JCheckBox chckbxExam = new JCheckBox("exam");
 
 
 	public int[] choose(int mode) {
 
 		Log.event("CharacterChoose");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 220, 165);
+		setBounds(100, 100, 209, 154);
 		setModal(true);
+		setResizable(false);
 		getContentPane().setLayout(null);
 
 		panelVoc = new JPanel();
@@ -125,6 +130,9 @@ public class KanaCharacterChoose extends JDialog {
 				JButton okButton = new JButton("OK");
 				okButton.addActionListener(new OkButtonActionListener(mode));
 				buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+				{
+					if (mode == 2) buttonPane.add(chckbxExam);
+				}
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -152,7 +160,9 @@ public class KanaCharacterChoose extends JDialog {
 		return choice;
 	}
 
-
+	public void dispose() {
+		super.dispose();
+	}
 
 	private class OkButtonActionListener implements ActionListener {
 		int mode;
@@ -172,9 +182,9 @@ public class KanaCharacterChoose extends JDialog {
 			} else if (mode == 2) {
 				if (rdbtnEnToJp.isSelected()) choice[0] = ENTOJP;
 				else if (rdbtnJpToEn.isSelected()) choice[0] = JPTOEN;
+				choice[1] = CodeLibary.boolToInt(chckbxExam.isSelected());
 			}
-			JButton button = (JButton) e.getSource();
-			SwingUtilities.getWindowAncestor(button).dispose();
+			dispose();
 		}
 	}
 
@@ -187,12 +197,14 @@ public class KanaCharacterChoose extends JDialog {
 
 	private class BtnHelpActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			showmessage("The Vocabulary is loaded into the program by xml files containing the vocabulary"
-					+ "\nThese xml files are located in '" + Log.getLog("Path.Vocabulary") + "'" 
-					+ "\nYou can edit these files if you wish to make changes to the vocabulary."
-					+ "\n\nImportant note for editing files: The Vocabulary.xml in 'UTF-8 w/o BOM encoding'."
-					+ "\nBe sure to maintain this encoding type because else it won't work."
-					+ "\nNotepad++ is recommended for editing.");
+			showmessage("\nInstructions:" + "\nEnter the correct translation and hit enter to confirm."
+					+ "\nPress <F1> for help and use <CTRL+S> to skip a word or if you didn't know the translation in exam mode."
+					+ "\nIn EXAM MODE you have to translate all words in the selected groups in random order." + "\n\nAdding Vocabulary:"
+					+ "\nThe Vocabulary is loaded into the program by xml files containing the vocabulary." + "\nThese xml files are located in '"
+					+ Log.getLog("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary." + "\n\nEditing XML Files:"
+					+ "\nThe Vocabulary.xml file is in 'UTF-8 w/o BOM' encoded."
+					+ "\nBe sure to maintain this encoding type because else it won't work.\nNotepad++ is recommended for editing."
+					+ "\nOne software to support this encoding is Notepad++. Windows' notepad does not support it.");
 		}
 	}
 
