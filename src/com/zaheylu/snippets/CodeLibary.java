@@ -1,11 +1,14 @@
 package com.zaheylu.snippets;
 
 import java.awt.Canvas;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.net.URI;
 import java.util.Random;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class CodeLibary {
 
@@ -17,6 +20,9 @@ public class CodeLibary {
 	}
 
 	public static void showmessage(String msg) {
+		JOptionPane.showMessageDialog(null, msg, null, JOptionPane.PLAIN_MESSAGE);
+	}
+	public static void showmessage(Object msg) {
 		JOptionPane.showMessageDialog(null, msg, null, JOptionPane.PLAIN_MESSAGE);
 	}
 
@@ -64,6 +70,16 @@ public class CodeLibary {
 	public static int boolToInt(boolean bool) {
 		if (bool) return 1;
 		else return 0;
+	}
+	
+	public static void openHTTP(String url) {
+		if (Desktop.isDesktopSupported()) {
+			try {
+				Desktop.getDesktop().browse(new URI(url));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else showmessage(new JTextField(url));
 	}
 
 

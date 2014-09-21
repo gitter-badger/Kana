@@ -1,13 +1,12 @@
 package com.zaheylu.kana.gui;
 
-import static com.zaheylu.snippets.CodeLibary.*;
-
-import java.awt.Desktop;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.zaheylu.kana.version.Version;
+import com.zaheylu.snippets.CodeLibary;
 
 public class KanaAbout extends JDialog {
 
@@ -47,9 +47,13 @@ public class KanaAbout extends JDialog {
 			}
 
 			JLabel lblHttpGit = new JLabel("http://zaheylu.github.io/Kana/");
+			lblHttpGit.setForeground(Color.blue);
+			lblHttpGit.addMouseListener(new OpenHTTPMouseListener());
 			panel1.add(lblHttpGit);
 
 			JLabel lblHttpSetup = new JLabel("http://hafnehau.square7.ch/kana/");
+			lblHttpSetup.setForeground(Color.blue);
+			lblHttpSetup.addMouseListener(new OpenHTTPMouseListener());
 			panel1.add(lblHttpSetup);
 			{
 				JPanel panel = new JPanel();
@@ -72,7 +76,9 @@ public class KanaAbout extends JDialog {
 				panel1.add(lblLicence2);
 			}
 			{
-				JLabel lblLicence3 = new JLabel("http://www.gnu.org/licenses/gpl-2.0.html");
+				JLabel lblLicence3 = new JLabel("http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt");
+				lblLicence3.setForeground(Color.blue);
+				lblLicence3.addMouseListener(new OpenHTTPMouseListener());
 				panel1.add(lblLicence3);
 			}
 			
@@ -113,16 +119,18 @@ public class KanaAbout extends JDialog {
 			dispose();
 		}
 	}
+	
+
 
 	private class ContactButtonActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent evt) {
-			if (Desktop.isDesktopSupported()) {
-				try {
-					Desktop.getDesktop().browse(new URI("http://www.hafnehau.square7.ch/kana/contact.html"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else showmessage("Please visit http://www.hafnehau.square7.ch/kana/contact.html");
+			CodeLibary.openHTTP("http://www.hafnehau.square7.ch/kana/contact.html");
+		}
+	}
+	private class OpenHTTPMouseListener extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+			CodeLibary.openHTTP(((JLabel)arg0.getSource()).getText());
 		}
 	}
 }
