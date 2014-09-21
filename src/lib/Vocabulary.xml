@@ -1009,30 +1009,4 @@
 		<engl>Go</engl>
 		<comment>destination に/へ</comment>
 	</entry>
-	<entry>
-		<group>0</group>
-		<kana>1</kana>
-		<engl>1</engl>
-	</entry>	
-	<entry>
-		<group>0</group>
-		<kana>2</kana>
-		<engl>2</engl>
-	</entry>	
-	<entry>
-		<group>0</group>
-		<kana>3</kana>
-		<engl>3</engl>
-	</entry>	
-	<entry>
-		<group>0</group>
-		<kana>4</kana>
-		<engl>4</engl>
-	</entry>	
-	<entry>
-		<group>0</group>
-		<kana>5</kana>
-		<engl>5</engl>
-	</entry>	
-
 </Dictionary>
