@@ -32,12 +32,12 @@ public class TVocabulary {
 	}
 
 	public void loadAllSounds() {
-		AudioLoadThread run = new AudioLoadThread(words, false);
+		AudioLoadThread run = new AudioLoadThread(words, false, true);
 		run.start();
 	}
 
-	public void loadSound(TWord word, boolean instantPlay) {
-		AudioLoadThread run = new AudioLoadThread(word, instantPlay);
+	public void loadSound(TWord word, boolean instantPlay, boolean overwrite) {
+		AudioLoadThread run = new AudioLoadThread(word, instantPlay, overwrite);
 		run.start();
 	}
 
@@ -96,16 +96,21 @@ public class TVocabulary {
 
 		private ArrayList<TWord> words;
 		private boolean instantPlay;
+		private boolean overwrite;
 
-		public AudioLoadThread(TWord word, boolean instantPlay) {
+		public AudioLoadThread(TWord word, boolean instantPlay, boolean overwrite) {
 			words = new ArrayList<TWord>();
 			words.add(word);
 			this.instantPlay = instantPlay;
+			this.overwrite = overwrite;
 		}
 
-		public AudioLoadThread(ArrayList<TWord> words, boolean instantPlay) {
+
+
+		public AudioLoadThread(ArrayList<TWord> words, boolean instantPlay, boolean overwrite) {
 			this.words = words;
 			this.instantPlay = instantPlay;
+			this.overwrite = overwrite;
 		}
 
 		public void run() {
@@ -114,7 +119,7 @@ public class TVocabulary {
 			for (int n = 0; n < words.size(); n++) {
 				try {
 					File dest = new File(Log.getLog("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
-					if (!(dest.exists())) {
+					if ((!dest.exists()) || (overwrite)) {
 						Log.event("AudioLoadThread: " + dest.getPath());
 						String txt = words.get(n).getKana();
 						txt = java.net.URLEncoder.encode(txt, "UTF-8");

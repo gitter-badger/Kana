@@ -22,6 +22,7 @@ public class CodeLibary {
 	public static void showmessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg, null, JOptionPane.PLAIN_MESSAGE);
 	}
+
 	public static void showmessage(Object msg) {
 		JOptionPane.showMessageDialog(null, msg, null, JOptionPane.PLAIN_MESSAGE);
 	}
@@ -31,7 +32,8 @@ public class CodeLibary {
 	}
 
 	public static int randInt(int max) {
-		return rand.nextInt((max) + 1);
+		if (max >= 0) return rand.nextInt((max) + 1);
+		else return -1;
 	}
 
 	public static int[] randomOrder(int number) {
@@ -71,7 +73,7 @@ public class CodeLibary {
 		if (bool) return 1;
 		else return 0;
 	}
-	
+
 	public static void openHTTP(String url) {
 		if (Desktop.isDesktopSupported()) {
 			try {

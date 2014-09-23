@@ -131,7 +131,10 @@ public class ReadXMLVocabulary {
 			if (qName.equalsIgnoreCase("ENTRY")) {
 				if (valid && tmpWord.isValid()) {
 					list.add(tmpWord);
-				} else nErr++;
+				} else {
+					nErr++;
+					Log.event("Vocabulary.Loading.Err: " + tmpWord.getEngl());
+				}
 			}
 		}
 

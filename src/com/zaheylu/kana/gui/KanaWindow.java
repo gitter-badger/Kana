@@ -76,6 +76,7 @@ public class KanaWindow extends JFrame {
 	private int[] examOrder;
 	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
 	private JMenuItem mnLoadAllSounds;
+	private JMenuItem mntmReloadSound;
 
 
 	public KanaWindow() {
@@ -188,7 +189,7 @@ public class KanaWindow extends JFrame {
 		chckbxmntmEnableSounds.addActionListener(new ChckbxmntmEnableSoundsActionListener());
 		mnProgram.add(chckbxmntmEnableSounds);
 
-		mnLoadAllSounds = new JMenuItem("Load All Sounds");
+		mnLoadAllSounds = new JMenuItem("Reload all sounds");
 		mnLoadAllSounds.setEnabled(false);
 		mnLoadAllSounds.addActionListener(new ChckbxmntmLoadAllSoundsActionListener());
 
@@ -197,6 +198,15 @@ public class KanaWindow extends JFrame {
 		chckbxmntmSoundOnNew.addActionListener(new ChckbxmntmSoundOnNewActionListener());
 		mnProgram.add(chckbxmntmSoundOnNew);
 		mnProgram.add(mnLoadAllSounds);
+
+		mntmReloadSound = new JMenuItem("Reload this sound");
+		mntmReloadSound.addActionListener(new MntmReloadSoundActionListener());
+		mntmReloadSound.setEnabled(false);
+		mnProgram.add(mntmReloadSound);
+		
+		JCheckBoxMenuItem chckbxmntmRemoveSkippedWords = new JCheckBoxMenuItem("Remove Skipped Words");
+		chckbxmntmRemoveSkippedWords.addActionListener(new ChckbxmntmRemoveSkippedWordsActionListener());
+		mnProgram.add(chckbxmntmRemoveSkippedWords);
 
 		mnProgram.add(mntmExit);
 
@@ -411,8 +421,14 @@ public class KanaWindow extends JFrame {
 				tfVoc.setText("");
 				lblVocHira.setText("");
 				lblVocKata.setText("");
-				if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(false);
-				else newVocabulary();
+				if (options[1] == KanaCharacterChoose.EXAM) {
+					newExamAnswer(false);
+				} else {
+					String s = Log.getLog("Vocabulary.RemoveSkipped");
+					if (Boolean.parseBoolean(s))
+					currentWordPool.remove(currentWord);
+					newVocabulary();
+				}
 			}
 			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 				if (options[0] == 1) {
@@ -475,6 +491,24 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
+	private class MntmReloadSoundActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			String sounds = Log.getLog("Sounds.Enabled");
+			if (sounds != null) {
+				mntmReloadSound.setEnabled(Boolean.valueOf(sounds));
+				if (Boolean.valueOf(sounds)) {
+					vocabulary.loadSound(currentWord, false, true);
+				}
+			}
+		}
+	}
+	private class ChckbxmntmRemoveSkippedWordsActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) e.getSource();
+			Log.setLog("Vocabulary.RemoveSkipped", String.valueOf(ch.isSelected()));
+		}
+	}
+
 	private void newType() {
 		int val;
 		if (options[0] != KanaCharacterChoose.KANJI) {
@@ -520,8 +554,9 @@ public class KanaWindow extends JFrame {
 		try {
 			String sounds = Log.getLog("Sounds.Enabled");
 			if (sounds != null) {
+				mntmReloadSound.setEnabled(Boolean.valueOf(sounds));
 				if (Boolean.valueOf(sounds)) {
-					vocabulary.loadSound(word, true);
+					vocabulary.loadSound(word, true, false);
 				}
 			}
 		} catch (Throwable t) {
@@ -560,11 +595,16 @@ public class KanaWindow extends JFrame {
 
 	private void newVocabulary() {
 		int val;
-		do {
-			val = randInt(currentWordPool.size() - 1);
-		} while (currentWordPool.get(val) == currentWord && currentWordPool.size() > 1);
-		currentWord = currentWordPool.get(val);
-		showVoc(currentWord);
+		if (currentWordPool.size() > 0) {
+			do {
+				val = randInt(currentWordPool.size() - 1);
+			} while (currentWordPool.get(val) == currentWord && currentWordPool.size() > 1);
+			currentWord = currentWordPool.get(val);
+			showVoc(currentWord);
+		} else {
+			showPanel(null);
+			showmessage("There are no word in the word pool left.");
+		}
 	}
 
 	private void newChoose() {
@@ -585,6 +625,4 @@ public class KanaWindow extends JFrame {
 		Log.event("Repaint");
 		this.repaint();
 	}
-
-
 }
