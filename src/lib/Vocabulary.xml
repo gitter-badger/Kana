@@ -8,19 +8,19 @@
 	</entry>
 	<entry>
 		<group>1</group>
-		<kana>おはよう　ございます</kana>	
+		<kana>おはよう ございます</kana>
 		<engl>Good morning</engl>
 		<comment>polite</comment>
-	</entry>	
+	</entry>
 	<entry>
 		<group>1</group>
-		<kana>こんにちは</kana>	
-		<engl>Good afternoon</engl>		
+		<kana>こんにちは</kana>
+		<engl>Good afternoon</engl>
 		<romaji>konnichiwa</romaji>
 	</entry>
 	<entry>
 		<group>1</group>
-		<kana>こんばんは</kana>	
+		<kana>こんばんは</kana>
 		<engl>Good evening</engl>
 		<romaji>konbanwa</romaji>
 	</entry>
@@ -41,7 +41,7 @@
 	</entry>
 	<entry>
 		<group>1</group>
-		<kana>ありがとう　ございます</kana>
+		<kana>ありがとう ございます</kana>
 		<engl>Thank you</engl>
 		<comment>polite</comment>
 	</entry>
@@ -97,7 +97,7 @@
 	</entry>
 	<entry>
 		<group>1</group>
-		<kana>よろしく　おねがいします</kana>
+		<kana>よろしく おねがいします</kana>
 		<engl>Nice to meet you</engl>
 	</entry>
 	<entry>
@@ -257,9 +257,10 @@
 	</entry>
 	<entry>
 		<group>2</group>
-		<kana>じゃあ　また</kana>
+		<kana>じゃあ また</kana>
 		<engl>Goodbye</engl>
-		<comment>Between friends, expecting to see each other again fairly soon</comment>
+		<comment>Between friends, expecting to see each other again fairly
+			soon</comment>
 	</entry>
 	<entry>
 		<group>2</group>
@@ -789,7 +790,7 @@
 		<kana>いらっしゃいませ</kana>
 		<engl>Welcome</engl>
 	</entry>
-	
+
 	<entry>
 		<group>4</group>
 		<kana>じゃあ</kana>

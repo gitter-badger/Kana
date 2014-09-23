@@ -13,7 +13,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import com.zaheylu.kana.KanaLib;
+import com.zaheylu.kana.mp3.Mp3Play;
 import com.zaheylu.kana.words.TWord;
+import com.zaheylu.log.Log;
 
 public class VocHelp extends JDialog {
 
@@ -106,15 +108,28 @@ public class VocHelp extends JDialog {
 			}
 
 			public void keyReleased(KeyEvent arg0) {
+
 			}
 
 			public void keyTyped(KeyEvent arg0) {
 			}
 		});
+		try {
+			String sounds = Log.getLog("Sounds.Enabled");
+			if (sounds != null) {
+				if (Boolean.valueOf(sounds)) {
+					Mp3Play.play(word);
+				}
+			}
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 		this.setVisible(true);
+
 	}
 
 	public void dispose() {
 		super.dispose();
 	}
+
 }

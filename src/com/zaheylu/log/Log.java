@@ -2,7 +2,7 @@ package com.zaheylu.log;
 
 import java.util.ArrayList;
 
-import com.zaheylu.snippets.ToString;
+import com.zaheylu.snippets.Convert;
 
 public class Log {
 	private static ArrayList<LogEntry> log = new ArrayList<LogEntry>();
@@ -25,21 +25,17 @@ public class Log {
 	}
 
 	public static String getLog(String name) {
-		LogEntry tmpEntry;
-		for (int n = 0; n < log.size(); n++) {
-			tmpEntry = log.get(n);
-			if (tmpEntry.getName().equalsIgnoreCase(name)) return logString(tmpEntry);
-		}
-		return null;
+		LogEntry tmpEntry = getEntry(name);
+		if (tmpEntry == null) return null;
+		return logString(tmpEntry);
 	}
 
 	public static boolean setLog(String name, Object logObj) {
 		LogEntry tmpEntry = getEntry(name);
 		if (tmpEntry == null) {
 			return addLog(name, logObj);
-
 		} else {
-			tmpEntry.setLogObj(logObj);
+			tmpEntry.setOptObj(logObj);
 			write("changed", tmpEntry);
 			return true;
 		}
@@ -62,10 +58,11 @@ public class Log {
 	}
 
 	private static String logString(LogEntry entry) {
-		String result = ToString.logEntryToString(entry);
+		String result = Convert.logEntryToString(entry);
 		if (result == null) result = "(" + entry.getType().getSimpleName() + ")";
 		return result;
 	}
+
 
 	private static void write(String msg, LogEntry entry) {
 		if (output) write(msg + ": " + entry.getName() + ": " + logString(entry));
@@ -82,6 +79,6 @@ public class Log {
 
 	public static void event(String eventMsg) {
 		// TODO Add EventLogging
-		write("event  : " + eventMsg);		
+		write("event  : " + eventMsg);
 	}
 }

@@ -11,6 +11,7 @@ public class TWord {
 	private String kanji;
 	private String present;
 	private int group;
+	private int index;
 
 	public static TWord getDummyTWord(int i) {
 		TWord result = new TWord();
@@ -25,6 +26,7 @@ public class TWord {
 		
 		return result;
 	}
+	
 	
 	public TWord() {
 		engl = new ArrayList<String>();
@@ -122,6 +124,16 @@ public class TWord {
 
 	public boolean isValid() {
 		return ((hasKana() || hasKanji()) && hasEngl());
+	}
+
+
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 

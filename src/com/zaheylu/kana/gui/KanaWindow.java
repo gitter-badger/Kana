@@ -4,7 +4,6 @@ import static com.zaheylu.kana.KanaLib.*;
 import static com.zaheylu.snippets.CodeLibary.*;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +11,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -58,7 +57,6 @@ public class KanaWindow extends JFrame {
 	private JTextField tfTypeTmp;
 
 	private JTextField tfVoc;
-	//private JLabel lblVocHelp;
 	private JLabel lblVocHira;
 	private JLabel lblVocKata;
 	private JLabel lblVoc;
@@ -76,6 +74,8 @@ public class KanaWindow extends JFrame {
 	private ArrayList<TWord> examCorrect;
 	private ArrayList<TWord> examWrong;
 	private int[] examOrder;
+	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
+	private JMenuItem mnLoadAllSounds;
 
 
 	public KanaWindow() {
@@ -144,18 +144,10 @@ public class KanaWindow extends JFrame {
 		panelVocabulary.setLayout(null);
 
 		tfVoc = new JTextField();
-		tfVoc.addKeyListener(new TfVocKeyListener(this));
+		tfVoc.addKeyListener(new TfVocKeyListener());
 		tfVoc.setBounds(10, 215, 476, 20);
 		tfVoc.setColumns(10);
 		panelVocabulary.add(tfVoc);
-
-		/*lblVocHelp = new JLabel("A");
-		lblVocHelp.setForeground(Color.RED);
-		lblVocHelp.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVocHelp.setFont(new Font("MS Gothic", Font.BOLD, 120));
-		lblVocHelp.setBounds(0, 11, 608, 126);
-		lblVocHelp.setVisible(false);
-		panelVocabulary.add(lblVocHelp);*/
 
 		lblVoc = new JLabel("B");
 		lblVoc.setBounds(0, 11, 608, 126);
@@ -191,6 +183,20 @@ public class KanaWindow extends JFrame {
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new MntmExitActionListener());
+
+		JCheckBoxMenuItem chckbxmntmEnableSounds = new JCheckBoxMenuItem("Enable Sounds");
+		chckbxmntmEnableSounds.addActionListener(new ChckbxmntmEnableSoundsActionListener());
+		mnProgram.add(chckbxmntmEnableSounds);
+
+		mnLoadAllSounds = new JMenuItem("Load All Sounds");
+		mnLoadAllSounds.setEnabled(false);
+		mnLoadAllSounds.addActionListener(new ChckbxmntmLoadAllSoundsActionListener());
+
+		chckbxmntmSoundOnNew = new JCheckBoxMenuItem("Sound on new Vocabulary");
+		chckbxmntmSoundOnNew.setEnabled(false);
+		chckbxmntmSoundOnNew.addActionListener(new ChckbxmntmSoundOnNewActionListener());
+		mnProgram.add(chckbxmntmSoundOnNew);
+		mnProgram.add(mnLoadAllSounds);
 
 		mnProgram.add(mntmExit);
 
@@ -248,6 +254,7 @@ public class KanaWindow extends JFrame {
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException err) {
+			Log.event("Err.KanaWindow.loadGroups");
 			err.printStackTrace();
 		}
 	}
@@ -268,6 +275,7 @@ public class KanaWindow extends JFrame {
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
+			Log.event("Err.KanaWindow.loadVocabulary");
 			e.printStackTrace();
 		}
 	}
@@ -391,24 +399,12 @@ public class KanaWindow extends JFrame {
 
 	private class MntmCheckForUpdatesActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			if (Desktop.isDesktopSupported()) {
-				try {
-					Desktop.getDesktop().browse(new URI("http://www.hafnehau.square7.ch/kana/versioncheck.php?v=" + Version.getShortVersion()));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				showmessage("Please visit http://www.hafnehau.square7.ch/kana/versioncheck.php?v=" + Version.getShortVersion());
-			}
+			openHTTP("http://www.hafnehau.square7.ch/kana/versioncheck.php?=" + Version.getShortVersion());
 		}
 	}
 
 	private class TfVocKeyListener extends KeyAdapter {
-		private JFrame frame;
 
-		public TfVocKeyListener(JFrame frame) {
-			this.frame = frame;
-		}
 
 		public void keyReleased(KeyEvent arg0) {
 			if (arg0.getKeyCode() == KeyEvent.VK_S && arg0.isControlDown() && (!(arg0.isShiftDown())) && (!(arg0.isAltDown()))) {
@@ -450,14 +446,36 @@ public class KanaWindow extends JFrame {
 
 		public void keyPressed(KeyEvent arg0) {
 			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
-				new VocHelp(frame, currentWord, groups.get(currentWord.getGroup()));
+				new VocHelp(thisFrame, currentWord, groups.get(currentWord.getGroup()));
 			}
 		}
+	}
 
+	private class ChckbxmntmLoadAllSoundsActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			vocabulary.loadAllSounds();
+		}
+	}
+
+	private class ChckbxmntmEnableSoundsActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JCheckBoxMenuItem check = (JCheckBoxMenuItem) e.getSource();
+			Log.setLog("Sounds.Enabled", String.valueOf(check.isSelected()));
+			chckbxmntmSoundOnNew.setEnabled(check.isSelected());
+			mnLoadAllSounds.setEnabled(check.isSelected());
+			if (check.isSelected()) showmessage("Enabling this will read out the word you're translating in Vocabulary mode when pressing F1."
+					+ "\nIt is using Google's Text-To-Speech Service and JLayer for MP3-output."
+					+ "\nIt may or may not work. If it doesn't, just disable this feature by clicking 'Enable Sounds' again.");
+		}
+	}
+
+	private class ChckbxmntmSoundOnNewActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			Log.setLog("Sounds.OnVocabulary", String.valueOf(((JCheckBoxMenuItem) arg0.getSource()).isSelected()));
+		}
 	}
 
 	private void newType() {
-		Log.event("newType");
 		int val;
 		if (options[0] != KanaCharacterChoose.KANJI) {
 			do {
@@ -498,21 +516,33 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void showVoc(TWord word) {
+
+		try {
+			String sounds = Log.getLog("Sounds.Enabled");
+			if (sounds != null) {
+				if (Boolean.valueOf(sounds)) {
+					vocabulary.loadSound(word, true);
+				}
+			}
+		} catch (Throwable t) {
+			Log.event("Err.KanaWindow.showVoc");
+			t.printStackTrace();
+		}
 		Log.event("newVocabulary");
-		String from;//, to;
+		String from;// , to;
 		// CALCULATE TRANSLATION AND POSSIBLE ANSWERS
 		if (options[0] == 1) {
 			if (word.hasKanji()) from = currentWord.getKanji();
 			else from = word.getKana();
 			if (word.hasPresent()) from += " / " + word.getPresent();
-			//to = word.getEngl().get(randInt(word.getEngl().size() - 1));
+			// to = word.getEngl().get(randInt(word.getEngl().size() - 1));
 			lblVocHira.setText("");
 			lblVocKata.setText("");
 
 		} else {
 			from = word.getEngl().get(randInt(word.getEngl().size() - 1));
-			//to = word.getKana();
-			possibleAnswers = getPossibleAnswers(from);
+			// to = word.getKana();
+			possibleAnswers = vocabulary.getPossibleAnswers(from);
 		}
 		// SET TEXT
 		lblVoc.setText(from);
@@ -556,17 +586,5 @@ public class KanaWindow extends JFrame {
 		this.repaint();
 	}
 
-	private ArrayList<String> getPossibleAnswers(String arg) {
-		Log.event("getPossibleAnswers");
-		ArrayList<String> result = new ArrayList<String>();
-		for (int n = 0; n < vocabulary.size(); n++)
-			for (int m = 0; m < vocabulary.get(n).getEngl().size(); m++) {
-				if (equalsIgnoreCase(vocabulary.get(n).getEngl().get(m), arg)) {
-					result.add(vocabulary.get(n).getKana());
-					if (vocabulary.get(n).hasRomaji()) result.add(vocabulary.get(n).getRomaji());
-					if (vocabulary.get(n).hasPresent()) result.add(vocabulary.get(n).getPresent());
-				}
-			}
-		return result;
-	}
+
 }

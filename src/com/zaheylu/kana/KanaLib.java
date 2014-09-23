@@ -250,8 +250,6 @@ public class KanaLib {
 					"-", null, "ー" } };
 
 
-
-
 	public static String convert(String arg, int from, int to) {
 		for (int n = 0; n < DATA.length; n++) {
 			if (equalsIgnoreCase(arg, DATA[n][from]) && DATA[n][to] != null) {
@@ -261,13 +259,6 @@ public class KanaLib {
 		return null;
 	}
 
-
-	/*
-	 * ranges: 
-	 * 0: Romaji
-	 * 1: Hiragana
-	 * 2: Katakana
-	 */
 	public static String convertPlus(String arg, int from, int to) {
 		String result = "";
 		int index = 0;
@@ -318,7 +309,6 @@ public class KanaLib {
 		return result;
 	}
 
-
 	public static int findType(String arg) {
 		if (arg.isEmpty()) return -1;
 		else {
@@ -346,7 +336,6 @@ public class KanaLib {
 		return DATA;
 	}
 
-
 	public static String[] getAlphabet() {
 		return Alphabet;
 	}
@@ -372,4 +361,5 @@ public class KanaLib {
 		}
 		return String.valueOf(c1).equalsIgnoreCase(String.valueOf(c2));
 	}
+
 }
