@@ -118,7 +118,7 @@ public class TVocabulary {
 			ArrayList<Integer> errs = new ArrayList<Integer>();
 			for (int n = 0; n < words.size(); n++) {
 				try {
-					File dest = new File(Log.getLog("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
+					File dest = new File(Log.getString("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
 					if ((!dest.exists()) || (overwrite)) {
 						Log.event("AudioLoadThread: " + dest.getPath());
 						String txt = words.get(n).getKana();
@@ -136,6 +136,27 @@ public class TVocabulary {
 						}
 						outstream.close();
 					}
+					if (words.get(n).hasPresent()) {
+						dest = new File(Log.getString("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + "p.mp3");
+						if ((!dest.exists()) || (overwrite)) {
+							String txt = words.get(n).getPresent();
+							txt = java.net.URLEncoder.encode(txt, "UTF-8");
+							URL url = new URL("http://translate.google.com/translate_tts?ie=UTF-8&tl=ja&q=" + txt);
+							HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+							urlConn.addRequestProperty("User-Agent", "Mozilla/4.76");
+							InputStream audioSrc = urlConn.getInputStream();
+							DataInputStream read = new DataInputStream(audioSrc);
+							OutputStream outstream = new FileOutputStream(dest);
+							byte[] buffer = new byte[1024];
+							int len;
+							while ((len = read.read(buffer)) > 0) {
+								outstream.write(buffer, 0, len);
+							}
+							outstream.close();
+						}
+					}
+
+
 					if (instantPlay && words.size() == 1) {
 						Mp3Play.play(words.get(0));
 					}
@@ -143,13 +164,15 @@ public class TVocabulary {
 				} catch (IOException e) {
 					err = true;
 					errs.add(n);
-					Log.event("Err.AudioLoadThread.run");
+					Log.event("Err.AudioLoadThread.Run");
 					e.printStackTrace();
 				}
 			}
 			if (words.size() > 1 && (!instantPlay)) if (err) CodeLibary.showmessage("There was an error loading the sound files:" + errs);
 			else CodeLibary.showmessage("Loading complete.");
 		}
+
+
 
 	}
 }

@@ -24,7 +24,7 @@ public class Log {
 		return false;
 	}
 
-	public static String getLog(String name) {
+	public static String getString(String name) {
 		LogEntry tmpEntry = getEntry(name);
 		if (tmpEntry == null) return null;
 		return logString(tmpEntry);
@@ -80,5 +80,12 @@ public class Log {
 	public static void event(String eventMsg) {
 		// TODO Add EventLogging
 		write("event  : " + eventMsg);
+	}
+
+	public static boolean getBool(String name) {
+		LogEntry entry = getEntry(name);
+		if (entry == null) return false;
+		if (entry.getLogObj() instanceof Boolean) return (Boolean) entry.getLogObj();
+		return false;
 	}
 }

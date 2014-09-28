@@ -133,7 +133,7 @@ public class ReadXMLVocabulary {
 					list.add(tmpWord);
 				} else {
 					nErr++;
-					Log.event("Vocabulary.Loading.Err: " + tmpWord.getEngl());
+					//Log.event("Vocabulary.Loading.Err: " + tmpWord.getEngl());
 				}
 			}
 		}

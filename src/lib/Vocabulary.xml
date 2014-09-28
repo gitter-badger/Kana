@@ -1009,4 +1009,167 @@
 		<engl>Go</engl>
 		<comment>destination に/へ</comment>
 	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>帰る</kanji>
+		<kana>かえる</kana>
+		<present>帰ります</present>
+		<engl>go back</engl>
+		<engl>return</engl>
+		<comment>destination に/へ</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>聞く</kanji>
+		<kana>きく</kana>
+		<present>聞きます</present>
+		<engl>listen</engl>
+		<engl>hear</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>飲む</kanji>
+		<kana>のむ</kana>
+		<present>飲みます</present>
+		<engl>drink</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>話す</kanji>
+		<kana>はなす</kana>
+		<present>話します</present>
+		<engl>speak</engl>
+		<engl>talk</engl>
+		<comment>langugage を/で</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>読む</kanji>
+		<kana>よむ</kana>
+		<present>読みます</present>
+		<engl>read</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>起きる</kanji>
+		<kana>おきる</kana>
+		<present>起きます</present>
+		<engl>get up</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>食べる</kanji>
+		<kana>たべる</kana>
+		<present>食べます</present>
+		<engl>eat</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>寝る</kanji>
+		<kana>ねる</kana>
+		<present>寝ます</present>
+		<engl>sleep</engl>
+		<engl>go to sleep</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>見る</kanji>
+		<kana>みる</kana>
+		<present>見ます</present>
+		<engl>see</engl>
+		<engl>look at</engl>
+		<engl>watch</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>来る</kanji>
+		<kana>くる</kana>
+		<present>来ます</present>
+		<engl>come</engl>
+		<comment>destination に/へ</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>勉強する</kanji>
+		<kana>べんきょうする</kana>
+		<present>勉強します</present>
+		<engl>study</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>する</kana>
+		<present>します</present>
+		<engl>do</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>いい</kana>
+		<engl>good</engl>
+		<comment>～を</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>早い</kanji>
+		<kana>はやい</kana>
+		<engl>early</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>あまり</kana>
+		<engl>not much</engl>
+		<comment>+ Negative</comment>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>全然</kanji>
+		<kana>ぜんぜん</kana>
+		<engl>not at all</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>たいてい</kana>
+		<engl>usually</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>ちょって</kana>
+		<engl>a little</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kanji>時々</kanji>
+		<kana>ときどき</kana>
+		<engl>sometimes</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>よく</kana>
+		<engl>often</engl>
+		<engl>much</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>そうですね</kana>
+		<engl>That's right</engl>
+		<engl>Let me see</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>でも</kana>
+		<engl>but</engl>
+	</entry>
+	<entry>
+		<group>5</group>
+		<kana>どうですか</kana>
+		<engl>how about</engl>
+		<engl>how is</engl>
+		<comment>...?</comment>
+	</entry>
 </Dictionary>

@@ -1,9 +1,6 @@
 package com.zaheylu.kana.mp3;
 
 import java.io.File;
-
-
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -20,28 +17,30 @@ public class Mp3Play {
 
 	}
 
-	public static void play(String path) {
+	/*public static void play(String path) {
 		AudioPlayThread thread = new AudioPlayThread(new File(path));
 		thread.start();
-	}
+	}*/
 
 	public static void play(TWord word) {
-		AudioPlayThread thread = new AudioPlayThread(new File(Log.getLog("Path.User") + "Voc" + String.valueOf(word.getIndex()) + ".mp3"));
+		AudioPlayThread thread = new AudioPlayThread(word);
 		thread.start();
 	}
 }
 
 class AudioPlayThread extends Thread {
 
-	private File file;
+	private TWord word;
 
-	public AudioPlayThread(File file) {
-		this.file = file;
+
+	public AudioPlayThread(TWord word) {
+		this.word = word;
 	}
 
 	public void run() {
-		if (file.exists()) {
-			Log.event("AudioPlayThread: " + file.getPath());
+		File f = new File(Log.getString("Path.User") + "Voc" + String.valueOf(word.getIndex()) + ".mp3");
+		if (f.exists()) {
+			Log.event("AudioPlayThread: " + f.getPath());
 			/*
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -52,13 +51,21 @@ class AudioPlayThread extends Thread {
 			mediaPlayer.play();*/
 			Player player;
 			try {
-				player = new Player(new FileInputStream(file));
+				player = new Player(new FileInputStream(f));
 				player.play();
-			} catch (FileNotFoundException | JavaLayerException e) {
+				if (word.hasPresent()) {
+					f = new File(Log.getString("Path.User") + "Voc" + String.valueOf(word.getIndex()) + "p.mp3");
+					if (f.exists()) {
+						Thread.sleep(500);
+						player = new Player(new FileInputStream(f));
+						player.play();
+					}
+				}
+			} catch (FileNotFoundException | JavaLayerException | InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-            
+
+
 		}
 	}
 

@@ -40,6 +40,7 @@ import com.zaheylu.kana.xml.ReadXMLEntryNames;
 import com.zaheylu.kana.xml.ReadXMLVocabulary;
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
+import java.awt.GridLayout;
 
 
 public class KanaWindow extends JFrame {
@@ -77,6 +78,11 @@ public class KanaWindow extends JFrame {
 	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
 	private JMenuItem mnLoadAllSounds;
 	private JMenuItem mntmReloadSound;
+	private JPanel panelProgress;
+	private JLabel lblProgess;
+	private JPanel panel_1;
+	private JPanel panel_2;
+	private JCheckBoxMenuItem chckbxmntmChronologicalOrder;
 
 
 	public KanaWindow() {
@@ -146,7 +152,17 @@ public class KanaWindow extends JFrame {
 
 		tfVoc = new JTextField();
 		tfVoc.addKeyListener(new TfVocKeyListener());
-		tfVoc.setBounds(10, 215, 476, 20);
+
+		panelProgress = new JPanel();
+		panelProgress.setBounds(477, 213, 130, 30);
+		panelVocabulary.add(panelProgress);
+		panelProgress.setLayout(new GridLayout(0, 1, 0, 0));
+
+		lblProgess = new JLabel("Progess: 0 / 0");
+		lblProgess.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblProgess.setHorizontalAlignment(SwingConstants.CENTER);
+		panelProgress.add(lblProgess);
+		tfVoc.setBounds(0, 213, 476, 20);
 		tfVoc.setColumns(10);
 		panelVocabulary.add(tfVoc);
 
@@ -159,7 +175,7 @@ public class KanaWindow extends JFrame {
 		lblVocComment = new JLabel("");
 		lblVocComment.setFont(new Font("MS Gothic", Font.PLAIN, 22));
 		lblVocComment.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVocComment.setBounds(0, 174, 608, 30);
+		lblVocComment.setBounds(0, 180, 608, 30);
 		panelVocabulary.add(lblVocComment);
 
 		lblVocHira = new JLabel("");
@@ -172,14 +188,18 @@ public class KanaWindow extends JFrame {
 		lblVocKata.setBounds(315, 130, 293, 39);
 		panelVocabulary.add(lblVocKata);
 
-		JLabel lblPressEnter = new JLabel("Press Enter");
-		lblPressEnter.setBounds(496, 218, 68, 14);
-		panelVocabulary.add(lblPressEnter);
+		JLabel lblConfirm = new JLabel("Press Enter to Confirm");
+		lblConfirm.setBounds(477, 212, 132, 14);
+		panelVocabulary.add(lblConfirm);
+
+		JLabel lblSkip = new JLabel("Press CTRL+S to Skip");
+		lblSkip.setBounds(477, 226, 132, 14);
+		panelVocabulary.add(lblSkip);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnProgram = new JMenu("Program");
+		JMenu mnProgram = new JMenu("Settings");
 		menuBar.add(mnProgram);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
@@ -203,10 +223,24 @@ public class KanaWindow extends JFrame {
 		mntmReloadSound.addActionListener(new MntmReloadSoundActionListener());
 		mntmReloadSound.setEnabled(false);
 		mnProgram.add(mntmReloadSound);
-		
+
 		JCheckBoxMenuItem chckbxmntmRemoveSkippedWords = new JCheckBoxMenuItem("Remove Skipped Words");
 		chckbxmntmRemoveSkippedWords.addActionListener(new ChckbxmntmRemoveSkippedWordsActionListener());
 		mnProgram.add(chckbxmntmRemoveSkippedWords);
+
+		panel_1 = new JPanel();
+		panel_1.setBackground(Color.BLACK);
+		panel_1.setForeground(new Color(0, 0, 0));
+		mnProgram.add(panel_1);
+
+		chckbxmntmChronologicalOrder = new JCheckBoxMenuItem("Chronological Order");
+		chckbxmntmChronologicalOrder.addActionListener(new ChckbxmntmChronologicalOrderActionListener());
+		mnProgram.add(chckbxmntmChronologicalOrder);
+
+		panel_2 = new JPanel();
+		panel_2.setForeground(Color.BLACK);
+		panel_2.setBackground(Color.BLACK);
+		mnProgram.add(panel_2);
 
 		mnProgram.add(mntmExit);
 
@@ -276,6 +310,7 @@ public class KanaWindow extends JFrame {
 			if (new File(path + fileName).exists()) {
 				String path = this.path + fileName;
 				Log.setLog("Path.Vocabulary", path);
+				// TODO: I should really not be using SAX for this... might as well write a seperate xml loader for this...
 				vocabulary = vocReader.loadVocabulary(path);
 			} else {
 				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
@@ -390,8 +425,12 @@ public class KanaWindow extends JFrame {
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
 						currentWordPool = vocabulary.getFiltered(choices);
 						showPanel(panelVocabulary);
-						if (options[1] == KanaCharacterChoose.EXAM) newExam();
-						else newVocabulary();
+						Log.setLog("Vocabulary.Index", -1);
+						if (options[1] == KanaCharacterChoose.EXAM) {
+							newExam();
+						} else {
+							newVocabulary();
+						}
 					}
 				}
 			} else {
@@ -424,9 +463,7 @@ public class KanaWindow extends JFrame {
 				if (options[1] == KanaCharacterChoose.EXAM) {
 					newExamAnswer(false);
 				} else {
-					String s = Log.getLog("Vocabulary.RemoveSkipped");
-					if (Boolean.parseBoolean(s))
-					currentWordPool.remove(currentWord);
+					if (Log.getBool("Vocabulary.RemoveSkipped")) currentWordPool.remove(currentWord);
 					newVocabulary();
 				}
 			}
@@ -463,20 +500,22 @@ public class KanaWindow extends JFrame {
 		public void keyPressed(KeyEvent arg0) {
 			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
 				new VocHelp(thisFrame, currentWord, groups.get(currentWord.getGroup()));
+			} else if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE && options[1] != KanaCharacterChoose.EXAM) {
+				Log.setLog("Vocabulary.Index", -1);
 			}
 		}
 	}
 
 	private class ChckbxmntmLoadAllSoundsActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent arg0) {
 			vocabulary.loadAllSounds();
 		}
 	}
 
 	private class ChckbxmntmEnableSoundsActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			JCheckBoxMenuItem check = (JCheckBoxMenuItem) e.getSource();
-			Log.setLog("Sounds.Enabled", String.valueOf(check.isSelected()));
+		public void actionPerformed(ActionEvent arg0) {
+			JCheckBoxMenuItem check = (JCheckBoxMenuItem) arg0.getSource();
+			Log.setLog("Sounds.Enabled", check.isSelected());
 			chckbxmntmSoundOnNew.setEnabled(check.isSelected());
 			mnLoadAllSounds.setEnabled(check.isSelected());
 			if (check.isSelected()) showmessage("Enabling this will read out the word you're translating in Vocabulary mode when pressing F1."
@@ -487,25 +526,29 @@ public class KanaWindow extends JFrame {
 
 	private class ChckbxmntmSoundOnNewActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			Log.setLog("Sounds.OnVocabulary", String.valueOf(((JCheckBoxMenuItem) arg0.getSource()).isSelected()));
+			Log.setLog("Sounds.OnVocabulary",((JCheckBoxMenuItem) arg0.getSource()).isSelected());
 		}
 	}
 
 	private class MntmReloadSoundActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			String sounds = Log.getLog("Sounds.Enabled");
-			if (sounds != null) {
-				mntmReloadSound.setEnabled(Boolean.valueOf(sounds));
-				if (Boolean.valueOf(sounds)) {
-					vocabulary.loadSound(currentWord, false, true);
-				}
+			if (Log.getBool("Sounds.Enabled")) {
+				vocabulary.loadSound(currentWord, false, true);
 			}
 		}
 	}
+
 	private class ChckbxmntmRemoveSkippedWordsActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) e.getSource();
-			Log.setLog("Vocabulary.RemoveSkipped", String.valueOf(ch.isSelected()));
+		public void actionPerformed(ActionEvent arg0) {
+			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
+			Log.setLog("Vocabulary.RemoveSkipped", ch.isSelected());
+		}
+	}
+
+	private class ChckbxmntmChronologicalOrderActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
+			Log.setLog("Vocabulary.Order.Chronological", ch.isSelected());
 		}
 	}
 
@@ -527,7 +570,12 @@ public class KanaWindow extends JFrame {
 		examIndex = -1;
 		examCorrect = new ArrayList<TWord>();
 		examWrong = new ArrayList<TWord>();
-		examOrder = CodeLibary.randomOrder(currentWordPool.size());
+		if (Log.getBool("Vocabulary.Order.Chronological")) {
+			examOrder = new int[currentWordPool.size()];
+			for (int n = 0; n < examOrder.length; n++) {
+				examOrder[n] = n;
+			}
+		} else examOrder = CodeLibary.randomOrder(currentWordPool.size());
 		newExamWord();
 	}
 
@@ -540,50 +588,38 @@ public class KanaWindow extends JFrame {
 	private void newExamWord() {
 		examIndex++;
 		if (examIndex != currentWordPool.size()) {
+			lblProgess.setText(String.format("Progress: %d / %d", examIndex + 1, currentWordPool.size()));
 			currentWord = currentWordPool.get(examOrder[examIndex]);
 			showVoc(currentWord);
 		} else {
 			showPanel(null);
 			new KanaResult(thisFrame, examWrong, examCorrect);
 		}
-
 	}
 
 	private void showVoc(TWord word) {
+		panelProgress.setVisible(options[1] == KanaCharacterChoose.EXAM);
 
-		try {
-			String sounds = Log.getLog("Sounds.Enabled");
-			if (sounds != null) {
-				mntmReloadSound.setEnabled(Boolean.valueOf(sounds));
-				if (Boolean.valueOf(sounds)) {
-					vocabulary.loadSound(word, true, false);
-				}
-			}
-		} catch (Throwable t) {
-			Log.event("Err.KanaWindow.showVoc");
-			t.printStackTrace();
+		mntmReloadSound.setEnabled(Log.getBool("Sounds.Enabled"));
+		if (Log.getBool("Sounds.Enabled")) {
+			vocabulary.loadSound(word, Log.getBool("Sounds.OnVocabulary"), false);
 		}
-		Log.event("newVocabulary");
-		String from;// , to;
+		Log.event("showVoc");
+		String from;
 		// CALCULATE TRANSLATION AND POSSIBLE ANSWERS
 		if (options[0] == 1) {
 			if (word.hasKanji()) from = currentWord.getKanji();
 			else from = word.getKana();
 			if (word.hasPresent()) from += " / " + word.getPresent();
-			// to = word.getEngl().get(randInt(word.getEngl().size() - 1));
 			lblVocHira.setText("");
 			lblVocKata.setText("");
-
 		} else {
 			from = word.getEngl().get(randInt(word.getEngl().size() - 1));
-			// to = word.getKana();
 			possibleAnswers = vocabulary.getPossibleAnswers(from);
 		}
 		// SET TEXT
 		lblVoc.setText(from);
 		strechFont(lblVoc);
-		/*lblVocHelp.setText(to);
-		strechObject(lblVocHelp);*/
 		if (word.hasComment()) lblVocComment.setText("(" + word.getComment() + ")");
 		else lblVocComment.setText("");
 		strechFont(lblVocComment);
@@ -593,12 +629,21 @@ public class KanaWindow extends JFrame {
 
 	}
 
+	private int getNext() {
+		Integer index = (Integer) Log.getEntry("Vocabulary.Index").getLogObj();
+		if (index < currentWordPool.size() - 1) return index + 1;
+		else return 0;
+
+	}
+
 	private void newVocabulary() {
-		int val;
+		int val = 0;
 		if (currentWordPool.size() > 0) {
-			do {
+			if (Log.getBool("Vocabulary.Order.Chronological")) val = getNext();
+			else do {
 				val = randInt(currentWordPool.size() - 1);
 			} while (currentWordPool.get(val) == currentWord && currentWordPool.size() > 1);
+			Log.setLog("Vocabulary.Index", val);
 			currentWord = currentWordPool.get(val);
 			showVoc(currentWord);
 		} else {

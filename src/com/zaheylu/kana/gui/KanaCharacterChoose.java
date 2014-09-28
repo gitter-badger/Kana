@@ -201,7 +201,7 @@ public class KanaCharacterChoose extends JDialog {
 					+ "\nPress <F1> for help and use <CTRL+S> to skip a word or if you didn't know the translation in exam mode."
 					+ "\nIn EXAM MODE you have to translate all words in the selected groups in random order." + "\n\nAdding Vocabulary:"
 					+ "\nThe Vocabulary is loaded into the program by xml files containing the vocabulary." + "\nThese xml files are located in '"
-					+ Log.getLog("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary." + "\n\nEditing XML Files:"
+					+ Log.getString("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary." + "\n\nEditing XML Files:"
 					+ "\nThe Vocabulary.xml file is in 'UTF-8 w/o BOM' encoded."
 					+ "\nBe sure to maintain this encoding type because else it won't work.\nNotepad++ is recommended for editing."
 					+ "\nOne software to support this encoding is Notepad++. Windows' notepad does not support it.");
