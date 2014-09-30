@@ -2,6 +2,8 @@ package com.zaheylu.kana.gui;
 
 import static com.zaheylu.snippets.CodeLibary.*;
 
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -13,17 +15,18 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
 
 public class KanaCharacterChoose extends JDialog {
-	public KanaCharacterChoose() {
-		// choose(2);
+	public KanaCharacterChoose(JFrame parent) {
+		this.parent = parent;
+		//choose(2);
 	}
 
 
@@ -38,6 +41,7 @@ public class KanaCharacterChoose extends JDialog {
 	private JPanel panelVoc;
 	private JPanel panelChar2;
 	private JPanel panelChar1;
+	private JFrame parent;
 
 	public static final int HIRAGANA = 1;
 	public static final int KATAKANA = 2;
@@ -58,19 +62,32 @@ public class KanaCharacterChoose extends JDialog {
 	private final ButtonGroup buttonGroup_2 = new ButtonGroup();
 	private final JButton btnHelp = new JButton("How to use");
 	private final JCheckBox chckbxExam = new JCheckBox("exam");
+	private JPanel buttonPane;
 
+	private void placeComponents() {
+		Container pan = getContentPane();
+
+		if (!Log.getBool("Mode.Touch")) pan.setPreferredSize(new Dimension(209, 154));
+		// else pan.setPreferredSize(new Dimension(700, 350));
+		pan.setSize(pan.getPreferredSize());
+		pack();
+		int width = pan.getWidth();
+		int height = pan.getHeight();
+
+		panelVoc.setBounds(0, 0, width, (int) Math.round(height * 0.666));
+		panelChar1.setBounds(0, 0, width / 2, (int) Math.round(height * 0.666));
+		panelChar2.setBounds(width / 2, 0, width / 2, (int) Math.round(height * 0.666));
+		buttonPane.setBounds(0, (int) Math.round(height * 0.666), width, (int) Math.round(height * 0.333));
+	}
 
 	public int[] choose(int mode) {
-
 		Log.event("CharacterChoose");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 209, 154);
 		setModal(true);
 		setResizable(false);
 		getContentPane().setLayout(null);
 
 		panelVoc = new JPanel();
-		panelVoc.setBounds(0, 0, 204, 94);
 		getContentPane().add(panelVoc);
 		panelVoc.setLayout(new GridLayout(4, 2, 5, 5));
 		panelVoc.add(new JPanel());
@@ -86,8 +103,7 @@ public class KanaCharacterChoose extends JDialog {
 			panelVoc.add(btnHelp);
 		}
 		panelChar1 = new JPanel();
-		panelChar1.setBounds(0, 0, 105, 94);
-		panelChar1.setBorder(new EmptyBorder(5, 5, 5, 5));
+		//panelChar1.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(panelChar1);
 		panelChar1.setLayout(new GridLayout(0, 1, 0, 0));
 		{
@@ -107,7 +123,6 @@ public class KanaCharacterChoose extends JDialog {
 		}
 		{
 			panelChar2 = new JPanel();
-			panelChar2.setBounds(108, 0, 96, 94);
 			getContentPane().add(panelChar2);
 			panelChar2.setLayout(new GridLayout(0, 1, 0, 0));
 			{
@@ -123,8 +138,7 @@ public class KanaCharacterChoose extends JDialog {
 			}
 		}
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 94, 204, 33);
+			buttonPane = new JPanel();
 			getContentPane().add(buttonPane);
 			{
 				JButton okButton = new JButton("OK");
@@ -144,7 +158,7 @@ public class KanaCharacterChoose extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(parent);
 
 		if (mode == 1) {
 			panelVoc.setVisible(false);
@@ -155,7 +169,7 @@ public class KanaCharacterChoose extends JDialog {
 			panelChar2.setVisible(false);
 
 		}
-
+		placeComponents();
 		setVisible(true);
 		return choice;
 	}
@@ -201,8 +215,8 @@ public class KanaCharacterChoose extends JDialog {
 					+ "\nPress <F1> for help and use <CTRL+S> to skip a word or if you didn't know the translation in exam mode."
 					+ "\nIn EXAM MODE you have to translate all words in the selected groups in random order." + "\n\nAdding Vocabulary:"
 					+ "\nThe Vocabulary is loaded into the program by xml files containing the vocabulary." + "\nThese xml files are located in '"
-					+ Log.getString("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary." + "\n\nEditing XML Files:"
-					+ "\nThe Vocabulary.xml file is in 'UTF-8 w/o BOM' encoded."
+					+ Log.getString("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary."
+					+ "\n\nEditing XML Files:" + "\nThe Vocabulary.xml file is in 'UTF-8 w/o BOM' encoded."
 					+ "\nBe sure to maintain this encoding type because else it won't work.\nNotepad++ is recommended for editing."
 					+ "\nOne software to support this encoding is Notepad++. Windows' notepad does not support it.");
 		}

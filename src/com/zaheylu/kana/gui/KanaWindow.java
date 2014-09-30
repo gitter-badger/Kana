@@ -2,9 +2,13 @@ package com.zaheylu.kana.gui;
 
 import static com.zaheylu.kana.KanaLib.*;
 import static com.zaheylu.snippets.CodeLibary.*;
+import static java.lang.Math.*;
 
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -40,7 +44,6 @@ import com.zaheylu.kana.xml.ReadXMLEntryNames;
 import com.zaheylu.kana.xml.ReadXMLVocabulary;
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
-import java.awt.GridLayout;
 
 
 public class KanaWindow extends JFrame {
@@ -62,6 +65,12 @@ public class KanaWindow extends JFrame {
 	private JLabel lblVocKata;
 	private JLabel lblVoc;
 	private JLabel lblVocComment;
+	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
+	private JMenuItem mnLoadAllSounds;
+	private JMenuItem mntmReloadSound;
+	private JPanel panelProgress;
+	private JLabel lblProgess;
+	private JPanel panelHints;
 
 	private TVocabulary vocabulary;
 	private TGroups groups;
@@ -75,24 +84,21 @@ public class KanaWindow extends JFrame {
 	private ArrayList<TWord> examCorrect;
 	private ArrayList<TWord> examWrong;
 	private int[] examOrder;
-	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
-	private JMenuItem mnLoadAllSounds;
-	private JMenuItem mntmReloadSound;
-	private JPanel panelProgress;
-	private JLabel lblProgess;
-	private JPanel panel_1;
-	private JPanel panel_2;
-	private JCheckBoxMenuItem chckbxmntmChronologicalOrder;
 
+	public KanaWindow(String[] args) {
+		if (args != null) {
+			for (int n = 0; n < args.length; n++) {
+				if (args[n].equalsIgnoreCase("debug")) Log.enableLogOutput();
+				if (args[n].equalsIgnoreCase("touch")) Log.setLog("Mode.Touch", true);
+			}
+		}
 
-	public KanaWindow() {
 		this.path = System.getProperty("user.home") + "\\Documents\\kana\\";
 		Log.setLog("Path.User", path);
 
 		ImageIcon icon = new ImageIcon(KanaWindow.class.getResource("/res/kana_small.png"));
 		setIconImage(icon.getImage());
-		this.setSize(634, 317);
-		this.setLocationRelativeTo(null);
+		this.setMinimumSize(new Dimension(300, 200));
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Kana");
@@ -100,31 +106,33 @@ public class KanaWindow extends JFrame {
 		getContentPane().setLayout(null);
 
 		panelVocabulary = new JPanel();
-		panelVocabulary.setBounds(10, 11, 608, 246);
+		panelVocabulary.setLayout(null);
 		getContentPane().add(panelVocabulary);
 
 		panelChoose = new JPanel();
-		panelChoose.setBounds(10, 11, 608, 246);
+		panelChoose.setLayout(null);
 		getContentPane().add(panelChoose);
 
 		panelType = new JPanel();
-		panelType.setBounds(10, 11, 214, 246);
-		getContentPane().add(panelType);
 		panelType.setLayout(null);
+		getContentPane().add(panelType);
 
-		Log.event("initComponents");
 		initComponents();
 
 		showPanel(null);
 
 		loadXMLs();
 
-		Log.event("showWindow");
 		this.setVisible(true);
 	}
 
-	private void initComponents() {
+	public void setVisible(boolean b) {
+		Log.event("showWindow");
+		super.setVisible(b);
+	}
 
+	private void initComponents() {
+		Log.event("initComponents");
 		tfType = new JTextField();
 		tfTypeTmp = new JTextField();
 		TfTypeKeyListener tmp = new TfTypeKeyListener(tfType.getDocument(), tfTypeTmp.getDocument());
@@ -133,81 +141,85 @@ public class KanaWindow extends JFrame {
 		tfType.getDocument().addDocumentListener(tmp);
 		tfType.setBounds(10, 221, 194, 20);
 		tfType.setColumns(10);
-		panelType.add(tfType);
-
 		lblTypeHelp = new JLabel("");
 		lblTypeHelp.setForeground(Color.RED);
 		lblTypeHelp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTypeHelp.setFont(new Font("MS Gothic", Font.BOLD, 120));
-		lblTypeHelp.setBounds(0, 11, 214, 199);
 		lblTypeHelp.setVisible(false);
-		panelType.add(lblTypeHelp);
-
 		lblType = new JLabel("");
-		lblType.setBounds(0, 11, 214, 199);
-		panelType.add(lblType);
 		lblType.setHorizontalAlignment(SwingConstants.CENTER);
 		lblType.setFont(new Font("MS Gothic", Font.BOLD, 120));
-		panelVocabulary.setLayout(null);
 
-		tfVoc = new JTextField();
-		tfVoc.addKeyListener(new TfVocKeyListener());
-
+		panelHints = new JPanel();
+		panelHints.setLayout(new GridLayout(2, 1, 0, 0));
+		JLabel lblConfirm = new JLabel("Press Enter to Confirm");
+		JLabel lblSkip = new JLabel("Press CTRL+S to Skip");
 		panelProgress = new JPanel();
-		panelProgress.setBounds(477, 213, 130, 30);
-		panelVocabulary.add(panelProgress);
 		panelProgress.setLayout(new GridLayout(0, 1, 0, 0));
-
 		lblProgess = new JLabel("Progess: 0 / 0");
 		lblProgess.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblProgess.setHorizontalAlignment(SwingConstants.CENTER);
-		panelProgress.add(lblProgess);
-		tfVoc.setBounds(0, 213, 476, 20);
-		tfVoc.setColumns(10);
-		panelVocabulary.add(tfVoc);
 
+		tfVoc = new JTextField();
+		tfVoc.addKeyListener(new TfVocKeyListener());
+		tfVoc.setColumns(10);
 		lblVoc = new JLabel("B");
-		lblVoc.setBounds(0, 11, 608, 126);
-		panelVocabulary.add(lblVoc);
 		lblVoc.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVoc.setFont(new Font("MS Gothic", Font.BOLD, 120));
-
 		lblVocComment = new JLabel("");
 		lblVocComment.setFont(new Font("MS Gothic", Font.PLAIN, 22));
 		lblVocComment.setHorizontalAlignment(SwingConstants.CENTER);
-		lblVocComment.setBounds(0, 180, 608, 30);
-		panelVocabulary.add(lblVocComment);
-
 		lblVocHira = new JLabel("");
 		lblVocHira.setFont(new Font("MS Gothic", Font.PLAIN, 25));
-		lblVocHira.setBounds(0, 130, 303, 39);
-		panelVocabulary.add(lblVocHira);
-
 		lblVocKata = new JLabel("");
 		lblVocKata.setFont(new Font("MS Gothic", Font.PLAIN, 25));
-		lblVocKata.setBounds(315, 130, 293, 39);
+
+
+		panelType.add(tfType);
+		panelType.add(lblType);
+		panelType.add(lblTypeHelp);
+
+		panelHints.add(lblConfirm);
+		panelHints.add(lblSkip);
+		panelProgress.add(lblProgess);
+
+		panelVocabulary.add(panelHints);
+		panelVocabulary.add(panelProgress);
+		panelVocabulary.add(tfVoc);
+		panelVocabulary.add(lblVoc);
+		panelVocabulary.add(lblVocComment);
+		panelVocabulary.add(lblVocHira);
 		panelVocabulary.add(lblVocKata);
 
-		JLabel lblConfirm = new JLabel("Press Enter to Confirm");
-		lblConfirm.setBounds(477, 212, 132, 14);
-		panelVocabulary.add(lblConfirm);
-
-		JLabel lblSkip = new JLabel("Press CTRL+S to Skip");
-		lblSkip.setBounds(477, 226, 132, 14);
-		panelVocabulary.add(lblSkip);
+		// MENU
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnProgram = new JMenu("Settings");
-		menuBar.add(mnProgram);
+		JMenu mnProgram = new JMenu("Program");
+		JMenu mnProfile = new JMenu("Profile");
+		mnProfile.setEnabled(false);
+		JMenu mnTraining = new JMenu("Training");
+		JMenu mnSettings = new JMenu("Settings");
+		JMenu mnInfo = new JMenu("Info");
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new MntmExitActionListener());
 
+		JMenuItem mntmCharacters = new JMenuItem("Characters");
+		mntmCharacters.addActionListener(new MntmCharactersActionListener());
+
+		JMenuItem mntmVocabulary = new JMenuItem("Vocabulary");
+		mntmVocabulary.addActionListener(new MntmVocabularyActionListener());
+
+		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new MntmAboutActionListener());
+
+		JMenuItem mntmCheckForUpdates = new JMenuItem("Check for Updates");
+		mntmCheckForUpdates.addActionListener(new MntmCheckForUpdatesActionListener());
+
 		JCheckBoxMenuItem chckbxmntmEnableSounds = new JCheckBoxMenuItem("Enable Sounds");
 		chckbxmntmEnableSounds.addActionListener(new ChckbxmntmEnableSoundsActionListener());
-		mnProgram.add(chckbxmntmEnableSounds);
 
 		mnLoadAllSounds = new JMenuItem("Reload all sounds");
 		mnLoadAllSounds.setEnabled(false);
@@ -216,63 +228,79 @@ public class KanaWindow extends JFrame {
 		chckbxmntmSoundOnNew = new JCheckBoxMenuItem("Sound on new Vocabulary");
 		chckbxmntmSoundOnNew.setEnabled(false);
 		chckbxmntmSoundOnNew.addActionListener(new ChckbxmntmSoundOnNewActionListener());
-		mnProgram.add(chckbxmntmSoundOnNew);
-		mnProgram.add(mnLoadAllSounds);
 
 		mntmReloadSound = new JMenuItem("Reload this sound");
 		mntmReloadSound.addActionListener(new MntmReloadSoundActionListener());
 		mntmReloadSound.setEnabled(false);
-		mnProgram.add(mntmReloadSound);
 
 		JCheckBoxMenuItem chckbxmntmRemoveSkippedWords = new JCheckBoxMenuItem("Remove Skipped Words");
 		chckbxmntmRemoveSkippedWords.addActionListener(new ChckbxmntmRemoveSkippedWordsActionListener());
-		mnProgram.add(chckbxmntmRemoveSkippedWords);
 
-		panel_1 = new JPanel();
-		panel_1.setBackground(Color.BLACK);
-		panel_1.setForeground(new Color(0, 0, 0));
-		mnProgram.add(panel_1);
-
-		chckbxmntmChronologicalOrder = new JCheckBoxMenuItem("Chronological Order");
+		JCheckBoxMenuItem chckbxmntmChronologicalOrder = new JCheckBoxMenuItem("Chronological Order");
 		chckbxmntmChronologicalOrder.addActionListener(new ChckbxmntmChronologicalOrderActionListener());
-		mnProgram.add(chckbxmntmChronologicalOrder);
 
-		panel_2 = new JPanel();
-		panel_2.setForeground(Color.BLACK);
-		panel_2.setBackground(Color.BLACK);
-		mnProgram.add(panel_2);
+		JCheckBoxMenuItem chckbxmntmTouchMode = new JCheckBoxMenuItem("Bigger Window");
+		chckbxmntmTouchMode.addActionListener(new ChckbxmntmTouchModeListener());
+
+		menuBar.add(mnProgram);
+		menuBar.add(mnProfile);
+		menuBar.add(mnTraining);
+		menuBar.add(mnSettings);
+		menuBar.add(mnInfo);
 
 		mnProgram.add(mntmExit);
 
-		JMenu mnProfile = new JMenu("Profile");
-		mnProfile.setEnabled(false);
-		menuBar.add(mnProfile);
-
-		JMenuItem mntmLoad = new JMenuItem("Load");
-		mntmLoad.addActionListener(new MntmLoadActionListener());
-		mnProfile.add(mntmLoad);
-
-		JMenu mnTraining = new JMenu("Training");
-		menuBar.add(mnTraining);
-
-		JMenuItem mntmCharacters = new JMenuItem("Characters");
-		mntmCharacters.addActionListener(new MntmCharactersActionListener());
 		mnTraining.add(mntmCharacters);
-
-		JMenuItem mntmVocabulary = new JMenuItem("Vocabulary");
-		mntmVocabulary.addActionListener(new MntmVocabularyActionListener());
 		mnTraining.add(mntmVocabulary);
 
-		JMenu mnInfo = new JMenu("Info");
-		menuBar.add(mnInfo);
+		mnSettings.add(chckbxmntmEnableSounds);
+		mnSettings.add(chckbxmntmSoundOnNew);
+		mnSettings.add(mnLoadAllSounds);
+		mnSettings.add(mntmReloadSound);
+		mnSettings.add(chckbxmntmRemoveSkippedWords);
+		mnSettings.add(new JPanel());
+		mnSettings.add(chckbxmntmChronologicalOrder);
+		mnSettings.add(new JPanel());
+		mnSettings.add(chckbxmntmTouchMode);
+		mnSettings.add(new JPanel());
 
-		JMenuItem mntmAbout = new JMenuItem("About");
-		mntmAbout.addActionListener(new MntmAboutActionListener());
 		mnInfo.add(mntmAbout);
-
-		JMenuItem mntmCheckForUpdates = new JMenuItem("Check for Updates");
-		mntmCheckForUpdates.addActionListener(new MntmCheckForUpdatesActionListener());
 		mnInfo.add(mntmCheckForUpdates);
+
+		mnProgram.add(mntmExit);
+
+		placeComponents();
+		setLocationRelativeTo(null);
+
+	}
+
+	private void placeComponents() {
+		Log.event("placeComponents");
+		Container pan = getContentPane();
+
+		if (Log.getBool("Mode.Touch")) pan.setPreferredSize(new Dimension(1280, 640));
+		else pan.setPreferredSize(new Dimension(700, 350));
+
+		pan.setSize(pan.getPreferredSize());
+		pack();
+		int width = pan.getWidth();
+		int height = pan.getHeight();
+
+		panelVocabulary.setBounds(0, 0, width, height);
+		panelChoose.setBounds(0, 0, width, height);
+		panelType.setBounds(0, 0, width, height);
+
+		tfType.setBounds(10, 221, 194, 20);
+		lblTypeHelp.setBounds(0, 11, 214, 199);
+		lblType.setBounds(0, 11, 214, 199);
+
+		tfVoc.setBounds(5, height - 27, width - 140, 20);
+		panelHints.setBounds(width - 130, height - 30, 130, 30);
+		panelProgress.setBounds(panelHints.getBounds());
+		lblVocComment.setBounds(0, (int) round((height - 30) * 0.85), width, (int) round((height - 30) * 0.15));
+		lblVocHira.setBounds(0, (int) round((height - 30) * 0.725), width / 2, (int) round((height - 30) * 0.125));
+		lblVocKata.setBounds(width / 2, lblVocHira.getY(), lblVocHira.getWidth(), lblVocHira.getHeight());
+		lblVoc.setBounds(0, 0, width, (int) round((height - 30) * 0.725));
 	}
 
 	private void loadXMLs() {
@@ -331,18 +359,12 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
-	private class MntmLoadActionListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-
-		}
-	}
-
 	private class MntmCharactersActionListener implements ActionListener {
 
 
 		public void actionPerformed(ActionEvent arg0) {
 
-			options = new KanaCharacterChoose().choose(1);
+			options = new KanaCharacterChoose(thisFrame).choose(1);
 			if (options[0] != -1) {
 				if (options[1] == 1) {
 					showPanel(panelType);
@@ -419,7 +441,7 @@ public class KanaWindow extends JFrame {
 	private class MntmVocabularyActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			if (vocabulary != null) if (vocabulary.size() > 0) {
-				options = new KanaCharacterChoose().choose(2);
+				options = new KanaCharacterChoose(thisFrame).choose(2);
 				if (options[0] != KanaCharacterChoose.CANCEL) {
 					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArray(vocabulary), 2).choose();
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
@@ -466,27 +488,17 @@ public class KanaWindow extends JFrame {
 					if (Log.getBool("Vocabulary.RemoveSkipped")) currentWordPool.remove(currentWord);
 					newVocabulary();
 				}
-			}
-			if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-				if (options[0] == 1) {
-					for (int n = 0; n < currentWord.getEngl().size(); n++) {
-						if (equalsIgnoreCase(currentWord.getEngl().get(n), tfVoc.getText())) {
+			} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+
+				for (int n = 0; n < possibleAnswers.size(); n++) {
+					if (!(tfVoc.getText().isEmpty())) {
+						if (equalsIgnoreCase(tfVoc.getText(), possibleAnswers.get(n)) || equalsIgnoreCase(lblVocHira.getText(), possibleAnswers.get(n))
+								|| equalsIgnoreCase(lblVocKata.getText(), possibleAnswers.get(n))) {
 							tfVoc.setText("");
+							lblVocHira.setText("");
+							lblVocKata.setText("");
 							if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
 							else newVocabulary();
-						}
-					}
-				} else {
-					for (int n = 0; n < possibleAnswers.size(); n++) {
-						if (!(tfVoc.getText().isEmpty())) {
-							if (equalsIgnoreCase(tfVoc.getText(), possibleAnswers.get(n)) || equalsIgnoreCase(lblVocHira.getText(), possibleAnswers.get(n))
-									|| equalsIgnoreCase(lblVocKata.getText(), possibleAnswers.get(n))) {
-								tfVoc.setText("");
-								lblVocHira.setText("");
-								lblVocKata.setText("");
-								if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
-								else newVocabulary();
-							}
 						}
 					}
 				}
@@ -494,6 +506,8 @@ public class KanaWindow extends JFrame {
 			if (options[0] == 2) {
 				lblVocHira.setText(convertPlus(tfVoc.getText(), 0, 1));
 				lblVocKata.setText(convertPlus(tfVoc.getText(), 0, 2));
+				strechFont(lblVocHira);
+				strechFont(lblVocKata);
 			}
 		}
 
@@ -526,7 +540,7 @@ public class KanaWindow extends JFrame {
 
 	private class ChckbxmntmSoundOnNewActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			Log.setLog("Sounds.OnVocabulary",((JCheckBoxMenuItem) arg0.getSource()).isSelected());
+			Log.setLog("Sounds.OnVocabulary", ((JCheckBoxMenuItem) arg0.getSource()).isSelected());
 		}
 	}
 
@@ -549,6 +563,29 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
 			Log.setLog("Vocabulary.Order.Chronological", ch.isSelected());
+		}
+	}
+
+	private class ChckbxmntmTouchModeListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
+			Log.setLog("Mode.Touch", ch.isSelected());
+			// Thread t = new Thread(new RefreshThread());
+			// t.start();
+			placeComponents();
+		}
+	}
+
+	class RefreshThread implements Runnable {
+		public void run() {
+			while (Log.getBool("Mode.Touch")) {
+				try {
+					placeComponents();
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -613,9 +650,10 @@ public class KanaWindow extends JFrame {
 			if (word.hasPresent()) from += " / " + word.getPresent();
 			lblVocHira.setText("");
 			lblVocKata.setText("");
+			possibleAnswers = vocabulary.getPossibleEngl(word);
 		} else {
 			from = word.getEngl().get(randInt(word.getEngl().size() - 1));
-			possibleAnswers = vocabulary.getPossibleAnswers(from);
+			possibleAnswers = vocabulary.getPossibleKana(from);
 		}
 		// SET TEXT
 		lblVoc.setText(from);

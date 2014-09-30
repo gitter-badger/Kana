@@ -78,8 +78,8 @@ public class TVocabulary {
 		return result;
 	}
 
-	public ArrayList<String> getPossibleAnswers(String arg) {
-		Log.event("getPossibleAnswers");
+	public ArrayList<String> getPossibleKana(String arg) {
+		Log.event("getPossibleKana");
 		ArrayList<String> result = new ArrayList<String>();
 		for (int n = 0; n < this.size(); n++)
 			for (int m = 0; m < this.get(n).getEngl().size(); m++) {
@@ -89,6 +89,21 @@ public class TVocabulary {
 					if (this.get(n).hasPresent()) result.add(this.get(n).getPresent());
 				}
 			}
+		return result;
+	}
+
+	public ArrayList<String> getPossibleEngl(TWord word) {
+		Log.event("getPossibleEngl");
+		ArrayList<String> result = new ArrayList<String>();
+		for (int n = 0; n < size(); n++) {
+			if (KanaLib.equalsIgnoreCase(this.get(n).getKana(), word.getKana()) || KanaLib.equalsIgnoreCase(this.get(n).getKana(), word.getKanji())) {
+				for (int m = 0; m < this.get(n).getEngl().size(); m++) {
+					result.add(this.get(n).getEngl().get(m));
+				}
+			}
+
+		}
+
 		return result;
 	}
 

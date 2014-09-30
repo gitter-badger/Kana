@@ -56,6 +56,7 @@ public class CodeLibary {
 		if (obj instanceof JLabel) {
 			Font font = ((JLabel) obj).getFont();
 			String text = ((JLabel) obj).getText();
+			if (text == null || text.isEmpty()) return;
 			int stringWidth = ((JLabel) obj).getFontMetrics(font).stringWidth(text);
 			int componentWidth = ((JLabel) obj).getWidth() - (((JLabel) obj).getWidth() / 50);
 			int componentHeight = ((JLabel) obj).getHeight();
