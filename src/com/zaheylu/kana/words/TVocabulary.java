@@ -43,10 +43,10 @@ public class TVocabulary {
 
 	public ArrayList<TWord> getFiltered(ArrayList<Integer> filter) {
 		ArrayList<TWord> result = new ArrayList<TWord>();
-		for (int i = 0; i < words.size(); i++) {
-			int iGroup = words.get(i).getGroup();
-			for (int n = 0; n < filter.size(); n++) {
-				if (iGroup == filter.get(n)) result.add(words.get(i));
+		for (TWord word : words) {
+			int iGroup = word.getGroup();
+			for (Integer filt : filter) {
+				if (iGroup == filt) result.add(word);
 			}
 		}
 		return result;
@@ -54,9 +54,8 @@ public class TVocabulary {
 
 	public ArrayList<TWord> getFiltered(int filter) {
 		ArrayList<TWord> result = new ArrayList<TWord>();
-		for (int i = 0; i < words.size(); i++) {
-			int iGroup = words.get(i).getGroup();
-			if (iGroup == filter) result.add(words.get(i));
+		for (TWord word : words) {
+			if (word.getGroup() == filter) result.add(word);
 		}
 		return result;
 	}
@@ -71,22 +70,22 @@ public class TVocabulary {
 
 	public int size(int group) {
 		int result = 0;
-		for (int i = 0; i < words.size(); i++) {
-			int iGroup = words.get(i).getGroup();
-			if (iGroup == group) result++;
-		}
+			for (TWord word : words) {
+				if (word.getGroup() == group) result++;
+			}
 		return result;
 	}
 
 	public ArrayList<String> getPossibleKana(String arg) {
 		Log.event("getPossibleKana");
 		ArrayList<String> result = new ArrayList<String>();
-		for (int n = 0; n < this.size(); n++)
-			for (int m = 0; m < this.get(n).getEngl().size(); m++) {
-				if (KanaLib.equalsIgnoreCase(this.get(n).getEngl().get(m), arg)) {
-					result.add(this.get(n).getKana());
-					if (this.get(n).hasRomaji()) result.add(this.get(n).getRomaji());
-					if (this.get(n).hasPresent()) result.add(this.get(n).getPresent());
+
+		for (TWord word : words)
+			for (String engl : word.getEngl()) {
+				if (KanaLib.equalsIgnoreCase(engl, arg)) {
+					result.add(word.getKana());
+					if (word.hasRomaji()) result.add(word.getRomaji());
+					if (word.hasPresent()) result.add(word.getPresent());
 				}
 			}
 		return result;
@@ -95,10 +94,10 @@ public class TVocabulary {
 	public ArrayList<String> getPossibleEngl(TWord word) {
 		Log.event("getPossibleEngl");
 		ArrayList<String> result = new ArrayList<String>();
-		for (int n = 0; n < size(); n++) {
-			if (KanaLib.equalsIgnoreCase(this.get(n).getKana(), word.getKana()) || KanaLib.equalsIgnoreCase(this.get(n).getKana(), word.getKanji())) {
-				for (int m = 0; m < this.get(n).getEngl().size(); m++) {
-					result.add(this.get(n).getEngl().get(m));
+		for (TWord nWord : words) {
+			if (KanaLib.equalsIgnoreCase(nWord.getKana(), word.getKana()) || KanaLib.equalsIgnoreCase(nWord.getKana(), word.getKanji())) {
+				for (String engl : nWord.getEngl()) {
+					result.add(engl);
 				}
 			}
 
@@ -135,12 +134,12 @@ public class TVocabulary {
 		public void run() {
 			boolean err = false;
 			ArrayList<Integer> errs = new ArrayList<Integer>();
-			for (int n = 0; n < words.size(); n++) {
+			for (TWord word : words) {
 				try {
-					File dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
+					File dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + ".mp3");
 					if ((!dest.exists()) || (overwrite)) {
 						Log.event("AudioLoadThread: " + dest.getPath());
-						String txt = words.get(n).getKana();
+						String txt = word.getKana();
 						txt = java.net.URLEncoder.encode(txt, "UTF-8");
 						URL url = new URL("http://translate.google.com/translate_tts?ie=UTF-8&tl=ja&q=" + txt);
 						HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
@@ -155,10 +154,10 @@ public class TVocabulary {
 						}
 						outstream.close();
 					}
-					if (words.get(n).hasPresent()) {
-						dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(words.get(n).getIndex()) + "p.mp3");
+					if (word.hasPresent()) {
+						dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + "p.mp3");
 						if ((!dest.exists()) || (overwrite)) {
-							String txt = words.get(n).getPresent();
+							String txt = word.getPresent();
 							txt = java.net.URLEncoder.encode(txt, "UTF-8");
 							URL url = new URL("http://translate.google.com/translate_tts?ie=UTF-8&tl=ja&q=" + txt);
 							HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
@@ -182,7 +181,6 @@ public class TVocabulary {
 
 				} catch (IOException e) {
 					err = true;
-					errs.add(n);
 					Log.event("Err.AudioLoadThread.Run");
 					e.printStackTrace();
 				}

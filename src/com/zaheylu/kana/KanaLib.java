@@ -23,9 +23,9 @@ public class KanaLib {
 
 
 	private static final String[] Alphabet = new String[] {
-			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu", "ne", "no", "ha", "hi", "hu", "he", "ho", "ma", "mi",
-			"mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n", "ga", "gi", "gu", "ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi",
-			"bu", "be", "bo", "pa", "pi", "pu", "pe", "po" };
+			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu", "ne", "no",
+			"ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n", "ga", "gi", "gu",
+			"ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po" };
 	private static final String[][] DATA = new String[][] {
 			{
 					"wi", null, "ウィ" }, {
@@ -251,15 +251,15 @@ public class KanaLib {
 
 
 	public static String convert(String arg, int from, int to) {
-		for (int n = 0; n < DATA.length; n++) {
-			if (equalsIgnoreCase(arg, DATA[n][from]) && DATA[n][to] != null) {
-				return DATA[n][to];
+		for (String[] s : DATA) {
+			if (equalsIgnoreCase(arg, s[from]) && s[to] != null) {
+				return s[to];
 			}
 		}
 		return null;
 	}
 
-	public static String convertPlus(String arg, int from, int to) {
+	public static String convertPlus(String arg, int from, int to) { //TODO: Seperate Threading TODO: use char[] instead of Strings; performance check
 		String result = "";
 		int index = 0;
 		int read = 4;
@@ -301,8 +301,8 @@ public class KanaLib {
 				ar.add(n);
 			}
 		boolean result = false;
-		for (int n = 0; n < ar.size(); n++) {
-			if (equalsIgnoreCase(DATA[ar.get(n)][typ2], str2)) {
+		for (Integer val : ar) {
+			if (equalsIgnoreCase(DATA[val][typ2], str2)) {
 				result = true;
 			}
 		}
@@ -312,11 +312,11 @@ public class KanaLib {
 	public static int findType(String arg) {
 		if (arg.isEmpty()) return -1;
 		else {
-			for (int n = 0; n < DATA.length - 4; n++) {
-				if (equalsIgnoreCase(DATA[n][1], arg)) {
+			for (String[] data : DATA) {
+				if (equalsIgnoreCase(data[1], arg)) {
 					return 1;
 				}
-				if (equalsIgnoreCase(DATA[n][2], arg)) {
+				if (equalsIgnoreCase(data[2], arg)) {
 					return 2;
 				}
 			}
@@ -344,18 +344,17 @@ public class KanaLib {
 		if (s1 == null || s2 == null) return false;
 		char[] c1 = s1.toCharArray();
 		char[] c2 = s2.toCharArray();
-		for (int n = 0; n < c1.length; n++) {
-			for (int m = 0; m < CaseConversion.length; m++) {
-				if (String.valueOf(c1[n]).equalsIgnoreCase(CaseConversion[m][0])) {
-					c1[n] = CaseConversion[m][1].charAt(0);
+		for (char char1 : c1) {
+			for (String[] caseC : CaseConversion) {
+				if (String.valueOf(char1).equalsIgnoreCase(caseC[0])) {
+					char1 = caseC[1].charAt(0);
 				}
 			}
 		}
-
-		for (int n = 0; n < c2.length; n++) {
-			for (int m = 0; m < CaseConversion.length; m++) {
-				if (String.valueOf(c2[n]).equalsIgnoreCase(CaseConversion[m][0])) {
-					c2[n] = CaseConversion[m][1].charAt(0);
+		for (char char2 : c2) {
+			for (String[] caseC : CaseConversion) {
+				if (String.valueOf(char2).equalsIgnoreCase(caseC[0])) {
+					char2 = caseC[1].charAt(0);
 				}
 			}
 		}

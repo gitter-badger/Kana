@@ -56,8 +56,8 @@ public class VocHelp extends JDialog {
 		}
 		// English
 		{
-			for (int n = 0; n < word.getEngl().size(); n++) {
-				JLabel lblEngl = newJLabel(word.getEngl().get(n), cY, 50, new Font("Tahoma", Font.PLAIN, 20));
+			for (String engl : word.getEngl()) {
+				JLabel lblEngl = newJLabel(engl, cY, 50, new Font("Tahoma", Font.PLAIN, 20));
 				cY += lblEngl.getHeight();
 				getContentPane().add(lblEngl);
 			}

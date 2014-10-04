@@ -53,8 +53,9 @@ public class ReadXMLUTF8FileSAX {
 			public void characters(char ch[], int start, int length) throws SAXException {
 
 				currContext = "";
-				for (int n = 0; n < context.size(); n++)
-					currContext += context.get(n) + ".";
+				for (String cont : context) {
+					currContext += cont + ".";
+				}					
 				System.out.println(String.format("%s.%s", currContext, new String(ch, start, length)));
 
 			}

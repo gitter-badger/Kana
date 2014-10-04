@@ -19,8 +19,9 @@ public class Log {
 	}
 
 	public static boolean hasEntry(String name) {
-		for (int n = 0; n < log.size(); n++)
-			if (log.get(n).getName().equalsIgnoreCase(name)) return true;
+		for (LogEntry e : log) {
+			if (e.getName().equalsIgnoreCase(name)) return true;
+		}
 		return false;
 	}
 
@@ -42,9 +43,7 @@ public class Log {
 	}
 
 	public static LogEntry getEntry(String name) {
-		LogEntry tmpEntry;
-		for (int n = 0; n < log.size(); n++) {
-			tmpEntry = log.get(n);
+		for (LogEntry tmpEntry : log) {
 			if (tmpEntry.getName().equalsIgnoreCase(name)) return tmpEntry;
 		}
 		return null;

@@ -38,7 +38,7 @@ public class ReadXMLEntryNames {
 		return load(dBuilder.parse(path.openStream()));
 	}
 
-	private ArrayList<String> load(Document doc) throws ParserConfigurationException, SAXException, IOException {
+	private ArrayList<String> load(Document doc) {
 
 		doc.getDocumentElement().normalize();
 

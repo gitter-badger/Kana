@@ -96,12 +96,12 @@ public class KanaWindow extends JFrame {
 	public KanaWindow(String[] args) {
 		profile = new Profile();
 		if (args != null) {
-			for (int n = 0; n < args.length; n++) {
-				if (args[n].equalsIgnoreCase("debug")) Log.enableLogOutput();
-				if (args[n].equalsIgnoreCase("touch")) Log.setLog("Mode.Touch", true);
+			for (String arg : args) {
+				if (arg.equalsIgnoreCase("debug")) Log.enableLogOutput();
+				if (arg.equalsIgnoreCase("touch")) Log.setLog("Mode.Touch", true);
 			}
 		}
-
+		options = new int[2];
 		this.path = System.getProperty("user.home") + "\\Documents\\kana\\";
 		Log.setLog("Path.User", path);
 
@@ -265,7 +265,7 @@ public class KanaWindow extends JFrame {
 
 		JCheckBoxMenuItem chckbxmntmTouchMode = new JCheckBoxMenuItem("Bigger Window");
 		chckbxmntmTouchMode.addActionListener(new ChckbxmntmTouchModeListener());
-		
+
 		JMenuItem mntmPoolNewWords = new JMenuItem("Word Pool: New Words");
 		mntmPoolNewWords.addActionListener(new MntmNewWordsActionListener());
 
@@ -552,8 +552,10 @@ public class KanaWindow extends JFrame {
 
 		public void keyReleased(KeyEvent arg0) {
 			if (options[0] == 2) {
+				long time = System.nanoTime();
 				lblVocHira.setText(convertPlus(tfVoc.getText(), 0, 1));
 				lblVocKata.setText(convertPlus(tfVoc.getText(), 0, 2));
+				System.out.println("Conversion time: " + ((System.nanoTime() - time) / 1000000000.0) + " seconds");
 				strechFont(lblVocHira);
 				strechFont(lblVocKata);
 			}
@@ -571,10 +573,10 @@ public class KanaWindow extends JFrame {
 				}
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
 
-				for (int n = 0; n < possibleAnswers.size(); n++) {
+				for (String answer : possibleAnswers) {
 					if (!(tfVoc.getText().isEmpty())) {
-						if (equalsIgnoreCase(tfVoc.getText(), possibleAnswers.get(n)) || equalsIgnoreCase(lblVocHira.getText(), possibleAnswers.get(n))
-								|| equalsIgnoreCase(lblVocKata.getText(), possibleAnswers.get(n))) {
+						if (equalsIgnoreCase(tfVoc.getText(), answer) || equalsIgnoreCase(lblVocHira.getText(), answer)
+								|| equalsIgnoreCase(lblVocKata.getText(), answer)) {
 							tfVoc.setText("");
 							lblVocHira.setText("");
 							lblVocKata.setText("");
@@ -658,6 +660,7 @@ public class KanaWindow extends JFrame {
 			}
 			if (words.size() > 0) {
 				currentWordPool = words;
+				showPanel(panelVocabulary);
 				newVocabulary();
 			} else showmessage("There are no new words.");
 		}
@@ -667,19 +670,25 @@ public class KanaWindow extends JFrame {
 
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
-			double threshold = Double.valueOf(JOptionPane.showInputDialog("Threshold in percent")) / 100.0;
-			for (SuccessEntry item : profile.getSuccess()) {
-				for (TWord word : vocabulary.words) {
-					if (item.getRatio() <= threshold) {
-						if (item.getNumber() == 0) words.add(word);
-						break;
+			try {
+				double threshold = Double.valueOf(JOptionPane.showInputDialog("Threshold in percent")) / 100.0;
+				for (SuccessEntry item : profile.getSuccess()) {
+					for (TWord word : vocabulary.words) {
+						if (item.getIndex() == word.getIndex()) {
+							if (item.getNumber() > 0 && item.getRatio() <= threshold) words.add(word);
+							break;
+						}
 					}
 				}
+				if (words.size() > 0) {
+					currentWordPool = words;
+					showPanel(panelVocabulary);
+					newVocabulary();
+				} else showmessage("There are no new words.");
+			} catch (Exception e) {
+				showmessage("Some error occoured."); // TODO: even for you, that's too lazy...
+				e.printStackTrace();
 			}
-			if (words.size() > 0) {
-				currentWordPool = words;
-				newVocabulary();
-			} else showmessage("There are no new words.");
 		}
 	}
 

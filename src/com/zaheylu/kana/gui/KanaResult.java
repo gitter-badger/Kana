@@ -44,8 +44,7 @@ public class KanaResult extends JDialog {
 		panelContent.setBackground(new Color(100, 100, 100));
 		panelContent.setBounds(0, 50, width, rows * 50);
 
-		for (int n = 0; n < words.size(); n++) {
-			TWord word = words.get(n);
+		for (TWord word : words) {
 			JLabel lbl = new JLabel(word.getKana());
 			if (word.hasKanji()) lbl.setText(word.getKanji());
 			lbl.setSize((panelContent.getWidth()) / (columns), (panelContent.getHeight()) / rows);
