@@ -38,25 +38,17 @@ class AudioPlayThread extends Thread {
 	}
 
 	public void run() {
-		File f = new File(Log.getString("Path.User") + "Voc" + String.valueOf(word.getIndex()) + ".mp3");
+		File f = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + ".mp3");
 		if (f.exists()) {
 			Log.event("AudioPlayThread: " + f.getPath());
-			/*
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.start();*/
-			/*Media hit = new Media(file.toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(hit);
-			mediaPlayer.play();*/
 			Player player;
 			try {
 				player = new Player(new FileInputStream(f));
 				player.play();
 				if (word.hasPresent()) {
-					f = new File(Log.getString("Path.User") + "Voc" + String.valueOf(word.getIndex()) + "p.mp3");
+					f = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + "p.mp3");
 					if (f.exists()) {
-						Thread.sleep(500);
+						Thread.sleep(400);
 						player = new Player(new FileInputStream(f));
 						player.play();
 					}

@@ -14,7 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -32,16 +35,20 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
 
 import org.xml.sax.SAXException;
 
 import com.zaheylu.gui.JCheckDialog;
+import com.zaheylu.kana.users.Profile;
+import com.zaheylu.kana.users.SuccessEntry;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
 import com.zaheylu.kana.words.TVocabulary;
 import com.zaheylu.kana.words.TWord;
 import com.zaheylu.kana.xml.ReadXMLEntryNames;
-import com.zaheylu.kana.xml.ReadXMLVocabulary;
+import com.zaheylu.kana.xml.handler.ProfileHandler;
+import com.zaheylu.kana.xml.handler.VocHandler;
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
 
@@ -72,6 +79,7 @@ public class KanaWindow extends JFrame {
 	private JLabel lblProgess;
 	private JPanel panelHints;
 
+	private Profile profile;
 	private TVocabulary vocabulary;
 	private TGroups groups;
 	private TWord currentWord;
@@ -86,6 +94,7 @@ public class KanaWindow extends JFrame {
 	private int[] examOrder;
 
 	public KanaWindow(String[] args) {
+		profile = new Profile();
 		if (args != null) {
 			for (int n = 0; n < args.length; n++) {
 				if (args[n].equalsIgnoreCase("debug")) Log.enableLogOutput();
@@ -122,6 +131,21 @@ public class KanaWindow extends JFrame {
 		showPanel(null);
 
 		loadXMLs();
+
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				Log.event("Hook.Shutdown");
+				try {
+					profile.save();
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (XMLStreamException e) {
+					e.printStackTrace();
+				}
+			}
+		}));
 
 		this.setVisible(true);
 	}
@@ -241,6 +265,12 @@ public class KanaWindow extends JFrame {
 
 		JCheckBoxMenuItem chckbxmntmTouchMode = new JCheckBoxMenuItem("Bigger Window");
 		chckbxmntmTouchMode.addActionListener(new ChckbxmntmTouchModeListener());
+		
+		JMenuItem mntmPoolNewWords = new JMenuItem("Word Pool: New Words");
+		mntmPoolNewWords.addActionListener(new MntmNewWordsActionListener());
+
+		JMenuItem mntmPoolWrongWords = new JMenuItem("Word Pool: Wrong Words");
+		mntmPoolWrongWords.addActionListener(new MntmWrongWordsActionListener());
 
 		menuBar.add(mnProgram);
 		menuBar.add(mnProfile);
@@ -263,6 +293,8 @@ public class KanaWindow extends JFrame {
 		mnSettings.add(new JPanel());
 		mnSettings.add(chckbxmntmTouchMode);
 		mnSettings.add(new JPanel());
+		mnSettings.add(mntmPoolNewWords);
+		mnSettings.add(mntmPoolWrongWords);
 
 		mnInfo.add(mntmAbout);
 		mnInfo.add(mntmCheckForUpdates);
@@ -308,6 +340,7 @@ public class KanaWindow extends JFrame {
 
 		loadGroups("Groups.xml");
 		loadVocabulary("Vocabulary.xml");
+		loadProfiles();
 	}
 
 	private void loadGroups(String fileName) {
@@ -334,23 +367,63 @@ public class KanaWindow extends JFrame {
 	private void loadVocabulary(String fileName) {
 		Log.event("Load Vocabulary");
 		try {
-			ReadXMLVocabulary vocReader = new ReadXMLVocabulary();
+			VocHandler reader = VocHandler.newVocHandler();
 			if (new File(path + fileName).exists()) {
 				String path = this.path + fileName;
 				Log.setLog("Path.Vocabulary", path);
-				// TODO: I should really not be using SAX for this... might as well write a seperate xml loader for this...
-				vocabulary = vocReader.loadVocabulary(path);
+				reader.load(path);
+				vocabulary = reader.getReturn();
 			} else {
 				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
 				Log.setLog("Path.Vocabulary", path);
-				vocabulary = vocReader.loadVocabulary(path);
-				Log.setLog("Loaded.Vocabulary", vocabulary);
+				reader.load(path);
+				vocabulary = reader.getReturn();
 			}
+			Log.setLog("Loaded.Vocabulary", vocabulary);
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			Log.event("Err.KanaWindow.loadVocabulary");
 			e.printStackTrace();
 		}
+	}
+
+	private void loadProfiles() {
+		Log.event("Load Profiles");
+		try {
+			profile = loadProfile("default");
+			if (profile == null) profile = new Profile();
+			loadProfile(); // TODO: Proper Profile Loading
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			Log.event("Err.KanaWindow.loadProfiles");
+			e.printStackTrace();
+		}
+	}
+
+	private Profile loadProfile(String name) {
+		File f = new File(path + "profiles\\" + name + ".xml");
+		if (f.exists() && name.compareToIgnoreCase("profiles") != 0) {
+			Log.event("Load Profile: " + name);
+			try {
+				ProfileHandler reader = ProfileHandler.newProfileHandler();
+				reader.load(f);
+				return reader.getReturn();
+			} catch (UnsupportedEncodingException | FileNotFoundException | ParserConfigurationException | SAXException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	private Profile[] loadProfile() throws ParserConfigurationException, SAXException, IOException {
+		ReadXMLEntryNames reader = new ReadXMLEntryNames();
+		ArrayList<String> list = reader.load(path + "profiles.xml");
+
+		if (list == null) return null;
+		Profile[] profiles = new Profile[list.size()];
+		for (int n = 0; n < list.size(); n++) {
+			profiles[n] = loadProfile(list.get(n));
+		}
+		return profiles;
 	}
 
 	private class MntmExitActionListener implements ActionListener {
@@ -464,13 +537,13 @@ public class KanaWindow extends JFrame {
 	private class MntmAboutActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent arg0) {
-			new KanaAbout();
+			new KanaAbout(thisFrame);
 		}
 	}
 
 	private class MntmCheckForUpdatesActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			openHTTP("http://www.hafnehau.square7.ch/kana/versioncheck.php?=" + Version.getShortVersion());
+			openHTTP("http://www.hafnehau.square7.ch/kana/versioncheck.php?v=" + Version.getShortVersion());
 		}
 	}
 
@@ -478,14 +551,22 @@ public class KanaWindow extends JFrame {
 
 
 		public void keyReleased(KeyEvent arg0) {
+			if (options[0] == 2) {
+				lblVocHira.setText(convertPlus(tfVoc.getText(), 0, 1));
+				lblVocKata.setText(convertPlus(tfVoc.getText(), 0, 2));
+				strechFont(lblVocHira);
+				strechFont(lblVocKata);
+			}
 			if (arg0.getKeyCode() == KeyEvent.VK_S && arg0.isControlDown() && (!(arg0.isShiftDown())) && (!(arg0.isAltDown()))) {
 				tfVoc.setText("");
 				lblVocHira.setText("");
 				lblVocKata.setText("");
 				if (options[1] == KanaCharacterChoose.EXAM) {
+					profile.update(currentWord.getIndex(), false);
 					newExamAnswer(false);
 				} else {
 					if (Log.getBool("Vocabulary.RemoveSkipped")) currentWordPool.remove(currentWord);
+					else profile.update(currentWord.getIndex(), false);
 					newVocabulary();
 				}
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -497,17 +578,12 @@ public class KanaWindow extends JFrame {
 							tfVoc.setText("");
 							lblVocHira.setText("");
 							lblVocKata.setText("");
+							profile.update(currentWord.getIndex(), true);
 							if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
 							else newVocabulary();
 						}
 					}
 				}
-			}
-			if (options[0] == 2) {
-				lblVocHira.setText(convertPlus(tfVoc.getText(), 0, 1));
-				lblVocKata.setText(convertPlus(tfVoc.getText(), 0, 2));
-				strechFont(lblVocHira);
-				strechFont(lblVocKata);
 			}
 		}
 
@@ -516,6 +592,8 @@ public class KanaWindow extends JFrame {
 				new VocHelp(thisFrame, currentWord, groups.get(currentWord.getGroup()));
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE && options[1] != KanaCharacterChoose.EXAM) {
 				Log.setLog("Vocabulary.Index", -1);
+			} else if (arg0.getKeyCode() == KeyEvent.VK_F3) {
+				new KanaResult(thisFrame, currentWordPool, profile);
 			}
 		}
 	}
@@ -566,6 +644,46 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
+	private class MntmNewWordsActionListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<TWord> words = new ArrayList<TWord>();
+			for (SuccessEntry item : profile.getSuccess()) {
+				for (TWord word : vocabulary.words) {
+					if (item.getIndex() == word.getIndex()) {
+						if (item.getNumber() == 0) words.add(word);
+						break;
+					}
+				}
+			}
+			if (words.size() > 0) {
+				currentWordPool = words;
+				newVocabulary();
+			} else showmessage("There are no new words.");
+		}
+	}
+
+	private class MntmWrongWordsActionListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<TWord> words = new ArrayList<TWord>();
+			double threshold = Double.valueOf(JOptionPane.showInputDialog("Threshold in percent")) / 100.0;
+			for (SuccessEntry item : profile.getSuccess()) {
+				for (TWord word : vocabulary.words) {
+					if (item.getRatio() <= threshold) {
+						if (item.getNumber() == 0) words.add(word);
+						break;
+					}
+				}
+			}
+			if (words.size() > 0) {
+				currentWordPool = words;
+				newVocabulary();
+			} else showmessage("There are no new words.");
+		}
+	}
+
+
 	private class ChckbxmntmTouchModeListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
@@ -576,7 +694,7 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
-	class RefreshThread implements Runnable {
+	/*class RefreshThread implements Runnable {
 		public void run() {
 			while (Log.getBool("Mode.Touch")) {
 				try {
@@ -587,7 +705,7 @@ public class KanaWindow extends JFrame {
 				}
 			}
 		}
-	}
+	}*/
 
 	private void newType() {
 		int val;
@@ -630,18 +748,18 @@ public class KanaWindow extends JFrame {
 			showVoc(currentWord);
 		} else {
 			showPanel(null);
-			new KanaResult(thisFrame, examWrong, examCorrect);
+			new KanaResult(thisFrame, examWrong, examCorrect, profile);
 		}
 	}
 
 	private void showVoc(TWord word) {
+		Log.event("showVoc");
 		panelProgress.setVisible(options[1] == KanaCharacterChoose.EXAM);
 
 		mntmReloadSound.setEnabled(Log.getBool("Sounds.Enabled"));
 		if (Log.getBool("Sounds.Enabled")) {
 			vocabulary.loadSound(word, Log.getBool("Sounds.OnVocabulary"), false);
 		}
-		Log.event("showVoc");
 		String from;
 		// CALCULATE TRANSLATION AND POSSIBLE ANSWERS
 		if (options[0] == 1) {
@@ -664,7 +782,7 @@ public class KanaWindow extends JFrame {
 
 		// FOCUS TEXTFIELD
 		tfVoc.requestFocus();
-
+		// profile.debug();
 	}
 
 	private int getNext() {

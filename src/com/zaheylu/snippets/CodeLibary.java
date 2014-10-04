@@ -14,6 +14,13 @@ public class CodeLibary {
 
 	private static Random rand = new Random();
 
+	public static void init() {
+		randInt(10);
+		for (int n = 0; n < randInt(10); n++) {
+			randInt(10);
+		}
+	}
+
 	public static int getStringWidth(Font font, String txt) {
 		Canvas c = new Canvas();
 		return c.getFontMetrics(font).stringWidth(txt);

@@ -23,11 +23,11 @@ public class TWord {
 		result.setRomaji(String.valueOf(i));
 		result.addEngl(String.valueOf(i));
 		result.addEngl(String.valueOf(i));
-		
+
 		return result;
 	}
-	
-	
+
+
 	public TWord() {
 		engl = new ArrayList<String>();
 		group = 0;
@@ -97,11 +97,11 @@ public class TWord {
 	public void setPresent(String present) {
 		this.present = present;
 	}
-	
+
 	public boolean hasComment() {
 		return (comment != null);
 	}
-	
+
 	public boolean hasRomaji() {
 		return (romaji != null);
 	}
@@ -109,15 +109,15 @@ public class TWord {
 	public boolean hasKanji() {
 		return (kanji != null);
 	}
-	
+
 	public boolean hasPresent() {
 		return (present != null);
 	}
-	
+
 	private boolean hasKana() {
 		return (kana != null);
 	}
-	
+
 	private boolean hasEngl() {
 		return (engl.size() > 0);
 	}
@@ -126,11 +126,9 @@ public class TWord {
 		return ((hasKana() || hasKanji()) && hasEngl());
 	}
 
-
 	public int getIndex() {
 		return index;
 	}
-
 
 	public void setIndex(int index) {
 		this.index = index;

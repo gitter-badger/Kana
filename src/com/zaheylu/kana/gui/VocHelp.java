@@ -4,6 +4,7 @@ import static com.zaheylu.snippets.CodeLibary.*;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -80,7 +81,8 @@ public class VocHelp extends JDialog {
 
 
 		if (group != null) this.setTitle("Group: " + group);
-		this.setSize(width, cY + 40);
+		getContentPane().setPreferredSize(new Dimension(width, cY));
+		pack();
 		this.setLocationRelativeTo(frame);
 		this.setModal(true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

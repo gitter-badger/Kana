@@ -67,17 +67,16 @@ public class KanaCharacterChoose extends JDialog {
 	private void placeComponents() {
 		Container pan = getContentPane();
 
-		if (!Log.getBool("Mode.Touch")) pan.setPreferredSize(new Dimension(209, 154));
-		// else pan.setPreferredSize(new Dimension(700, 350));
+		pan.setPreferredSize(new Dimension(209, 154));
 		pan.setSize(pan.getPreferredSize());
 		pack();
 		int width = pan.getWidth();
 		int height = pan.getHeight();
 
-		panelVoc.setBounds(0, 0, width, (int) Math.round(height * 0.666));
-		panelChar1.setBounds(0, 0, width / 2, (int) Math.round(height * 0.666));
-		panelChar2.setBounds(width / 2, 0, width / 2, (int) Math.round(height * 0.666));
-		buttonPane.setBounds(0, (int) Math.round(height * 0.666), width, (int) Math.round(height * 0.333));
+		panelVoc.setBounds(0, 0, width, (int) Math.round(height * 0.75));
+		panelChar1.setBounds(0, 0, width / 2, (int) Math.round(height * 0.75));
+		panelChar2.setBounds(width / 2, 0, width / 2, (int) Math.round(height * 0.75));
+		buttonPane.setBounds(0, (int) Math.round(height * 0.75), width, (int) Math.round(height * 0.25));
 	}
 
 	public int[] choose(int mode) {
@@ -213,6 +212,7 @@ public class KanaCharacterChoose extends JDialog {
 		public void actionPerformed(ActionEvent arg0) {
 			showmessage("\nInstructions:" + "\nEnter the correct translation and hit enter to confirm."
 					+ "\nPress <F1> for help and use <CTRL+S> to skip a word or if you didn't know the translation in exam mode."
+					+ "\nPress <F2> to see all words in the current word pool."
 					+ "\nIn EXAM MODE you have to translate all words in the selected groups in random order." + "\n\nAdding Vocabulary:"
 					+ "\nThe Vocabulary is loaded into the program by xml files containing the vocabulary." + "\nThese xml files are located in '"
 					+ Log.getString("Path.Vocabulary") + "'\nYou can edit these files if you wish to make changes to the vocabulary."

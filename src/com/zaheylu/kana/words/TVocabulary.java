@@ -107,6 +107,10 @@ public class TVocabulary {
 		return result;
 	}
 
+	public ArrayList<TWord> getWords() {
+		return words;
+	}
+
 	private class AudioLoadThread extends Thread {
 
 		private ArrayList<TWord> words;
@@ -133,7 +137,7 @@ public class TVocabulary {
 			ArrayList<Integer> errs = new ArrayList<Integer>();
 			for (int n = 0; n < words.size(); n++) {
 				try {
-					File dest = new File(Log.getString("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
+					File dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(words.get(n).getIndex()) + ".mp3");
 					if ((!dest.exists()) || (overwrite)) {
 						Log.event("AudioLoadThread: " + dest.getPath());
 						String txt = words.get(n).getKana();
@@ -152,7 +156,7 @@ public class TVocabulary {
 						outstream.close();
 					}
 					if (words.get(n).hasPresent()) {
-						dest = new File(Log.getString("Path.User") + "Voc" + String.valueOf(words.get(n).getIndex()) + "p.mp3");
+						dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(words.get(n).getIndex()) + "p.mp3");
 						if ((!dest.exists()) || (overwrite)) {
 							String txt = words.get(n).getPresent();
 							txt = java.net.URLEncoder.encode(txt, "UTF-8");
@@ -186,8 +190,6 @@ public class TVocabulary {
 			if (words.size() > 1 && (!instantPlay)) if (err) CodeLibary.showmessage("There was an error loading the sound files:" + errs);
 			else CodeLibary.showmessage("Loading complete.");
 		}
-
-
 
 	}
 }

@@ -1,5 +1,6 @@
 package com.zaheylu.kana.xml;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ReadXMLEntryNames {
 	public ArrayList<String> load(String path) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		if (!new File(path).exists()) return null;
 		return load(dBuilder.parse(path));
 	}
 
