@@ -272,6 +272,9 @@ public class KanaWindow extends JFrame {
 		JMenuItem mntmPoolWrongWords = new JMenuItem("Word Pool: Wrong Words");
 		mntmPoolWrongWords.addActionListener(new MntmWrongWordsActionListener());
 
+		JMenuItem mntmPoolHasKanji = new JMenuItem("Word Pool: Has Kanji");
+		mntmPoolHasKanji.addActionListener(new MntmHasKanjiActionListener());
+
 		menuBar.add(mnProgram);
 		menuBar.add(mnProfile);
 		menuBar.add(mnTraining);
@@ -295,6 +298,7 @@ public class KanaWindow extends JFrame {
 		mnSettings.add(new JPanel());
 		mnSettings.add(mntmPoolNewWords);
 		mnSettings.add(mntmPoolWrongWords);
+		mnSettings.add(mntmPoolHasKanji);
 
 		mnInfo.add(mntmAbout);
 		mnInfo.add(mntmCheckForUpdates);
@@ -337,7 +341,6 @@ public class KanaWindow extends JFrame {
 
 	private void loadXMLs() {
 		Log.event("loadXML");
-
 		loadGroups("Groups.xml");
 		loadVocabulary("Vocabulary.xml");
 		loadProfiles();
@@ -636,6 +639,7 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
 			Log.setLog("Vocabulary.RemoveSkipped", ch.isSelected());
+			// TODO: erase button instead
 		}
 	}
 
@@ -667,7 +671,6 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmWrongWordsActionListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			try {
@@ -689,6 +692,23 @@ public class KanaWindow extends JFrame {
 				showmessage("Some error occoured."); // TODO: even for you, that's too lazy...
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private class MntmHasKanjiActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<TWord> words = new ArrayList<TWord>();
+			for (TWord word : vocabulary.words) {
+				if (word.hasKanji()) {
+					words.add(word);
+				}
+			}
+			if (words.size() > 0) {
+				currentWordPool = words;
+				showPanel(panelVocabulary);
+				newVocabulary();
+			} else showmessage("There are no new words.");
+
 		}
 	}
 

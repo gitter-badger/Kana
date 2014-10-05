@@ -34,6 +34,7 @@ public class VocHelp extends JDialog {
 	}
 
 	public VocHelp(Component frame, TWord word, String group) {
+		
 		int cY = 0;
 		getContentPane().setLayout(null);
 		// kanji
@@ -78,7 +79,6 @@ public class VocHelp extends JDialog {
 			cY += lblComment.getHeight();
 			getContentPane().add(lblComment);
 		}
-
 
 		if (group != null) this.setTitle("Group: " + group);
 		getContentPane().setPreferredSize(new Dimension(width, cY));
