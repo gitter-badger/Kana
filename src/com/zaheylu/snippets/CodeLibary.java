@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 public class CodeLibary {
 
 	private static Random rand = new Random();
+	private static Canvas can = new Canvas();
 
 	public static void init() {
 		randInt(10);
@@ -22,8 +23,8 @@ public class CodeLibary {
 	}
 
 	public static int getStringWidth(Font font, String txt) {
-		Canvas c = new Canvas();
-		return c.getFontMetrics(font).stringWidth(txt);
+		
+		return can.getFontMetrics(font).stringWidth(txt);
 	}
 
 	public static void showmessage(String msg) {
@@ -73,7 +74,9 @@ public class CodeLibary {
 
 	private static int calcTextRatio(int stringWidth, int componentWidth, int componentHeight, Font font) {
 		double widthRatio = (double) componentWidth / (double) stringWidth;
-		int newFontSize = (int) (font.getSize() * widthRatio) - 1;
+		int newFontSize = (int) ((double)font.getSize() * widthRatio);
+		System.out.print((double)font.getSize() * widthRatio);
+		System.out.print("\tTo: " + newFontSize);
 		return Math.min(newFontSize, componentHeight);
 	}
 

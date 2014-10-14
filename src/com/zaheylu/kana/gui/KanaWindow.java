@@ -654,10 +654,11 @@ public class KanaWindow extends JFrame {
 
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
+			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
 			for (SuccessEntry item : profile.getSuccess()) {
 				for (TWord word : vocabulary.words) {
 					if (item.getIndex() == word.getIndex()) {
-						if (item.getNumber() == 0) words.add(word);
+						if (item.getNumber() <= threshold) words.add(word);
 						break;
 					}
 				}
@@ -674,7 +675,7 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			try {
-				double threshold = Double.valueOf(JOptionPane.showInputDialog("Threshold in percent")) / 100.0;
+				double threshold = Double.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold in percent", "50")) / 100.0;
 				for (SuccessEntry item : profile.getSuccess()) {
 					for (TWord word : vocabulary.words) {
 						if (item.getIndex() == word.getIndex()) {

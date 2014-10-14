@@ -93,6 +93,7 @@ public class Profile {
 	}
 
 	public ArrayList<SuccessEntry> getSuccess() {
+		// TODO: This should be called only if the DAU wants to.
 		return success;
 	}
 

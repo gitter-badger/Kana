@@ -1,7 +1,7 @@
 package com.zaheylu.kana;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class KanaLib {
 	private static final String space = "　";
 	private static final String dot = "。";
@@ -229,7 +229,7 @@ public class KanaLib {
 					"ra", "ら", "ラ" }, {
 					"ri", "り", "リ" }, {
 					"ru", "る", "ル" }, {
-					"re", "れ", "れ" }, {
+					"re", "れ", "レ" }, {
 					"ro", "ろ", "ロ" }, {
 
 					"wa", "わ", "ワ" }, {
