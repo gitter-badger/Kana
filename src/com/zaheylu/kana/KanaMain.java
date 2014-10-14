@@ -12,6 +12,7 @@ public class KanaMain {
 		EventQueue.invokeLater(new Runnable() {
             public void run() {
             	CodeLibary.init();
+            	KanaLibV2.init();
             	Version.loadVersion();
         		new KanaWindow(args);
             }

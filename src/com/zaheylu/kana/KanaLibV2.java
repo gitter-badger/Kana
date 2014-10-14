@@ -2,8 +2,14 @@ package com.zaheylu.kana;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("unused")
+import com.zaheylu.snippets.CodeLibary;
+
 public class KanaLibV2 {
+
+	private KanaLibV2() {
+
+	}
+
 	private static final String space = "　";
 	private static final String dot = "。";
 	private static final String[][] CaseConversion = new String[][] {
@@ -27,391 +33,305 @@ public class KanaLibV2 {
 			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu", "ne", "no",
 			"ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n", "ga", "gi", "gu",
 			"ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po" };
-
-	private static final String[][] HIRADATA = new String[][] {
+	private static final String[][] DATA = new String[][] {
 			{
-					"ssha", "っしゃ" }, {
-					"ssya", "っしゃ" }, {
-					"sshu", "っしゅ" }, {
-					"ssyu", "っしゅ" }, {
-					"ssho", "っしょ" }, {
-					"ssyo", "っしょ" }, {
+					"wi", null, "ウィ" }, {
+					"we", null, "ウェ" }, {
+					"wo", null, "ウォ" }, {
+					"she", null, "シェ" }, {
+					"je", null, "ジェ" }, {
+					"che", null, "チェ" }, {
+					"fa", null, "ファ" }, {
+					"fi", null, "フィ" }, {
+					"fe", null, "フェ" }, {
+					"fo", null, "フォ" }, {
+					"ti", null, "ティ" }, {
+					"di", null, "ディ" }, {
+					"dyu", null, "ヂュ" }, {
+					"ssha", "っしゃ", null }, {
+					"ssya", "っしゃ", null }, {
+					"sshu", "っしゅ", null }, {
+					"ssyu", "っしゅ", null }, {
+					"ssho", "っしょ", null }, {
+					"ssyo", "っしょ", null }, {
 
-					"ccha", "っちゃ" }, {
-					"ttya", "っちゃ" }, {
-					"cchu", "っちゅ" }, {
-					"ttyu", "っちゅ" }, {
-					"ccho", "っちょ" }, {
-					"ttyo", "っちょ" }, {
+					"ccha", "っちゃ", null }, {
+					"ttya", "っちゃ", null }, {
+					"cchu", "っちゅ", null }, {
+					"ttyu", "っちゅ", null }, {
+					"ccho", "っちょ", null }, {
+					"ttyo", "っちょ", null }, {
 
-					"ppya", "っぴゃ" }, {
-					"ppyu", "っぴゅ" }, {
-					"ppyo", "っぴょ" }, {
+					"ppya", "っぴゃ", null }, {
+					"ppyu", "っぴゅ", null }, {
+					"ppyo", "っぴょ", null }, {
 
-					"kkya", "っきゃ" }, {
-					"kkyi", "っきぃ" }, {
-					"kkyu", "っきゅ" }, {
-					"kkye", "っきぇ" }, {
-					"kkyo", "っきょ" }, {
+					"kkya", "っきゃ", null }, {
+					"kkyi", "っきぃ", null }, {
+					"kkyu", "っきゅ", null }, {
+					"kkye", "っきぇ", null }, {
+					"kkyo", "っきょ", null }, {
 
-					"tta", "った" }, {
-					"cchi", "っち" }, {
-					"tti", "っち" }, {
-					"ttsu", "っつ" }, {
-					"ttu", "っつ" }, {
-					"tte", "って" }, {
-					"tto", "っと" }, {
+					"tta", "った", null }, {
+					"cchi", "っち", null }, {
+					"tti", "っち", null }, {
+					"ttsu", "っつ", null }, {
+					"ttu", "っつ", null }, {
+					"tte", "って", null }, {
+					"tto", "っと", null }, {
 
-					"ppa", "っぱ" }, {
-					"ppi", "っぴ" }, {
-					"ppu", "っぷ" }, {
-					"ppe", "っぺ" }, {
-					"ppo", "っぽ" }, {
+					"ppa", "っぱ", null }, {
+					"ppi", "っぴ", null }, {
+					"ppu", "っぷ", null }, {
+					"ppe", "っぺ", null }, {
+					"ppo", "っぽ", null }, {
 
-					"kka", "っか" }, {
-					"kki", "っき" }, {
-					"kku", "っく" }, {
-					"kke", "っけ" }, {
-					"kko", "っこ" }, {
+					"kka", "っか", null }, {
+					"kki", "っき", null }, {
+					"kku", "っく", null }, {
+					"kke", "っけ", null }, {
+					"kko", "っこ", null }, {
 
-					"ssa", "っさ" }, {
-					"sshi", "っし" }, {
-					"ssi", "っし" }, {
-					"ssu", "っす" }, {
-					"sse", "っせ" }, {
-					"sso", "っそ" }, {
+					"ssa", "っさ", null }, {
+					"sshi", "っし", null }, {
+					"ssi", "っし", null }, {
+					"ssu", "っす", null }, {
+					"sse", "っせ", null }, {
+					"sso", "っそ", null }, {
 
-					"nna", "んな" }, {
-					"nni", "んに" }, {
-					"nnu", "んぬ" }, {
-					"nne", "んね" }, {
-					"nno", "んの" }, {
+					"nna", "んな", null }, {
+					"nni", "んに", null }, {
+					"nnu", "んぬ", null }, {
+					"nne", "んね", null }, {
+					"nno", "んの", null }, {
 
-					"kya", "きゃ" }, {
-					"kyu", "きゅ" }, {
-					"kyo", "きょ" }, {
+					"kya", "きゃ", "キャ" }, {
+					"kyu", "きゅ", "キュ" }, {
+					"kyo", "きょ", "キョ" }, {
 
-					"gya", "ぎゃ" }, {
-					"gyu", "ぎゅ" }, {
-					"gyo", "ぎょ" }, {
+					"gya", "ぎゃ", "ギャ" }, {
+					"gyu", "ぎゅ", "ギュ" }, {
+					"gyo", "ぎょ", "ギョ" }, {
 
-					"sha", "しゃ" }, {
-					"sya", "しゃ" }, {
-					"shu", "しゅ" }, {
-					"syu", "しゅ" }, {
-					"sho", "しょ" }, {
-					"syo", "しょ" }, {
-					"ja", "じゃ" }, {
-					"zya", "じゃ" }, {
-					"ju", "じゅ" }, {
-					"zyu", "じゅ" }, {
-					"jo", "じょ" }, {
-					"zyo", "じょ" }, {
+					"sha", "しゃ", "シャ" }, {
+					"sya", "しゃ", "シャ" }, {
+					"shu", "しゅ", "シュ" }, {
+					"syu", "しゅ", "シュ" }, {
+					"sho", "しょ", "ショ" }, {
+					"syo", "しょ", "ショ" }, {
+					"ja", "じゃ", "ジャ" }, {
+					"zya", "じゃ", "ジャ" }, {
+					"ju", "じゅ", "ジュ" }, {
+					"zyu", "じゅ", "ジュ" }, {
+					"jo", "じょ", "ジョ" }, {
+					"zyo", "じょ", "ジョ" }, {
 
-					"cha", "ちゃ" }, {
-					"tya", "ちゃ" }, {
-					"chu", "ちゅ" }, {
-					"tyu", "ちゅ" }, {
-					"cho", "ちょ" }, {
-					"tyo", "ちょ" }, {
+					"cha", "ちゃ", "チャ" }, {
+					"tya", "ちゃ", "チャ" }, {
+					"chu", "ちゅ", "チュ" }, {
+					"tyu", "ちゅ", "チュ" }, {
+					"cho", "ちょ", "チョ" }, {
+					"tyo", "ちょ", "チョ" }, {
 
-					"nya", "にゃ" }, {
-					"nyu", "にゅ" }, {
-					"nyo", "にょ" }, {
+					"nya", "にゃ", "ニャ" }, {
+					"nyu", "にゅ", "ニュ" }, {
+					"nyo", "にょ", "ニョ" }, {
 
-					"hya", "ひゃ" }, {
-					"hyu", "ひゅ" }, {
-					"hyo", "ひょ" }, {
+					"hya", "ひゃ", "ヒャ" }, {
+					"hyu", "ひゅ", "ヒュ" }, {
+					"hyo", "ひょ", "ヒィ" }, {
 
-					"bya", "びゃ" }, {
-					"byu", "びゅ" }, {
-					"byo", "びょ" }, {
+					"bya", "びゃ", "ビャ" }, {
+					"byu", "びゅ", "ビュ" }, {
+					"byo", "びょ", "ビョ" }, {
 
-					"pya", "びゃ" }, {
-					"pyu", "びゅ" }, {
-					"pyo", "びょ" }, {
+					"pya", "びゃ", "ピャ" }, {
+					"pyu", "びゅ", "ピュ" }, {
+					"pyo", "びょ", "ピョ" }, {
 
-					"mya", "みゃ" }, {
-					"myu", "みゅ" }, {
-					"myo", "みょ" }, {
+					"mya", "みゃ", "ミャ" }, {
+					"myu", "みゅ", "ミュ" }, {
+					"myo", "みょ", "ミョ" }, {
 
-					"rya", "りゃ" }, {
-					"ryu", "りゅ" }, {
-					"ryo", "りょ" }, {
+					"rya", "りゃ", "リャ" }, {
+					"ryu", "りゅ", "リュ" }, {
+					"ryo", "りょ", "リョ" }, {
 
-					"ga", "が" }, {
-					"gi", "ぎ" }, {
-					"gu", "ぐ" }, {
-					"ge", "げ" }, {
-					"go", "ご" }, {
+					"ga", "が", "ガ" }, {
+					"gi", "ぎ", "ギ" }, {
+					"gu", "ぐ", "グ" }, {
+					"ge", "げ", "ゲ" }, {
+					"go", "ご", "ゴ" }, {
 
-					"za", "ざ" }, {
-					"ji", "じ" }, {
-					"zi", "じ" }, {
-					"zu", "ず" }, {
-					"ze", "ぜ" }, {
-					"zo", "ぞ" }, {
+					"za", "ざ", "ザ" }, {
+					"ji", "じ", "ジ" }, {
+					"zi", "じ", "ジ" }, {
+					"zu", "ず", "ズ" }, {
+					"ze", "ぜ", "ゼ" }, {
+					"zo", "ぞ", "ゾ" }, {
 
-					"da", "だ" }, {
-					"ji", "ぢ" }, {
-					"di", "ぢ" }, {
-					"zu", "づ" }, {
-					"du", "づ" }, {
-					"de", "で" }, {
-					"do", "ど" }, {
+					"da", "だ", "ダ" }, {
+					"ji", "ぢ", "ヂ" }, {
+					"di", "ぢ", "ヂ" }, {
+					"zu", "づ", "ヅ" }, {
+					"du", "づ", "ヅ" }, {
+					"de", "で", "デ" }, {
+					"do", "ど", "ド" }, {
 
-					"ba", "ば" }, {
-					"bi", "び" }, {
-					"bu", "ぶ" }, {
-					"be", "べ" }, {
-					"bo", "ぼ" }, {
+					"ba", "ば", "バ" }, {
+					"bi", "び", "ビ" }, {
+					"bu", "ぶ", "ブ" }, {
+					"be", "べ", "ベ" }, {
+					"bo", "ぼ", "ボ" }, {
 
-					"pa", "ぱ" }, {
-					"pi", "ぴ" }, {
-					"pu", "ぷ" }, {
-					"pe", "ぺ" }, {
-					"po", "ぽ" }, {
+					"pa", "ぱ", "パ" }, {
+					"pi", "ぴ", "ピ" }, {
+					"pu", "ぷ", "プ" }, {
+					"pe", "ぺ", "ペ" }, {
+					"po", "ぽ", "ポ" }, {
 
-					"ka", "か" }, {
-					"ki", "き" }, {
-					"ku", "く" }, {
-					"ke", "け" }, {
-					"ko", "こ" }, {
+					"ka", "か", "カ" }, {
+					"ki", "き", "キ" }, {
+					"ku", "く", "ク" }, {
+					"ke", "け", "ケ" }, {
+					"ko", "こ", "コ" }, {
 
-					"sa", "さ" }, {
-					"shi", "し" }, {
-					"si", "し" }, {
-					"su", "す" }, {
-					"se", "せ" }, {
-					"so", "そ" }, {
-					"ta", "た" }, {
-					"chi", "ち" }, {
-					"ti", "ち" }, {
-					"tsu", "つ" }, {
-					"tu", "つ" }, {
-					"te", "て" }, {
-					"to", "と" }, {
+					"sa", "さ", "サ" }, {
+					"shi", "し", "シ" }, {
+					"si", "し", "シ" }, {
+					"su", "す", "ス" }, {
+					"se", "せ", "セ" }, {
+					"so", "そ", "ソ" }, {
+					"ta", "た", "タ" }, {
+					"chi", "ち", "チ" }, {
+					"ti", "ち", "チ" }, {
+					"tsu", "つ", "ツ" }, {
+					"tu", "つ", "ツ" }, {
+					"te", "て", "テ" }, {
+					"to", "と", "ト" }, {
 
-					"na", "な" }, {
-					"ni", "に" }, {
-					"nu", "ぬ" }, {
-					"ne", "ね" }, {
-					"no", "の" }, {
+					"na", "な", "ナ" }, {
+					"ni", "に", "ニ" }, {
+					"nu", "ぬ", "ヌ" }, {
+					"ne", "ね", "ネ" }, {
+					"no", "の", "ノ" }, {
 
-					"ha", "は" }, {
-					"hi", "ひ" }, {
-					"fu", "ふ" }, {
-					"hu", "ふ" }, {
-					"he", "へ" }, {
-					"ho", "ほ" }, {
+					"ha", "は", "ハ" }, {
+					"hi", "ひ", "ヒ" }, {
+					"fu", "ふ", "フ" }, {
+					"hu", "ふ", "フ" }, {
+					"he", "へ", "ヘ" }, {
+					"ho", "ほ", "ホ" }, {
 
-					"ma", "ま" }, {
-					"mi", "み" }, {
-					"mu", "む" }, {
-					"me", "め" }, {
-					"mo", "も" }, {
+					"ma", "ま", "マ" }, {
+					"mi", "み", "ミ" }, {
+					"mu", "む", "ム" }, {
+					"me", "め", "メ" }, {
+					"mo", "も", "モ" }, {
 
-					"ya", "や" }, {
-					"yu", "ゆ" }, {
-					"yo", "よ" }, {
+					"ya", "や", "ヤ" }, {
+					"yu", "ゆ", "ユ" }, {
+					"yo", "よ", "ヨ" }, {
 
-					"ra", "ら" }, {
-					"ri", "り" }, {
-					"ru", "る" }, {
-					"re", "れ" }, {
-					"ro", "ろ" }, {
+					"ra", "ら", "ラ" }, {
+					"ri", "り", "リ" }, {
+					"ru", "る", "ル" }, {
+					"re", "れ", "レ" }, {
+					"ro", "ろ", "ロ" }, {
 
-					"wa", "わ" }, {
-					"wo", "を" }, {
-
-					"a", "あ" }, {
-					"i", "い" }, {
-					"u", "う" }, {
-					"e", "え" }, {
-					"o", "お" }, {
-
-					"n", "ん" }, {
-					"nn", "ん" } };
-	private static final String[][] KATADATA = new String[][] {
-			{
-					"wi", "ウィ" }, {
-					"we", "ウェ" }, {
-					"wo", "ウォ" }, {
-					"she", "シェ" }, {
-					"je", "ジェ" }, {
-					"che", "チェ" }, {
-					"fa", "ファ" }, {
-					"fi", "フィ" }, {
-					"fe", "フェ" }, {
-					"fo", "フォ" }, {
-					"ti", "ティ" }, {
-					"di", "ディ" }, {
-					"dyu", "ヂュ" }, {
-
-					"kya", "キャ" }, {
-					"kyu", "キュ" }, {
-					"kyo", "キョ" }, {
-
-					"gya", "ギャ" }, {
-					"gyu", "ギュ" }, {
-					"gyo", "ギョ" }, {
-
-					"sha", "シャ" }, {
-					"sya", "シャ" }, {
-					"shu", "シュ" }, {
-					"syu", "シュ" }, {
-					"sho", "ショ" }, {
-					"syo", "ショ" }, {
-					"ja", "ジャ" }, {
-					"zya", "ジャ" }, {
-					"ju", "ジュ" }, {
-					"zyu", "ジュ" }, {
-					"jo", "ジョ" }, {
-					"zyo", "ジョ" }, {
-
-					"cha", "チャ" }, {
-					"tya", "チャ" }, {
-					"chu", "チュ" }, {
-					"tyu", "チュ" }, {
-					"cho", "チョ" }, {
-					"tyo", "チョ" }, {
-
-					"nya", "ニャ" }, {
-					"nyu", "ニュ" }, {
-					"nyo", "ニョ" }, {
-
-					"hya", "ヒャ" }, {
-					"hyu", "ヒュ" }, {
-					"hyo", "ヒィ" }, {
-
-					"bya", "ビャ" }, {
-					"byu", "ビュ" }, {
-					"byo", "ビョ" }, {
-
-					"pya", "ピャ" }, {
-					"pyu", "ピュ" }, {
-					"pyo", "ピョ" }, {
-
-					"mya", "ミャ" }, {
-					"myu", "ミュ" }, {
-					"myo", "ミョ" }, {
-
-					"rya", "リャ" }, {
-					"ryu", "リュ" }, {
-					"ryo", "リョ" }, {
-
-					"ga", "ガ" }, {
-					"gi", "ギ" }, {
-					"gu", "グ" }, {
-					"ge", "ゲ" }, {
-					"go", "ゴ" }, {
-
-					"za", "ザ" }, {
-					"ji", "ジ" }, {
-					"zi", "ジ" }, {
-					"zu", "ズ" }, {
-					"ze", "ゼ" }, {
-					"zo", "ゾ" }, {
-
-					"da", "ダ" }, {
-					"ji", "ヂ" }, {
-					"di", "ヂ" }, {
-					"zu", "ヅ" }, {
-					"du", "ヅ" }, {
-					"de", "デ" }, {
-					"do", "ド" }, {
-
-					"ba", "バ" }, {
-					"bi", "ビ" }, {
-					"bu", "ブ" }, {
-					"be", "ベ" }, {
-					"bo", "ボ" }, {
-
-					"pa", "パ" }, {
-					"pi", "ピ" }, {
-					"pu", "プ" }, {
-					"pe", "ペ" }, {
-					"po", "ポ" }, {
-
-					"ka", "カ" }, {
-					"ki", "キ" }, {
-					"ku", "ク" }, {
-					"ke", "ケ" }, {
-					"ko", "コ" }, {
-
-					"sa", "サ" }, {
-					"shi", "シ" }, {
-					"si", "シ" }, {
-					"su", "ス" }, {
-					"se", "セ" }, {
-					"so", "ソ" }, {
-					"ta", "タ" }, {
-					"chi", "チ" }, {
-					"ti", "チ" }, {
-					"tsu", "ツ" }, {
-					"tu", "ツ" }, {
-					"te", "テ" }, {
-					"to", "ト" }, {
-
-					"na", "ナ" }, {
-					"ni", "ニ" }, {
-					"nu", "ヌ" }, {
-					"ne", "ネ" }, {
-					"no", "ノ" }, {
-
-					"ha", "ハ" }, {
-					"hi", "ヒ" }, {
-					"fu", "フ" }, {
-					"hu", "フ" }, {
-					"he", "ヘ" }, {
-					"ho", "ホ" }, {
-
-					"ma", "マ" }, {
-					"mi", "ミ" }, {
-					"mu", "ム" }, {
-					"me", "メ" }, {
-					"mo", "モ" }, {
-
-					"ya", "ヤ" }, {
-					"yu", "ユ" }, {
-					"yo", "ヨ" }, {
-
-					"ra", "ラ" }, {
-					"ri", "リ" }, {
-					"ru", "ル" }, {
-					"re", "レ" }, {
-					"ro", "ロ" }, {
-
-					"wa", "ワ" }, {
-					"wo", "ヲ" }, {
+					"wa", "わ", "ワ" }, {
+					"wo", "を", "ヲ" }, {
 
 
-					"a", "ア" }, {
-					"i", "イ" }, {
-					"u", "ウ" }, {
-					"e", "エ" }, {
-					"o", "オ" }, {
+					"a", "あ", "ア" }, {
+					"i", "い", "イ" }, {
+					"u", "う", "ウ" }, {
+					"e", "え", "エ" }, {
+					"o", "お", "オ" }, {
 
 					"n", "ん", "ン" }, {
 					"nn", "ん", "ン" }, {
-					".", dot, dot }, {
-					" ", space, space }, {
-					",", "、", "、" }, {
 					"-", null, "ー" } };
 
+	// variables to initiate
+	private static ArrayList<ArrayList<String[]>> hiraX;
+	private static ArrayList<ArrayList<String[]>> kataX;
+
+	// field numbers
+	private static final int roma = 0;
+	private static final int hira = 1;
+	private static final int kata = 2;
+
+	public static ArrayList<ArrayList<String[]>> getHiraData() {
+		return hiraX;
+	}
+
+	public static ArrayList<ArrayList<String[]>> getKataData() {
+		return kataX;
+	}
+
+	public static void init() {
+		ArrayList<ArrayList<String[]>> hiraX = new ArrayList<ArrayList<String[]>>();
+		ArrayList<ArrayList<String[]>> kataX = new ArrayList<ArrayList<String[]>>();
+
+		for (int n = 0; n < 4; n++) {
+			hiraX.add(new ArrayList<String[]>());
+			kataX.add(new ArrayList<String[]>());
+		}
+		for (String[] str : DATA) {
+			if (str[hira] != null) {
+				hiraX.get(str[roma].length() - 1).add(new String[] {
+						str[roma], str[hira] });
+			}
+			if (str[kata] != null) {
+				kataX.get(str[roma].length() - 1).add(new String[] {
+						str[roma], str[kata] });
+			}
+		}
+		KanaLibV2.hiraX = hiraX;
+		KanaLibV2.kataX = kataX;
+	}
 
 	public static String convert(String arg, int from, int to) {
-		for (String[] s : DATA) {
-			if (equalsIgnoreCase(arg, s[from]) && s[to] != null) {
-				return s[to];
+		ArrayList<ArrayList<String[]>> target;
+		if (from == roma) {
+			if (to == hira) target = hiraX;
+			else target = kataX;
+			for (String[] str : target.get(arg.length() - 1)) {
+				if (str[0].equalsIgnoreCase(arg)) return str[1];
+			}
+		} else if (to == roma) {
+			if (from == hira) target = hiraX;
+			else target = kataX;
+			for (String[] str : target.get(arg.length() - 1)) {
+				if (str[1].equalsIgnoreCase(arg)) return str[0];
+			}
+		} else {
+			if (from == hira) {
+				target = hiraX;
+				for (String[] str : target.get(arg.length() - 1)) {
+					if (str[1].equalsIgnoreCase(arg)) {
+						return convert(str[0], roma, kata);
+					}
+				}
+				CodeLibary.showmessage(arg);
+				
+			} else {
+				target = kataX;
+				for (String[] str : target.get(arg.length() - 1)) {
+					if (str[1].equalsIgnoreCase(arg)) {
+						return convert(str[0], roma, hira);
+					}
+				}
+				return 
 			}
 		}
 		return null;
 	}
 
-	public static String convertPlus(String arg, int from, int to) { 	// TODO: Seperate Threading TODO: use char[] instead of Strings; performance check
-		String result = "";												// TODO: Seperated Length Arrays
-		int index = 0;													// TODO: Everything more seperated
+	public static String convertPlus(String arg, int from, int to) { // TODO: Seperate Threading TODO: use char[] instead of Strings; performance check
+		String result = ""; // TODO: Seperated Length Arrays
+		int index = 0; // TODO: Everything more seperated
 		int read = 4;
 		if (arg.isEmpty()) return null;
 		boolean broke = false;
