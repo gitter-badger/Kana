@@ -10,23 +10,26 @@ public class KanaLibV2 {
 
 	}
 
-	private static final String space = "　";
-	private static final String dot = "。";
-	private static final String[][] CaseConversion = new String[][] {
+
+	private static final char[][] specialChar = new char[][] {
 			{
-					"ﾔ", "ヤ" }, {
-					"ﾕ", "ユ" }, {
-					"ﾖ", "ヨ" }, {
+					'.', '。' }, {
+					' ', ' ' } };
+	private static final char[][] CaseConversion = new char[][] {
+			{
+					'ﾔ', 'ヤ' }, {
+					'ﾕ', 'ユ' }, {
+					'ﾖ', 'ヨ' }, {
 
-					"ｱ", "ア" }, {
-					"ｲ", "イ" }, {
-					"ｳ", "ウ" }, {
-					"ｴ", "エ" }, {
-					"ｵ", "オ" }, {
+					'ｱ', 'ア' }, {
+					'ｲ', 'イ' }, {
+					'ｳ', 'ウ' }, {
+					'ｴ', 'エ' }, {
+					'ｵ', 'オ' }, {
 
-					"ゃ", "や" }, {
-					"ゅ", "ゆ" }, {
-					"ょ", "よ" } };
+					'ゃ', 'や' }, {
+					'ゅ', 'ゆ' }, {
+					'ょ', 'よ' } };
 
 
 	private static final String[] Alphabet = new String[] {
@@ -254,113 +257,103 @@ public class KanaLibV2 {
 					"-", null, "ー" } };
 
 	// variables to initiate
-	private static ArrayList<ArrayList<String[]>> hiraX;
-	private static ArrayList<ArrayList<String[]>> kataX;
+	private static ArrayList<ArrayList<String[]>> romaHira;
+	private static ArrayList<ArrayList<String[]>> romaKata;
+	private static ArrayList<ArrayList<String[]>> hiraKata;
 
 	// field numbers
 	private static final int roma = 0;
 	private static final int hira = 1;
 	private static final int kata = 2;
 
-	public static ArrayList<ArrayList<String[]>> getHiraData() {
-		return hiraX;
-	}
-
-	public static ArrayList<ArrayList<String[]>> getKataData() {
-		return kataX;
-	}
-
 	public static void init() {
-		ArrayList<ArrayList<String[]>> hiraX = new ArrayList<ArrayList<String[]>>();
-		ArrayList<ArrayList<String[]>> kataX = new ArrayList<ArrayList<String[]>>();
+		ArrayList<ArrayList<String[]>> romaHira = new ArrayList<ArrayList<String[]>>();
+		ArrayList<ArrayList<String[]>> romaKata = new ArrayList<ArrayList<String[]>>();
+		ArrayList<ArrayList<String[]>> hiraKata = new ArrayList<ArrayList<String[]>>();
 
 		for (int n = 0; n < 4; n++) {
-			hiraX.add(new ArrayList<String[]>());
-			kataX.add(new ArrayList<String[]>());
+			romaHira.add(new ArrayList<String[]>());
+			romaKata.add(new ArrayList<String[]>());
+			hiraKata.add(new ArrayList<String[]>());
 		}
 		for (String[] str : DATA) {
-			if (str[hira] != null) {
-				hiraX.get(str[roma].length() - 1).add(new String[] {
+			if (str[hira] != null && str[kata] != null) {
+				hiraKata.get(str[hira].length() - 1).add(new String[] {
+						str[hira], str[kata] });
+				romaHira.get(str[roma].length() - 1).add(new String[] {
 						str[roma], str[hira] });
-			}
-			if (str[kata] != null) {
-				kataX.get(str[roma].length() - 1).add(new String[] {
+				romaKata.get(str[roma].length() - 1).add(new String[] {
+						str[roma], str[kata] });
+			} else if (str[hira] != null) {
+				romaHira.get(str[roma].length() - 1).add(new String[] {
+						str[roma], str[hira] });
+			} else if (str[kata] != null) {
+				romaKata.get(str[roma].length() - 1).add(new String[] {
 						str[roma], str[kata] });
 			}
 		}
-		KanaLibV2.hiraX = hiraX;
-		KanaLibV2.kataX = kataX;
+		KanaLibV2.romaHira = romaHira;
+		KanaLibV2.romaKata = romaKata;
+		KanaLibV2.hiraKata = hiraKata;
 	}
 
-	public static String convert(String arg, int from, int to) {
+	public static String convertChr(String arg, int from, int to) {
 		ArrayList<ArrayList<String[]>> target;
 		if (from == roma) {
-			if (to == hira) target = hiraX;
-			else target = kataX;
+			if (to == hira) target = romaHira;
+			else target = romaKata;
 			for (String[] str : target.get(arg.length() - 1)) {
 				if (str[0].equalsIgnoreCase(arg)) return str[1];
 			}
 		} else if (to == roma) {
-			if (from == hira) target = hiraX;
-			else target = kataX;
+			if (from == hira) target = romaHira;
+			else target = romaKata;
 			for (String[] str : target.get(arg.length() - 1)) {
 				if (str[1].equalsIgnoreCase(arg)) return str[0];
 			}
 		} else {
 			if (from == hira) {
-				target = hiraX;
+				target = hiraKata;
 				for (String[] str : target.get(arg.length() - 1)) {
-					if (str[1].equalsIgnoreCase(arg)) {
-						return convert(str[0], roma, kata);
+					if (equalsIgnoreCase(str[0], arg)) {
+						return str[1];
 					}
 				}
-				CodeLibary.showmessage(arg);
-				
 			} else {
-				target = kataX;
+				target = hiraKata;
 				for (String[] str : target.get(arg.length() - 1)) {
-					if (str[1].equalsIgnoreCase(arg)) {
-						return convert(str[0], roma, hira);
+					if (equalsIgnoreCase(str[1], arg)) {
+						return str[0];
 					}
 				}
-				return 
 			}
 		}
 		return null;
 	}
 
-	public static String convertPlus(String arg, int from, int to) { // TODO: Seperate Threading TODO: use char[] instead of Strings; performance check
-		String result = ""; // TODO: Seperated Length Arrays
-		int index = 0; // TODO: Everything more seperated
-		int read = 4;
-		if (arg.isEmpty()) return null;
-		boolean broke = false;
+	public static String convertStr(String arg, int from, int to) {
+		if (arg == null || arg.isEmpty()) return null;
+		char[] c = arg.toCharArray();
+		String tmpS = null;
+		int length = c.length;
+		String result = "";
+		int index = 0;
+		int readLength = 4;
 		do {
-			if (index + read > arg.length()) read = arg.length() - index;
-			while (convert(arg.substring(index, index + read), from, to) == null) {
-				read--;
-				if (read == 0) {
-					read++;
-					broke = true;
-					break;
+			readLength = 4;
+			if (index + readLength > length) readLength = length - index;
+			do {
+				tmpS = KanaLibV2.convertChr(new String(c, index, readLength), from, to);
+				if (tmpS != null) {
+					result += tmpS;
+					index += readLength;
+					readLength = -1;
+				} else {
+					readLength--;
 				}
-			}
-			if (broke) {
-				result += arg.substring(index, index + read);
-				broke = false;
-			} else {
-				result += convert(arg.substring(index, index + read), from, to);
-				if (from == 0 && to == 2 && index + read < arg.length()) {
-					if (equalsIgnoreCase(arg.substring(index + read - 1, index + read), arg.substring(index + read, index + read + 1))) {
-						result += convert("-", 0, 2);
-						index++;
-					}
-				}
-			}
-			index += read;
-			read = 4;
-
-		} while (index < arg.length());
+				if (readLength == 0) result += tmpS;
+			} while (readLength > 0);
+		} while (index < length - 1);
 		return result;
 	}
 
@@ -394,14 +387,6 @@ public class KanaLibV2 {
 		return 0;
 	}
 
-	public static String getSpace() {
-		return space;
-	}
-
-	public static String getDot() {
-		return dot;
-	}
-
 	public static String[][] getData() {
 		return DATA;
 	}
@@ -412,23 +397,19 @@ public class KanaLibV2 {
 
 	public static boolean equalsIgnoreCase(String s1, String s2) {
 		if (s1 == null || s2 == null) return false;
-		char[] c1 = s1.toCharArray();
-		char[] c2 = s2.toCharArray();
-		for (char char1 : c1) {
-			for (String[] caseC : CaseConversion) {
-				if (String.valueOf(char1).equalsIgnoreCase(caseC[0])) {
-					char1 = caseC[1].charAt(0);
+		return uppercase(s1).equalsIgnoreCase(uppercase(s2));
+	}
+
+	public static String uppercase(String s) {
+		char[] c = s.toCharArray();
+		for (int n = 0; n < c.length; n++) {
+			for (char[] caseC : CaseConversion) {
+				if (c[n] == caseC[0]) {
+					c[n] = caseC[1];
 				}
 			}
 		}
-		for (char char2 : c2) {
-			for (String[] caseC : CaseConversion) {
-				if (String.valueOf(char2).equalsIgnoreCase(caseC[0])) {
-					char2 = caseC[1].charAt(0);
-				}
-			}
-		}
-		return String.valueOf(c1).equalsIgnoreCase(String.valueOf(c2));
+		return new String(c);
 	}
 
 }
