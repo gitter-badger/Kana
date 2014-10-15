@@ -2,7 +2,7 @@ package com.zaheylu.kana;
 
 import java.util.ArrayList;
 
-import com.zaheylu.snippets.CodeLibary;
+import com.zaheylu.log.Log;
 
 public class KanaLibV2 {
 
@@ -312,7 +312,8 @@ public class KanaLibV2 {
 				if (str[1].equalsIgnoreCase(arg)) return str[0];
 			}
 		} else {
-			if (from == hira) {
+			if (from == hira) { //TODO: re-do this w/o this hiraKata stuff, it doesn't work.
+								//you better believe me, you wrote it.
 				target = hiraKata;
 				for (String[] str : target.get(arg.length() - 1)) {
 					if (equalsIgnoreCase(str[0], arg)) {
@@ -349,15 +350,41 @@ public class KanaLibV2 {
 					index += readLength;
 					readLength = -1;
 				} else {
-					readLength--;
+					boolean special = false;
+					if (readLength == 1) {
+						if (to == kata || to == hira) {
+							for (char[] cc : specialChar)
+								if (c[index] == cc[0]) {
+									result += cc[1];
+									special = true;
+								}
+						} else if (to == roma) {
+							for (char[] cc : specialChar)
+								if (c[index] == cc[1]) {
+									result += cc[0];
+									special = true;
+								}
+						}
+						if (!special) {
+							if from
+						}
+					}
+					if (special) {
+						index += 1;
+						readLength = -1;
+					} else readLength--;
 				}
-				if (readLength == 0) result += tmpS;
+				if (readLength == 0) {
+					result += c[index];
+					index++;
+				}
 			} while (readLength > 0);
-		} while (index < length - 1);
+		} while (index < length);
 		return result;
 	}
 
 	public static boolean matches(String str1, int typ1, String str2, int typ2) {
+		// TODO: Rethink this.
 		ArrayList<Integer> ar = new ArrayList<Integer>();
 		for (int n = 0; n < DATA.length; n++)
 			if (equalsIgnoreCase(DATA[n][typ1], str1)) {
@@ -375,19 +402,38 @@ public class KanaLibV2 {
 	public static int findType(String arg) {
 		if (arg.isEmpty()) return -1;
 		else {
-			for (String[] data : DATA) {
+			char[] c = arg.toCharArray();
+			int max = 3;
+			if (c.length < 4) max = c.length - 1;
+			for (int n = max; n >= 0; n--) {
+				String arg2 = new String(c, 0, n + 1);
+				for (String[] str : romaHira.get(n)) {
+					if (equalsIgnoreCase(arg2, str[0])) return 0;
+					if (equalsIgnoreCase(arg2, str[1])) return 1;
+				}
+				for (String[] str : romaKata.get(n)) {
+					if (equalsIgnoreCase(arg2, str[1])) return 2;
+				}
+				for (String[] str : romaKata.get(n)) {
+					if (equalsIgnoreCase(arg2, str[0])) return 0;
+				}
+
+			}
+			/*
+				for (String[] data : DATA) {
 				if (equalsIgnoreCase(data[1], arg)) {
 					return 1;
 				}
 				if (equalsIgnoreCase(data[2], arg)) {
 					return 2;
 				}
-			}
+				}*/
 		}
-		return 0;
+		return 3;
 	}
 
 	public static String[][] getData() {
+		// TODO: Rethink Getter and setter
 		return DATA;
 	}
 
