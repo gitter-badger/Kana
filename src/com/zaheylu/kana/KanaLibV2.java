@@ -312,9 +312,12 @@ public class KanaLibV2 {
 				if (str[1].equalsIgnoreCase(arg)) return str[0];
 			}
 		} else {
-			if (from == hira) { //TODO: re-do this w/o this hiraKata stuff, it doesn't work.
-								//you better believe me, you wrote it.
-				target = hiraKata;
+			if (from == hira) { 
+				for (String[] str : DATA) {
+					if (e)
+				}
+				target = romaHira;
+				
 				for (String[] str : target.get(arg.length() - 1)) {
 					if (equalsIgnoreCase(str[0], arg)) {
 						return str[1];
@@ -366,7 +369,7 @@ public class KanaLibV2 {
 								}
 						}
 						if (!special) {
-							if from
+							if (from
 						}
 					}
 					if (special) {
