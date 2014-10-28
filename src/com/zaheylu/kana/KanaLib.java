@@ -259,7 +259,7 @@ public class KanaLib {
 		return null;
 	}
 
-	public static String convertPlus(String arg, int from, int to) { //TODO: Seperate Threading TODO: use char[] instead of Strings; performance check
+	public static String convertPlus(String arg, int from, int to) {
 		String result = "";
 		int index = 0;
 		int read = 4;

@@ -1172,4 +1172,37 @@
 		<engl>how is</engl>
 		<comment>...?</comment>
 	</entry>
+	<entry>
+		<group>6</group>
+		<kana>アルバイト</kana>
+		<engl>part-time job</engl>
+	</entry>
+	<entry>
+		<group>6</group>
+		<kanji>買い物</kanji>
+		<kana>かいもの</kana>
+		<engl>shopping</engl>
+	</entry>
+	<entry>
+		<group>6</group>
+		<kana>クラス</kana>
+	</entry>
+	<entry>
+		<group>6</group>
+		<kana>いす</kana>
+		<engl>chair</engl>
+	</entry>
+	<entry>
+		<group>6</group>
+		<kanji>犬</kanji>
+		<kana>いぬ</kana>
+		<engl>dog</engl>
+	</entry>
+	<entry>
+		<group>6</group>
+		<kanji>お土産</kanji>
+		<kana>おみやげ</kana>
+		<engl>souvenir</engl>
+	</entry>
+	
 </Dictionary>

@@ -57,6 +57,7 @@ public class Profile {
 	}
 
 	public void save() throws UnsupportedEncodingException, FileNotFoundException, XMLStreamException {
+		// TODO: This should be called only if the User wants to.
 		if (null != success && size() > 0) {
 			Log.event("Profile.Save");
 			PrintWriter writerXml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(Log.getString("Path.user") + "profiles\\default.xml"), "utf-8"));
@@ -93,7 +94,6 @@ public class Profile {
 	}
 
 	public ArrayList<SuccessEntry> getSuccess() {
-		// TODO: This should be called only if the DAU wants to.
 		return success;
 	}
 

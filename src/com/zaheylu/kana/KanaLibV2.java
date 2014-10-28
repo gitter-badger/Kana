@@ -2,19 +2,15 @@ package com.zaheylu.kana;
 
 import java.util.ArrayList;
 
-import com.zaheylu.log.Log;
-
 public class KanaLibV2 {
 
-	private KanaLibV2() {
-
-	}
+	private KanaLibV2() {}
 
 
 	private static final char[][] specialChar = new char[][] {
 			{
 					'.', '。' }, {
-					' ', ' ' } };
+					' ', '　' } };
 	private static final char[][] CaseConversion = new char[][] {
 			{
 					'ﾔ', 'ヤ' }, {
@@ -33,9 +29,10 @@ public class KanaLibV2 {
 
 
 	private static final String[] Alphabet = new String[] {
-			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu", "ne", "no",
-			"ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n", "ga", "gi", "gu",
-			"ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu", "pe", "po" };
+			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu",
+			"ne", "no", "ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n",
+			"ga", "gi", "gu", "ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu",
+			"pe", "po" };
 	private static final String[][] DATA = new String[][] {
 			{
 					"wi", null, "ウィ" }, {
@@ -253,82 +250,76 @@ public class KanaLibV2 {
 					"o", "お", "オ" }, {
 
 					"n", "ん", "ン" }, {
-					"nn", "ん", "ン" }, {
-					"-", null, "ー" } };
+					"nn", "ん", "ン" } };
 
 	// variables to initiate
-	private static ArrayList<ArrayList<String[]>> romaHira;
-	private static ArrayList<ArrayList<String[]>> romaKata;
-	private static ArrayList<ArrayList<String[]>> hiraKata;
+	public static ArrayList<String[][]> romaHira;
+	public static ArrayList<String[][]> romaKata;
 
 	// field numbers
-	private static final int roma = 0;
-	private static final int hira = 1;
-	private static final int kata = 2;
+	public static final int ROMA = 0;
+	public static final int HIRA = 1;
+	public static final int KATA = 2;
+
 
 	public static void init() {
-		ArrayList<ArrayList<String[]>> romaHira = new ArrayList<ArrayList<String[]>>();
-		ArrayList<ArrayList<String[]>> romaKata = new ArrayList<ArrayList<String[]>>();
-		ArrayList<ArrayList<String[]>> hiraKata = new ArrayList<ArrayList<String[]>>();
+		int hiraC[] = new int[] {
+				0, 0, 0, 0 };
+		int kataC[] = new int[] {
+				0, 0, 0, 0 };
+		romaHira = new ArrayList<String[][]>();
+		romaKata = new ArrayList<String[][]>();
 
-		for (int n = 0; n < 4; n++) {
-			romaHira.add(new ArrayList<String[]>());
-			romaKata.add(new ArrayList<String[]>());
-			hiraKata.add(new ArrayList<String[]>());
+		for (String[] str : DATA) {
+			if (str[HIRA] != null) hiraC[str[ROMA].length() - 1]++;
+			if (str[KATA] != null) kataC[str[ROMA].length() - 1]++;
+		}
+
+		for (int n = 0; n < hiraC.length; n++) {
+			romaHira.add(new String[hiraC[n]][2]);
+			hiraC[n] = 0;
+			romaKata.add(new String[kataC[n]][2]);
+			kataC[n] = 0;
 		}
 		for (String[] str : DATA) {
-			if (str[hira] != null && str[kata] != null) {
-				hiraKata.get(str[hira].length() - 1).add(new String[] {
-						str[hira], str[kata] });
-				romaHira.get(str[roma].length() - 1).add(new String[] {
-						str[roma], str[hira] });
-				romaKata.get(str[roma].length() - 1).add(new String[] {
-						str[roma], str[kata] });
-			} else if (str[hira] != null) {
-				romaHira.get(str[roma].length() - 1).add(new String[] {
-						str[roma], str[hira] });
-			} else if (str[kata] != null) {
-				romaKata.get(str[roma].length() - 1).add(new String[] {
-						str[roma], str[kata] });
+			int group = str[ROMA].length() - 1;
+			if (str[HIRA] != null) {
+				romaHira.get(group)[hiraC[group]][0] = str[ROMA];
+				romaHira.get(group)[hiraC[group]][1] = str[HIRA];
+				hiraC[group]++;
+			}
+			if (str[KATA] != null) {
+				romaKata.get(group)[kataC[group]][0] = str[ROMA];
+				romaKata.get(group)[kataC[group]][1] = str[KATA];
+				kataC[group]++;
 			}
 		}
-		KanaLibV2.romaHira = romaHira;
-		KanaLibV2.romaKata = romaKata;
-		KanaLibV2.hiraKata = hiraKata;
+	}
+
+	public static String convertChr(char arg, int from, int to) {
+		return convertChr(String.valueOf(arg), from, to);
 	}
 
 	public static String convertChr(String arg, int from, int to) {
-		ArrayList<ArrayList<String[]>> target;
-		if (from == roma) {
-			if (to == hira) target = romaHira;
+		ArrayList<String[][]> target;
+		if (from == ROMA) {
+			if (to == HIRA) target = romaHira;
 			else target = romaKata;
 			for (String[] str : target.get(arg.length() - 1)) {
 				if (str[0].equalsIgnoreCase(arg)) return str[1];
 			}
-		} else if (to == roma) {
-			if (from == hira) target = romaHira;
-			else target = romaKata;
-			for (String[] str : target.get(arg.length() - 1)) {
-				if (str[1].equalsIgnoreCase(arg)) return str[0];
+		} else if (to == ROMA) {
+			for (String[] str : DATA) {
+				if (str[from] != null && str[from].equalsIgnoreCase(arg)) return str[ROMA];
 			}
 		} else {
-			if (from == hira) { 
+			if (from == HIRA) {
 				for (String[] str : DATA) {
-					if (e)
-				}
-				target = romaHira;
-				
-				for (String[] str : target.get(arg.length() - 1)) {
-					if (equalsIgnoreCase(str[0], arg)) {
-						return str[1];
-					}
+					if (str[HIRA] != null && str[HIRA].equalsIgnoreCase(arg)) return convertChr(str[ROMA], ROMA, KATA);
 				}
 			} else {
-				target = hiraKata;
-				for (String[] str : target.get(arg.length() - 1)) {
-					if (equalsIgnoreCase(str[1], arg)) {
-						return str[0];
-					}
+				for (String[] str : DATA) {
+					if (str[KATA] != null && str[KATA].equalsIgnoreCase(arg)) return convertChr(str[ROMA], ROMA, HIRA);
 				}
 			}
 		}
@@ -340,36 +331,49 @@ public class KanaLibV2 {
 		char[] c = arg.toCharArray();
 		String tmpS = null;
 		int length = c.length;
-		String result = "";
 		int index = 0;
 		int readLength = 4;
+		StringBuilder sb = new StringBuilder("");
 		do {
 			readLength = 4;
 			if (index + readLength > length) readLength = length - index;
 			do {
 				tmpS = KanaLibV2.convertChr(new String(c, index, readLength), from, to);
 				if (tmpS != null) {
-					result += tmpS;
-					index += readLength;
-					readLength = -1;
+					if (readLength == 1 && index > 0 && from == ROMA && to == KATA && c[index - 1] == c[index]
+							&& (c[index] == 'a' || c[index] == 'e' || c[index] == 'i' || c[index] == 'o' || c[index] == 'u')) {
+						sb.append("ー");
+						index += 1;
+						readLength = -1;
+					} else {
+						sb.append(tmpS);
+						index += readLength;
+						readLength = -1;
+					}
 				} else {
 					boolean special = false;
 					if (readLength == 1) {
-						if (to == kata || to == hira) {
+						if (to == KATA || to == HIRA) {
 							for (char[] cc : specialChar)
 								if (c[index] == cc[0]) {
-									result += cc[1];
+									sb.append(cc[1]);
 									special = true;
 								}
-						} else if (to == roma) {
+						} else if (to == ROMA) {
 							for (char[] cc : specialChar)
 								if (c[index] == cc[1]) {
-									result += cc[0];
+									sb.append(cc[0]);
 									special = true;
 								}
 						}
 						if (!special) {
-							if (from
+							if (from == KATA && to == ROMA) {
+								if (c[index] == 'ー' && index > 0) {
+									String s = convertChr(c[index - 1], from, to);
+									sb.append(s.charAt(s.length() - 1));
+									special = true;
+								}
+							}
 						}
 					}
 					if (special) {
@@ -378,12 +382,12 @@ public class KanaLibV2 {
 					} else readLength--;
 				}
 				if (readLength == 0) {
-					result += c[index];
+					sb.append(c[index]);
 					index++;
 				}
 			} while (readLength > 0);
 		} while (index < length);
-		return result;
+		return sb.toString();
 	}
 
 	public static boolean matches(String str1, int typ1, String str2, int typ2) {
@@ -422,15 +426,6 @@ public class KanaLibV2 {
 				}
 
 			}
-			/*
-				for (String[] data : DATA) {
-				if (equalsIgnoreCase(data[1], arg)) {
-					return 1;
-				}
-				if (equalsIgnoreCase(data[2], arg)) {
-					return 2;
-				}
-				}*/
 		}
 		return 3;
 	}

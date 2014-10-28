@@ -651,7 +651,8 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmNewWordsActionListener implements ActionListener {
-
+		//TODO: those should be applied to the currentWordPool rather than the vocabulary
+		//also TODO: vocabulary<->profileSuccess relation
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
