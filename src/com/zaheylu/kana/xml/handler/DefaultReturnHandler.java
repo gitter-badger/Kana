@@ -36,10 +36,10 @@ public abstract class DefaultReturnHandler extends DefaultHandler {
 
 	public abstract Object getReturn();
 
-	public void load(File f) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException  {
+	public void load(File f) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException {
 		loadXML(new FileInputStream(f));
 	}
-	
+
 	public void load(String path) throws UnsupportedEncodingException, FileNotFoundException, ParserConfigurationException, SAXException {
 		loadXML(new FileInputStream(path));
 	}

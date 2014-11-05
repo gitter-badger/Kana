@@ -15,7 +15,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
-import com.zaheylu.kana.KanaLib;
+import com.zaheylu.kana.KanaLibV2;
 import com.zaheylu.kana.mp3.Mp3Play;
 import com.zaheylu.kana.words.TWord;
 import com.zaheylu.log.Log;
@@ -34,7 +34,7 @@ public class VocHelp extends JDialog {
 	}
 
 	public VocHelp(Component frame, TWord word, String group) {
-		
+
 		int cY = 0;
 		getContentPane().setLayout(null);
 		// kanji
@@ -68,7 +68,7 @@ public class VocHelp extends JDialog {
 			JLabel lblRomaji;
 			String txt = "Romaji: ";
 			if (word.hasRomaji()) txt += word.getRomaji();
-			else txt += KanaLib.convertPlus(word.getKana(), KanaLib.findType(String.valueOf(word.getKana().toCharArray()[0])), 0);
+			else txt += KanaLibV2.convertStr(word.getKana(), KanaLibV2.findType(word.getKana()), 0);
 			lblRomaji = newJLabel(txt, cY, 30, new Font("MS Gothic", Font.PLAIN, 20));
 			cY += lblRomaji.getHeight() + 10;
 			getContentPane().add(lblRomaji);
@@ -80,6 +80,7 @@ public class VocHelp extends JDialog {
 			getContentPane().add(lblComment);
 		}
 
+		if (Log.getBool("sounds.enabled")) Mp3Play.play(word);
 		if (group != null) this.setTitle("Group: " + group);
 		getContentPane().setPreferredSize(new Dimension(width, cY));
 		pack();
@@ -105,8 +106,7 @@ public class VocHelp extends JDialog {
 				dispose();
 			}
 
-			public void mouseReleased(MouseEvent arg0) {
-			}
+			public void mouseReleased(MouseEvent arg0) {}
 		});
 		this.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) {
@@ -117,10 +117,9 @@ public class VocHelp extends JDialog {
 
 			}
 
-			public void keyTyped(KeyEvent arg0) {
-			}
+			public void keyTyped(KeyEvent arg0) {}
 		});
-		if (Log.getBool("Sounds.Enabled")) Mp3Play.play(word);
+
 		this.setVisible(true);
 
 	}

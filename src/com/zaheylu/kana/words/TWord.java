@@ -12,6 +12,7 @@ public class TWord {
 	private String present;
 	private int group;
 	private int index;
+	//TODO: <----- SUCCESS
 
 	public static TWord getDummyTWord(int i) {
 		TWord result = new TWord();
@@ -23,10 +24,8 @@ public class TWord {
 		result.setRomaji(String.valueOf(i));
 		result.addEngl(String.valueOf(i));
 		result.addEngl(String.valueOf(i));
-
 		return result;
 	}
-
 
 	public TWord() {
 		engl = new ArrayList<String>();
@@ -133,6 +132,4 @@ public class TWord {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
-
 }

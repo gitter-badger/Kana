@@ -1,7 +1,9 @@
 package com.zaheylu.kana.gui;
 
-import static com.zaheylu.kana.KanaLib.*;
+import static com.zaheylu.kana.KanaLibV2.*;
 import static com.zaheylu.snippets.CodeLibary.*;
+import static com.zaheylu.kana.settings.KanaSettings.*;
+
 import static java.lang.Math.*;
 
 import java.awt.Color;
@@ -44,7 +46,6 @@ import com.zaheylu.kana.users.Profile;
 import com.zaheylu.kana.users.SuccessEntry;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
-import com.zaheylu.kana.words.TVocabulary;
 import com.zaheylu.kana.words.TWord;
 import com.zaheylu.kana.xml.ReadXMLEntryNames;
 import com.zaheylu.kana.xml.handler.ProfileHandler;
@@ -55,9 +56,7 @@ import com.zaheylu.snippets.CodeLibary;
 
 public class KanaWindow extends JFrame {
 
-	private String path;
-	private int[] options;
-
+	
 	private JPanel panelType;
 	private JPanel panelChoose;
 	private JPanel panelVocabulary;
@@ -79,31 +78,19 @@ public class KanaWindow extends JFrame {
 	private JLabel lblProgess;
 	private JPanel panelHints;
 
-	private Profile profile;
-	private TVocabulary vocabulary;
-	private TGroups groups;
-	private TWord currentWord;
-	private ArrayList<TWord> currentWordPool;
-	private ArrayList<String> possibleAnswers;
 
 	private KanaWindow thisFrame = this;
-
-	private int examIndex;
-	private ArrayList<TWord> examCorrect;
-	private ArrayList<TWord> examWrong;
-	private int[] examOrder;
-
+	
 	public KanaWindow(String[] args) {
 		profile = new Profile();
 		if (args != null) {
 			for (String arg : args) {
 				if (arg.equalsIgnoreCase("debug")) Log.enableLogOutput();
-				if (arg.equalsIgnoreCase("touch")) Log.setLog("Mode.Touch", true);
+				if (arg.equalsIgnoreCase("touch")) Log.put("mode.touch", true);
 			}
 		}
 		options = new int[2];
-		this.path = System.getProperty("user.home") + "\\Documents\\kana\\";
-		Log.setLog("Path.User", path);
+		Log.put("path.user", System.getProperty("user.home") + "\\Documents\\kana\\");
 
 		ImageIcon icon = new ImageIcon(KanaWindow.class.getResource("/res/kana_small.png"));
 		setIconImage(icon.getImage());
@@ -134,20 +121,20 @@ public class KanaWindow extends JFrame {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				Log.event("Hook.Shutdown");
-				try {
-					profile.save();
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (XMLStreamException e) {
-					e.printStackTrace();
-				}
+				onShutdown();
 			}
 		}));
 
 		this.setVisible(true);
+	}
+
+	public void onShutdown() {
+		Log.event("hook.shutdown");
+		try {
+			profile.save();
+		} catch (UnsupportedEncodingException | FileNotFoundException | XMLStreamException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setVisible(boolean b) {
@@ -314,7 +301,7 @@ public class KanaWindow extends JFrame {
 		Log.event("placeComponents");
 		Container pan = getContentPane();
 
-		if (Log.getBool("Mode.Touch")) pan.setPreferredSize(new Dimension(1280, 640));
+		if (Log.getBool("mode.touch")) pan.setPreferredSize(new Dimension(1280, 640));
 		else pan.setPreferredSize(new Dimension(700, 350));
 
 		pan.setSize(pan.getPreferredSize());
@@ -347,65 +334,65 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void loadGroups(String fileName) {
-		Log.event("Load Groups");
+		Log.event("loadGroups");
 		try {
 			ReadXMLEntryNames reader = new ReadXMLEntryNames();
-			if (new File(path + fileName).exists()) {
-				String path = this.path + fileName;
-				Log.setLog("Path.Group", path);
+			if (new File(Log.getString("path.user") + fileName).exists()) {
+				String path = Log.getString("path.user") + fileName;
+				Log.put("path.group", path);
 				groups = new TGroups(reader.load(path));
 			} else {
 				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
-				Log.setLog("Path.Group", path);
+				Log.put("path.group", path);
 				groups = new TGroups(reader.load(path));
-				Log.setLog("Loaded.Group", groups);
+				Log.put("loaded.group", groups);
 			}
 
 		} catch (ParserConfigurationException | SAXException | IOException err) {
-			Log.event("Err.KanaWindow.loadGroups");
+			Log.event("err.kanaWindow.loadGroups");
 			err.printStackTrace();
 		}
 	}
 
 	private void loadVocabulary(String fileName) {
-		Log.event("Load Vocabulary");
+		Log.event("loadVocabulary");
 		try {
 			VocHandler reader = VocHandler.newVocHandler();
-			if (new File(path + fileName).exists()) {
-				String path = this.path + fileName;
-				Log.setLog("Path.Vocabulary", path);
+			if (new File(Log.getString("path.user") + fileName).exists()) {
+				String path = Log.getString("path.user") + fileName;
+				Log.put("path.vocabulary", path);
 				reader.load(path);
 				vocabulary = reader.getReturn();
 			} else {
 				URL path = (KanaWindow.class.getResource("/lib/" + fileName));
-				Log.setLog("Path.Vocabulary", path);
+				Log.put("path.vocabulary", path);
 				reader.load(path);
 				vocabulary = reader.getReturn();
 			}
-			Log.setLog("Loaded.Vocabulary", vocabulary);
+			Log.put("loaded.vocabulary", vocabulary);
 
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			Log.event("Err.KanaWindow.loadVocabulary");
+			Log.event("err.kanaWindow.loadVocabulary");
 			e.printStackTrace();
 		}
 	}
 
 	private void loadProfiles() {
-		Log.event("Load Profiles");
+		Log.event("loadProfiles");
 		try {
 			profile = loadProfile("default");
 			if (profile == null) profile = new Profile();
 			loadProfile(); // TODO: Proper Profile Loading
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			Log.event("Err.KanaWindow.loadProfiles");
+			Log.event("err.kanaWindow.loadProfiles");
 			e.printStackTrace();
 		}
 	}
 
 	private Profile loadProfile(String name) {
-		File f = new File(path + "profiles\\" + name + ".xml");
+		File f = new File(Log.getString("path.user") + "profiles\\" + name + ".xml");
 		if (f.exists() && name.compareToIgnoreCase("profiles") != 0) {
-			Log.event("Load Profile: " + name);
+			Log.event("loadProfile: " + name);
 			try {
 				ProfileHandler reader = ProfileHandler.newProfileHandler();
 				reader.load(f);
@@ -419,7 +406,7 @@ public class KanaWindow extends JFrame {
 
 	private Profile[] loadProfile() throws ParserConfigurationException, SAXException, IOException {
 		ReadXMLEntryNames reader = new ReadXMLEntryNames();
-		ArrayList<String> list = reader.load(path + "profiles.xml");
+		ArrayList<String> list = reader.load(Log.getString("path.user") + "profiles.xml");
 
 		if (list == null) return null;
 		Profile[] profiles = new Profile[list.size()];
@@ -470,7 +457,7 @@ public class KanaWindow extends JFrame {
 
 		public void keyPressed(KeyEvent arg0) {
 			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
-				lblTypeHelp.setText(convert(lblType.getText(), options[0], 0));
+				lblTypeHelp.setText(convertChr(lblType.getText(), options[0], 0));
 				lblTypeHelp.setVisible(true);
 			}
 		}
@@ -523,7 +510,7 @@ public class KanaWindow extends JFrame {
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
 						currentWordPool = vocabulary.getFiltered(choices);
 						showPanel(panelVocabulary);
-						Log.setLog("Vocabulary.Index", -1);
+						Log.put("vocabulary.index", -1);
 						if (options[1] == KanaCharacterChoose.EXAM) {
 							newExam();
 						} else {
@@ -555,10 +542,9 @@ public class KanaWindow extends JFrame {
 
 		public void keyReleased(KeyEvent arg0) {
 			if (options[0] == 2) {
-				long time = System.nanoTime();
-				lblVocHira.setText(convertPlus(tfVoc.getText(), 0, 1));
-				lblVocKata.setText(convertPlus(tfVoc.getText(), 0, 2));
-				System.out.println("Conversion time: " + ((System.nanoTime() - time) / 1000000000.0) + " seconds");
+				// TODO: Threaded Converting
+				lblVocHira.setText(convertStr(tfVoc.getText(), 0, 1));
+				lblVocKata.setText(convertStr(tfVoc.getText(), 0, 2));
 				strechFont(lblVocHira);
 				strechFont(lblVocKata);
 			}
@@ -570,7 +556,7 @@ public class KanaWindow extends JFrame {
 					profile.update(currentWord.getIndex(), false);
 					newExamAnswer(false);
 				} else {
-					if (Log.getBool("Vocabulary.RemoveSkipped")) currentWordPool.remove(currentWord);
+					if (Log.getBool("vocabulary.removeSkipped")) currentWordPool.remove(currentWord);
 					else profile.update(currentWord.getIndex(), false);
 					newVocabulary();
 				}
@@ -596,7 +582,7 @@ public class KanaWindow extends JFrame {
 			if (arg0.getKeyCode() == KeyEvent.VK_F1) {
 				new VocHelp(thisFrame, currentWord, groups.get(currentWord.getGroup()));
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE && options[1] != KanaCharacterChoose.EXAM) {
-				Log.setLog("Vocabulary.Index", -1);
+				Log.put("vocabulary.Index", -1);
 			} else if (arg0.getKeyCode() == KeyEvent.VK_F3) {
 				new KanaResult(thisFrame, currentWordPool, profile);
 			}
@@ -612,7 +598,7 @@ public class KanaWindow extends JFrame {
 	private class ChckbxmntmEnableSoundsActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem check = (JCheckBoxMenuItem) arg0.getSource();
-			Log.setLog("Sounds.Enabled", check.isSelected());
+			Log.put("sounds.enabled", check.isSelected());
 			chckbxmntmSoundOnNew.setEnabled(check.isSelected());
 			mnLoadAllSounds.setEnabled(check.isSelected());
 			if (check.isSelected()) showmessage("Enabling this will read out the word you're translating in Vocabulary mode when pressing F1."
@@ -623,13 +609,13 @@ public class KanaWindow extends JFrame {
 
 	private class ChckbxmntmSoundOnNewActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			Log.setLog("Sounds.OnVocabulary", ((JCheckBoxMenuItem) arg0.getSource()).isSelected());
+			Log.put("sounds.onVocabulary", ((JCheckBoxMenuItem) arg0.getSource()).isSelected());
 		}
 	}
 
 	private class MntmReloadSoundActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
-			if (Log.getBool("Sounds.Enabled")) {
+			if (Log.getBool("sounds.enabled")) {
 				vocabulary.loadSound(currentWord, false, true);
 			}
 		}
@@ -638,7 +624,7 @@ public class KanaWindow extends JFrame {
 	private class ChckbxmntmRemoveSkippedWordsActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
-			Log.setLog("Vocabulary.RemoveSkipped", ch.isSelected());
+			Log.put("vocabulary.removeSkipped", ch.isSelected());
 			// TODO: erase button instead
 		}
 	}
@@ -646,13 +632,13 @@ public class KanaWindow extends JFrame {
 	private class ChckbxmntmChronologicalOrderActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
-			Log.setLog("Vocabulary.Order.Chronological", ch.isSelected());
+			Log.put("vocabulary.order.chronological", ch.isSelected());
 		}
 	}
 
 	private class MntmNewWordsActionListener implements ActionListener {
-		//TODO: those should be applied to the currentWordPool rather than the vocabulary
-		//also TODO: vocabulary<->profileSuccess relation
+		// TODO: those should be applied to the currentWordPool rather than the vocabulary
+		// also TODO: vocabulary<->profileSuccess relation
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
@@ -691,7 +677,6 @@ public class KanaWindow extends JFrame {
 					newVocabulary();
 				} else showmessage("There are no new words.");
 			} catch (Exception e) {
-				showmessage("Some error occoured."); // TODO: even for you, that's too lazy...
 				e.printStackTrace();
 			}
 		}
@@ -718,7 +703,7 @@ public class KanaWindow extends JFrame {
 	private class ChckbxmntmTouchModeListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
-			Log.setLog("Mode.Touch", ch.isSelected());
+			Log.put("mode.touch", ch.isSelected());
 			// Thread t = new Thread(new RefreshThread());
 			// t.start();
 			placeComponents();
@@ -743,8 +728,8 @@ public class KanaWindow extends JFrame {
 		if (options[0] != KanaCharacterChoose.KANJI) {
 			do {
 				val = randInt(getAlphabet().length - 1);
-			} while (convert(getAlphabet()[val], 0, options[0]) == lblType.getText());
-			lblType.setText(convert(getAlphabet()[val], 0, options[0]));
+			} while (convertChr(getAlphabet()[val], 0, options[0]) == lblType.getText());
+			lblType.setText(convertChr(getAlphabet()[val], 0, options[0]));
 			tfType.requestFocus();
 		} else {
 			// TODO: typeKanji
@@ -752,11 +737,11 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void newExam() {
-		Log.event("Exam.Started");
+		Log.event("exam.started");
 		examIndex = -1;
 		examCorrect = new ArrayList<TWord>();
 		examWrong = new ArrayList<TWord>();
-		if (Log.getBool("Vocabulary.Order.Chronological")) {
+		if (Log.getBool("vocabulary.order.chronological")) {
 			examOrder = new int[currentWordPool.size()];
 			for (int n = 0; n < examOrder.length; n++) {
 				examOrder[n] = n;
@@ -788,8 +773,8 @@ public class KanaWindow extends JFrame {
 		panelProgress.setVisible(options[1] == KanaCharacterChoose.EXAM);
 
 		mntmReloadSound.setEnabled(Log.getBool("Sounds.Enabled"));
-		if (Log.getBool("Sounds.Enabled")) {
-			vocabulary.loadSound(word, Log.getBool("Sounds.OnVocabulary"), false);
+		if (Log.getBool("sounds.enabled")) {
+			vocabulary.loadSound(word, Log.getBool("sounds.onVocabulary"), false);
 		}
 		String from;
 		// CALCULATE TRANSLATION AND POSSIBLE ANSWERS
@@ -817,7 +802,7 @@ public class KanaWindow extends JFrame {
 	}
 
 	private int getNext() {
-		Integer index = (Integer) Log.getEntry("Vocabulary.Index").getLogObj();
+		Integer index = (Integer) Log.get("vocabulary.index").getValue();
 		if (index < currentWordPool.size() - 1) return index + 1;
 		else return 0;
 
@@ -826,11 +811,11 @@ public class KanaWindow extends JFrame {
 	private void newVocabulary() {
 		int val = 0;
 		if (currentWordPool.size() > 0) {
-			if (Log.getBool("Vocabulary.Order.Chronological")) val = getNext();
+			if (Log.getBool("vocabulary.order.chronological")) val = getNext();
 			else do {
 				val = randInt(currentWordPool.size() - 1);
 			} while (currentWordPool.get(val) == currentWord && currentWordPool.size() > 1);
-			Log.setLog("Vocabulary.Index", val);
+			Log.put("vocabulary.index", val);
 			currentWord = currentWordPool.get(val);
 			showVoc(currentWord);
 		} else {
@@ -854,7 +839,7 @@ public class KanaWindow extends JFrame {
 	}
 
 	private void f5() {
-		Log.event("Repaint");
+		Log.event("repaint");
 		this.repaint();
 	}
 }

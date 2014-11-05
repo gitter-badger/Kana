@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -59,8 +60,9 @@ public class Profile {
 	public void save() throws UnsupportedEncodingException, FileNotFoundException, XMLStreamException {
 		// TODO: This should be called only if the User wants to.
 		if (null != success && size() > 0) {
-			Log.event("Profile.Save");
-			PrintWriter writerXml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(Log.getString("Path.user") + "profiles\\default.xml"), "utf-8"));
+			Log.event("profile.save");
+			PrintWriter writerXml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(Log.getString("path.user") + "profiles"
+					+ FileSystems.getDefault().getSeparator() + "default.xml"), "utf-8"));
 			XMLOutputFactory xof = XMLOutputFactory.newInstance();
 			XMLStreamWriter xmlsw = xof.createXMLStreamWriter(writerXml);
 
@@ -84,8 +86,8 @@ public class Profile {
 				xmlsw.writeEndElement();
 				xmlsw.writeCharacters("\r\n");
 			}
-			xmlsw.writeEndElement(); //end success
-			xmlsw.writeEndElement(); //end profile
+			xmlsw.writeEndElement(); // end success
+			xmlsw.writeEndElement(); // end profile
 			xmlsw.writeEndDocument();
 			xmlsw.flush();
 			xmlsw.close();
@@ -96,5 +98,4 @@ public class Profile {
 	public ArrayList<SuccessEntry> getSuccess() {
 		return success;
 	}
-
 }

@@ -907,7 +907,7 @@
 	<entry>
 		<group>5</group>
 		<kanji>昼ご飯</kanji>
-		<kana>はるごはん</kana>
+		<kana>ひるごはん</kana>
 		<engl>Lunch</engl>
 	</entry>
 	<entry>
@@ -1186,6 +1186,7 @@
 	<entry>
 		<group>6</group>
 		<kana>クラス</kana>
+		<engl>class</engl>
 	</entry>
 	<entry>
 		<group>6</group>
@@ -1204,5 +1205,4 @@
 		<kana>おみやげ</kana>
 		<engl>souvenir</engl>
 	</entry>
-	
 </Dictionary>

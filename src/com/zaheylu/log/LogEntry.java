@@ -1,12 +1,40 @@
 package com.zaheylu.log;
 
-import com.zaheylu.snippets.Entry;
+import java.util.Map.Entry;
 
+public class LogEntry implements Entry<String, Object> {
+	private String key;
+	private Object value;
+	private Class<?> type;
 
-public class LogEntry extends Entry {
-
-	public LogEntry(String name, Object logObj) {
-		super(name, logObj);
+	public LogEntry(String key, Object value) {
+		this.key = key;
+		this.value = value;
+		type = value.getClass();
 	}
 
+	public Class<?> getType() {
+		return type;
+	}
+
+	public String toString() {
+		return type.cast(value).toString();
+	}
+
+	@Override
+	public String getKey() {
+		return key;
+	}
+
+	@Override
+	public Object getValue() {
+		return value;
+	}
+
+	@Override
+	public Object setValue(Object arg0) {
+		Object old = getValue();
+		value = arg0;
+		return old;
+	}
 }

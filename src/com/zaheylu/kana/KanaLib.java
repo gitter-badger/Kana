@@ -1,7 +1,14 @@
 package com.zaheylu.kana;
 
 import java.util.ArrayList;
+
+/**
+ * @deprecated  replaced by {@link KanaLibV2}
+ * 
+ * @see KanaLibV2
+ */
 @Deprecated
+
 public class KanaLib {
 	private static final String space = "　";
 	private static final String dot = "。";

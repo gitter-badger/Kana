@@ -114,7 +114,7 @@ public class VocHandler extends DefaultReturnHandler {
 				list.add(tmpWord);
 			} else {
 				nErr++;
-				// Log.event("Vocabulary.Loading.Err: " + tmpWord.getEngl());
+				Log.event("vocabulary.loading.err: " + tmpWord.getEngl());
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class VocHandler extends DefaultReturnHandler {
 	}
 
 	public void endDocument() throws SAXException {
-		if (getErrorCount() > 0) Log.setLog("Vocabulary.Loading.Err.Count", getErrorCount());
+		if (getErrorCount() > 0) Log.put("vocabulary.loading.err.count", getErrorCount());
 	}
 
 	public TVocabulary getReturn() {

@@ -1,5 +1,7 @@
 package com.zaheylu.kana.words;
 
+import static com.zaheylu.kana.KanaLibV2.*;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,9 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 
-import com.zaheylu.kana.KanaLib;
 import com.zaheylu.kana.mp3.Mp3Play;
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
@@ -70,9 +72,9 @@ public class TVocabulary {
 
 	public int size(int group) {
 		int result = 0;
-			for (TWord word : words) {
-				if (word.getGroup() == group) result++;
-			}
+		for (TWord word : words) {
+			if (word.getGroup() == group) result++;
+		}
 		return result;
 	}
 
@@ -82,7 +84,7 @@ public class TVocabulary {
 
 		for (TWord word : words)
 			for (String engl : word.getEngl()) {
-				if (KanaLib.equalsIgnoreCase(engl, arg)) {
+				if (equalsIgnoreCase(engl, arg)) {
 					result.add(word.getKana());
 					if (word.hasRomaji()) result.add(word.getRomaji());
 					if (word.hasPresent()) result.add(word.getPresent());
@@ -95,7 +97,7 @@ public class TVocabulary {
 		Log.event("getPossibleEngl");
 		ArrayList<String> result = new ArrayList<String>();
 		for (TWord nWord : words) {
-			if (KanaLib.equalsIgnoreCase(nWord.getKana(), word.getKana()) || KanaLib.equalsIgnoreCase(nWord.getKana(), word.getKanji())) {
+			if (equalsIgnoreCase(nWord.getKana(), word.getKana()) || equalsIgnoreCase(nWord.getKana(), word.getKanji())) {
 				for (String engl : nWord.getEngl()) {
 					result.add(engl);
 				}
@@ -136,7 +138,8 @@ public class TVocabulary {
 			ArrayList<Integer> errs = new ArrayList<Integer>();
 			for (TWord word : words) {
 				try {
-					File dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + ".mp3");
+					File dest = new File(Log.getString("path.user") + "sounds" + FileSystems.getDefault().getSeparator() + "Voc"
+							+ String.valueOf(word.getIndex()) + ".mp3");
 					if ((!dest.exists()) || (overwrite)) {
 						Log.event("AudioLoadThread: " + dest.getPath());
 						String txt = word.getKana();
@@ -155,7 +158,8 @@ public class TVocabulary {
 						outstream.close();
 					}
 					if (word.hasPresent()) {
-						dest = new File(Log.getString("Path.User") + "sounds\\Voc" + String.valueOf(word.getIndex()) + "p.mp3");
+						dest = new File(Log.getString("Path.User") + "sounds" + FileSystems.getDefault().getSeparator() + "Voc"
+								+ String.valueOf(word.getIndex()) + "p.mp3");
 						if ((!dest.exists()) || (overwrite)) {
 							String txt = word.getPresent();
 							txt = java.net.URLEncoder.encode(txt, "UTF-8");
@@ -174,7 +178,6 @@ public class TVocabulary {
 						}
 					}
 
-
 					if (instantPlay && words.size() == 1) {
 						Mp3Play.play(words.get(0));
 					}
@@ -188,6 +191,9 @@ public class TVocabulary {
 			if (words.size() > 1 && (!instantPlay)) if (err) CodeLibary.showmessage("There was an error loading the sound files:" + errs);
 			else CodeLibary.showmessage("Loading complete.");
 		}
+	}
 
+	public String toString() {
+		return words.size() + " words";
 	}
 }

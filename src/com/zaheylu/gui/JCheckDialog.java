@@ -103,7 +103,7 @@ public class JCheckDialog extends JDialog {
 	}
 
 	public ArrayList<Integer> choose() {
-		Log.event("ChooseCheck");
+		Log.event("chooseCheck");
 		this.setVisible(true);
 		return choices;
 	}

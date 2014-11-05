@@ -1,12 +1,16 @@
 package com.zaheylu.log;
 
-import java.util.ArrayList;
-
-import com.zaheylu.snippets.Convert;
+import java.util.HashMap;
 
 public class Log {
-	private static ArrayList<LogEntry> log = new ArrayList<LogEntry>();
+	private static HashMap<String, LogEntry> log = new HashMap<String, LogEntry>();
+	private static HashMap<Integer, String> events = new HashMap<Integer, String>();
+	private static int eventIndex = 0;
 	private static boolean output = false;
+
+	private Log() {
+
+	}
 
 	public static void enableLogOutput() {
 		output = true;
@@ -18,58 +22,33 @@ public class Log {
 		output = false;
 	}
 
-	public static boolean hasEntry(String name) {
-		for (LogEntry e : log) {
-			if (e.getName().equalsIgnoreCase(name)) return true;
-		}
-		return false;
+	public static boolean containsKey(String name) {
+		return log.containsKey(name.toUpperCase());
+	}
+
+	public static LogEntry get(String name) {
+		return log.get(name.toUpperCase());
 	}
 
 	public static String getString(String name) {
-		LogEntry tmpEntry = getEntry(name);
-		if (tmpEntry == null) return null;
-		return logString(tmpEntry);
+		LogEntry obj = get(name);
+		if (obj == null) return null;
+		return obj.toString();
 	}
 
-	public static boolean setLog(String name, Object logObj) {
-		LogEntry tmpEntry = getEntry(name);
-		if (tmpEntry == null) {
-			return addLog(name, logObj);
-		} else {
-			tmpEntry.setOptObj(logObj);
-			write("changed", tmpEntry);
-			return true;
-		}
+	public static void put(String name, LogEntry obj) {
+		if (containsKey(name)) write("put  ", obj);
+		else write("add  ", obj);
+		log.put(name.toUpperCase(), obj);
 	}
 
-	public static LogEntry getEntry(String name) {
-		for (LogEntry tmpEntry : log) {
-			if (tmpEntry.getName().equalsIgnoreCase(name)) return tmpEntry;
-		}
-		return null;
+	public static void put(String name, Object obj) {
+		LogEntry entry = new LogEntry(name, obj);
+		put(name, entry);
 	}
-
-	private static boolean addLog(String name, Object logObj) {
-		LogEntry tmpEntry = new LogEntry(name, logObj);
-		log.add(tmpEntry);
-		write("added  ", tmpEntry);
-		return true;
-	}
-
-	private static String logString(LogEntry entry) {
-		String result = Convert.logEntryToString(entry);
-		if (result == null) result = "(" + entry.getType().getSimpleName() + ")";
-		return result;
-	}
-
 
 	private static void write(String msg, LogEntry entry) {
-		if (output) write(msg + ": " + entry.getName() + ": " + logString(entry));
-	}
-
-	@SuppressWarnings("unused")
-	private static void write(LogEntry entry) {
-		if (output) write(entry.getName() + ": " + logString(entry));
+		if (output) write(msg + ": " + entry.getKey() + " : " + entry.toString());
 	}
 
 	private static void write(String msg) {
@@ -77,14 +56,15 @@ public class Log {
 	}
 
 	public static void event(String eventMsg) {
-		// TODO Add EventLogging
-		write("event  : " + eventMsg);
+		events.put(eventIndex, eventMsg);
+		write("ev(" + eventIndex + "): " + eventMsg);
+		eventIndex++;
 	}
 
 	public static boolean getBool(String name) {
-		LogEntry entry = getEntry(name);
+		LogEntry entry = get(name);
 		if (entry == null) return false;
-		if (entry.getLogObj() instanceof Boolean) return (Boolean) entry.getLogObj();
+		if (entry.getValue() instanceof Boolean) return (Boolean) entry.getValue();
 		return false;
 	}
 }

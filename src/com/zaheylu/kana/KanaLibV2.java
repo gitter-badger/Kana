@@ -1,38 +1,20 @@
 package com.zaheylu.kana;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class KanaLibV2 {
 
 	private KanaLibV2() {}
 
 
-	private static final char[][] specialChar = new char[][] {
-			{
-					'.', '。' }, {
-					' ', '　' } };
-	private static final char[][] CaseConversion = new char[][] {
-			{
-					'ﾔ', 'ヤ' }, {
-					'ﾕ', 'ユ' }, {
-					'ﾖ', 'ヨ' }, {
-
-					'ｱ', 'ア' }, {
-					'ｲ', 'イ' }, {
-					'ｳ', 'ウ' }, {
-					'ｴ', 'エ' }, {
-					'ｵ', 'オ' }, {
-
-					'ゃ', 'や' }, {
-					'ゅ', 'ゆ' }, {
-					'ょ', 'よ' } };
+	private static HashMap<Character, Character> specialMap = new HashMap<Character, Character>();
+	private static HashMap<Character, Character> caseMap = new HashMap<Character, Character>();
+	private static HashMap<String, String> HiraMap = new HashMap<String, String>();
+	private static HashMap<String, String> KataMap = new HashMap<String, String>();
 
 
-	private static final String[] Alphabet = new String[] {
-			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu",
-			"ne", "no", "ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n",
-			"ga", "gi", "gu", "ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu",
-			"pe", "po" };
 	private static final String[][] DATA = new String[][] {
 			{
 					"wi", null, "ウィ" }, {
@@ -249,8 +231,15 @@ public class KanaLibV2 {
 					"e", "え", "エ" }, {
 					"o", "お", "オ" }, {
 
-					"n", "ん", "ン" }, {
-					"nn", "ん", "ン" } };
+					"n", "ん", "ン" } };
+
+	private static final String[] Alphabet = new String[] {
+			"a", "i", "u", "e", "o", "ka", "ki", "ku", "ke", "ko", "sa", "si", "su", "se", "so", "ta", "ti", "tu", "te", "to", "na", "ni", "nu",
+			"ne", "no", "ha", "hi", "hu", "he", "ho", "ma", "mi", "mu", "me", "mo", "ya", "yu", "yo", "ra", "ri", "ru", "re", "ro", "wa", "wo", "n",
+			"ga", "gi", "gu", "ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu",
+			"pe", "po" };
+
+
 
 	// variables to initiate
 	public static ArrayList<String[][]> romaHira;
@@ -263,36 +252,25 @@ public class KanaLibV2 {
 
 
 	public static void init() {
-		int hiraC[] = new int[] {
-				0, 0, 0, 0 };
-		int kataC[] = new int[] {
-				0, 0, 0, 0 };
-		romaHira = new ArrayList<String[][]>();
-		romaKata = new ArrayList<String[][]>();
+
+		specialMap.put('.', '。');
+		specialMap.put(' ', '　');
+
+		caseMap.put('ﾔ', 'ヤ');
+		caseMap.put('ﾕ', 'ユ');
+		caseMap.put('ﾖ', 'ヨ');
+		caseMap.put('ｱ', 'ア');
+		caseMap.put('ｲ', 'イ');
+		caseMap.put('ｳ', 'ウ');
+		caseMap.put('ｴ', 'エ');
+		caseMap.put('ｵ', 'オ');
+		caseMap.put('ゃ', 'や');
+		caseMap.put('ゅ', 'ゆ');
+		caseMap.put('ょ', 'よ');
 
 		for (String[] str : DATA) {
-			if (str[HIRA] != null) hiraC[str[ROMA].length() - 1]++;
-			if (str[KATA] != null) kataC[str[ROMA].length() - 1]++;
-		}
-
-		for (int n = 0; n < hiraC.length; n++) {
-			romaHira.add(new String[hiraC[n]][2]);
-			hiraC[n] = 0;
-			romaKata.add(new String[kataC[n]][2]);
-			kataC[n] = 0;
-		}
-		for (String[] str : DATA) {
-			int group = str[ROMA].length() - 1;
-			if (str[HIRA] != null) {
-				romaHira.get(group)[hiraC[group]][0] = str[ROMA];
-				romaHira.get(group)[hiraC[group]][1] = str[HIRA];
-				hiraC[group]++;
-			}
-			if (str[KATA] != null) {
-				romaKata.get(group)[kataC[group]][0] = str[ROMA];
-				romaKata.get(group)[kataC[group]][1] = str[KATA];
-				kataC[group]++;
-			}
+			if (str[HIRA] != null) HiraMap.put(str[ROMA], str[HIRA]);
+			if (str[KATA] != null) KataMap.put(str[ROMA], str[KATA]);
 		}
 	}
 
@@ -301,97 +279,162 @@ public class KanaLibV2 {
 	}
 
 	public static String convertChr(String arg, int from, int to) {
-		ArrayList<String[][]> target;
 		if (from == ROMA) {
-			if (to == HIRA) target = romaHira;
-			else target = romaKata;
-			for (String[] str : target.get(arg.length() - 1)) {
-				if (str[0].equalsIgnoreCase(arg)) return str[1];
+			if (to == HIRA) {
+				return HiraMap.get(arg);
+			} else if (to == KATA) {
+				return KataMap.get(arg);
 			}
 		} else if (to == ROMA) {
-			for (String[] str : DATA) {
-				if (str[from] != null && str[from].equalsIgnoreCase(arg)) return str[ROMA];
-			}
-		} else {
 			if (from == HIRA) {
-				for (String[] str : DATA) {
-					if (str[HIRA] != null && str[HIRA].equalsIgnoreCase(arg)) return convertChr(str[ROMA], ROMA, KATA);
+				if (HiraMap.containsValue(arg)) for (Entry<String, String> entry : HiraMap.entrySet()) {
+					if (arg.equals(entry.getValue())) {
+						return entry.getKey();
+					}
 				}
-			} else {
-				for (String[] str : DATA) {
-					if (str[KATA] != null && str[KATA].equalsIgnoreCase(arg)) return convertChr(str[ROMA], ROMA, HIRA);
+			} else if (from == KATA) {
+				if (KataMap.containsValue(arg)) for (Entry<String, String> entry : KataMap.entrySet()) {
+					if (arg.equals(entry.getValue())) {
+						return entry.getKey();
+					}
 				}
 			}
 		}
 		return null;
 	}
 
+	public static boolean containsChr(String arg, int from, int to) {
+		if (from == ROMA) {
+			if (to == HIRA) return HiraMap.containsKey(arg);
+			else if (to == KATA) return KataMap.containsKey(arg);
+		} else if (to == ROMA) {
+			if (from == HIRA) return HiraMap.containsValue(arg);
+			else if (from == KATA) return KataMap.containsValue(arg);
+		}
+		return false;
+	}
+
+	/**
+	 * Converts a String from one writing system to another.<br>
+	 * Allowed are <b>Romaji -> Hiragana / Katakana</b><br>
+	 * and <b>Hiragana / Katakana -> Romaji.</b><br>
+	 * <br>
+	 * <b> 0 : Romaji<br>
+	 * 1 : Hiragana<br>
+	 * 2 : Katakana</b><br>
+	 * <br>
+	 * 
+	 * @param arg
+	 *            string to convert
+	 * @param from
+	 *            writing system of <b>arg</b>
+	 * @param to
+	 *            writing system you want <b>arg</b> to convert to
+	 */
 	public static String convertStr(String arg, int from, int to) {
 		if (arg == null || arg.isEmpty()) return null;
+		if (from < 0 || from > 2 || to < 0 || to > 2) return null;
+		if ((from == KATA && to == HIRA) || (from == HIRA && to == KATA)) return null;
 		char[] c = arg.toCharArray();
 		String tmpS = null;
 		int length = c.length;
 		int index = 0;
-		int readLength = 4;
+		int readLength = 0;
 		StringBuilder sb = new StringBuilder("");
-		do {
-			readLength = 4;
-			if (index + readLength > length) readLength = length - index;
-			do {
-				tmpS = KanaLibV2.convertChr(new String(c, index, readLength), from, to);
-				if (tmpS != null) {
+		if (from == ROMA) {
+			readLength = 1;
+			while (index < length) {
+				boolean eof = false;
+				if (index + readLength >= arg.length()) {
+					readLength = arg.length() - index;
+					eof = true;
+				}
+				tmpS = new String(c, index, readLength);
+				if (containsChr(tmpS, from, to)) {
 					if (readLength == 1 && index > 0 && from == ROMA && to == KATA && c[index - 1] == c[index]
 							&& (c[index] == 'a' || c[index] == 'e' || c[index] == 'i' || c[index] == 'o' || c[index] == 'u')) {
 						sb.append("ー");
 						index += 1;
-						readLength = -1;
+						readLength = 1;
 					} else {
-						sb.append(tmpS);
+						sb.append(convertChr(tmpS, from, to));
 						index += readLength;
-						readLength = -1;
+						readLength = 1;
 					}
 				} else {
 					boolean special = false;
 					if (readLength == 1) {
 						if (to == KATA || to == HIRA) {
-							for (char[] cc : specialChar)
-								if (c[index] == cc[0]) {
-									sb.append(cc[1]);
-									special = true;
-								}
-						} else if (to == ROMA) {
-							for (char[] cc : specialChar)
-								if (c[index] == cc[1]) {
-									sb.append(cc[0]);
-									special = true;
-								}
+							if (specialMap.containsKey(c[index])) {
+								sb.append(specialMap.get(c[index]));
+								special = true;
+							}
 						}
-						if (!special) {
-							if (from == KATA && to == ROMA) {
-								if (c[index] == 'ー' && index > 0) {
-									String s = convertChr(c[index - 1], from, to);
-									sb.append(s.charAt(s.length() - 1));
-									special = true;
+					}
+					if (special) {
+						index += 1;
+						readLength = 1;
+					} else {
+						readLength++;
+						if (readLength >= 5) {
+							sb.append(c[index]);
+							index += 1;
+							readLength = 1;
+						}
+						if (eof) {
+							sb.append(c[index]);
+							index += 1;
+						}
+					}
+				}
+			}
+		} else if (to == ROMA) {
+			readLength = 4;
+			while (index < length) {
+				if (index + readLength >= arg.length()) {
+					readLength = arg.length() - index;
+				}
+				tmpS = new String(c, index, readLength);
+				if (containsChr(tmpS, from, to)) {
+					sb.append(convertChr(tmpS, from, to));
+					index += readLength;
+					readLength = 4;
+				} else {
+					boolean special = false;
+					if (readLength == 1) {
+						if (from == KATA && to == ROMA && index > 0 && c[index] == 'ー') {
+							sb.append(sb.charAt(sb.length() - 1));
+							special = true;
+						} else if (!special && to == ROMA) {
+							if (!special && specialMap.containsValue(c[index])) {
+								for (Entry<Character, Character> entry : specialMap.entrySet()) {
+									if (entry.getValue() == c[index]) {
+										sb.append(entry.getKey());
+										special = true;
+										break;
+									}
 								}
 							}
 						}
 					}
 					if (special) {
 						index += 1;
-						readLength = -1;
-					} else readLength--;
+						readLength = 4;
+					} else {
+						readLength--;
+						if (readLength == 0) {
+							sb.append(c[index]);
+							index += 1;
+							readLength = 4;
+						}
+					}
 				}
-				if (readLength == 0) {
-					sb.append(c[index]);
-					index++;
-				}
-			} while (readLength > 0);
-		} while (index < length);
+			}
+		}
 		return sb.toString();
 	}
 
 	public static boolean matches(String str1, int typ1, String str2, int typ2) {
-		// TODO: Rethink this.
 		ArrayList<Integer> ar = new ArrayList<Integer>();
 		for (int n = 0; n < DATA.length; n++)
 			if (equalsIgnoreCase(DATA[n][typ1], str1)) {
@@ -407,32 +450,14 @@ public class KanaLibV2 {
 	}
 
 	public static int findType(String arg) {
-		if (arg.isEmpty()) return -1;
-		else {
-			char[] c = arg.toCharArray();
-			int max = 3;
-			if (c.length < 4) max = c.length - 1;
-			for (int n = max; n >= 0; n--) {
-				String arg2 = new String(c, 0, n + 1);
-				for (String[] str : romaHira.get(n)) {
-					if (equalsIgnoreCase(arg2, str[0])) return 0;
-					if (equalsIgnoreCase(arg2, str[1])) return 1;
-				}
-				for (String[] str : romaKata.get(n)) {
-					if (equalsIgnoreCase(arg2, str[1])) return 2;
-				}
-				for (String[] str : romaKata.get(n)) {
-					if (equalsIgnoreCase(arg2, str[0])) return 0;
-				}
-
-			}
+		if (arg == null || arg.isEmpty()) return -1;
+		int max = 4;
+		if (arg.length() < max) max = arg.length();
+		for (int n = 0; n <= max; n++) {
+			if (HiraMap.containsValue(arg.substring(0, n))) return HIRA;
+			if (KataMap.containsValue(arg.substring(0, n))) return KATA;
 		}
-		return 3;
-	}
-
-	public static String[][] getData() {
-		// TODO: Rethink Getter and setter
-		return DATA;
+		return ROMA;
 	}
 
 	public static String[] getAlphabet() {
@@ -441,17 +466,14 @@ public class KanaLibV2 {
 
 	public static boolean equalsIgnoreCase(String s1, String s2) {
 		if (s1 == null || s2 == null) return false;
+		if ((s1 == null || s1.isEmpty()) && (s2 == null || s2.isEmpty())) return true;
 		return uppercase(s1).equalsIgnoreCase(uppercase(s2));
 	}
 
 	public static String uppercase(String s) {
 		char[] c = s.toCharArray();
 		for (int n = 0; n < c.length; n++) {
-			for (char[] caseC : CaseConversion) {
-				if (c[n] == caseC[0]) {
-					c[n] = caseC[1];
-				}
-			}
+			if (caseMap.containsKey(c[n])) c[n] = caseMap.get(c[n]);
 		}
 		return new String(c);
 	}

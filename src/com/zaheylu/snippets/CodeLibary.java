@@ -23,7 +23,7 @@ public class CodeLibary {
 	}
 
 	public static int getStringWidth(Font font, String txt) {
-		
+
 		return can.getFontMetrics(font).stringWidth(txt);
 	}
 
@@ -74,9 +74,7 @@ public class CodeLibary {
 
 	private static int calcTextRatio(int stringWidth, int componentWidth, int componentHeight, Font font) {
 		double widthRatio = (double) componentWidth / (double) stringWidth;
-		int newFontSize = (int) ((double)font.getSize() * widthRatio);
-		System.out.print((double)font.getSize() * widthRatio);
-		System.out.print("\tTo: " + newFontSize);
+		int newFontSize = (int) ((double) font.getSize() * widthRatio);
 		return Math.min(newFontSize, componentHeight);
 	}
 

@@ -46,4 +46,16 @@ public class TGroups {
 		return result;
 	}
 
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		boolean first = true;
+		for (String str : groups)
+			if (first) {
+				sb.append(str);
+				first = false;
+			} else sb.append(", " + str);
+		sb.append(']');
+		return sb.toString();
+	}
 }
