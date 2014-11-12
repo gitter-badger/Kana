@@ -3,25 +3,20 @@ package com.zaheylu.kana.users;
 public class SuccessEntry {
 	private int success;
 	private int number;
-	private int index;
+	private long timestamp;
 
 	public double getRatio() {
 		if (number == 0) return 0.5;
 		return ((double) success) / ((double) number);
 	}
 
-	public SuccessEntry() {
-		number = 0;
-		success = 0;
-	}
-
 	public void update(boolean result) {
 		if (result) success++;
 		number++;
+		timestamp = System.nanoTime();
 	}
 
-	public SuccessEntry(int index) {
-		this.index = index;
+	public SuccessEntry() {
 		number = 0;
 		success = 0;
 	}
@@ -47,11 +42,11 @@ public class SuccessEntry {
 		this.number = number;
 	}
 
-	public int getIndex() {
-		return index;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 }

@@ -53,11 +53,9 @@ public class KanaResult extends JDialog {
 			if (profile != null) {
 				double ratio;
 				int r = 0, g = 0, b = 0, number = 0;
-				if (profile.get(word.getIndex()) == null) ratio = 0.5;
-				else {
-					ratio = profile.get(word.getIndex()).getRatio();
-					number = profile.get(word.getIndex()).getNumber();
-				}
+				ratio = word.getSuccess().getRatio();
+				number = word.getSuccess().getNumber();
+
 
 
 				// COLOR
@@ -168,17 +166,14 @@ public class KanaResult extends JDialog {
 
 		}
 
-		public void mouseEntered(MouseEvent e) {
-		}
+		public void mouseEntered(MouseEvent e) {}
 
-		public void mouseExited(MouseEvent e) {
-		}
+		public void mouseExited(MouseEvent e) {}
 
 		public void mousePressed(MouseEvent e) {
 			new VocHelp(thisFrame, word, null);
 		}
 
-		public void mouseReleased(MouseEvent e) {
-		}
+		public void mouseReleased(MouseEvent e) {}
 	}
 }

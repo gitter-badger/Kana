@@ -2,6 +2,8 @@ package com.zaheylu.kana.words;
 
 import java.util.ArrayList;
 
+import com.zaheylu.kana.users.SuccessEntry;
+
 public class TWord {
 
 	private ArrayList<String> engl;
@@ -12,7 +14,7 @@ public class TWord {
 	private String present;
 	private int group;
 	private int index;
-	//TODO: <----- SUCCESS
+	private SuccessEntry success;
 
 	public static TWord getDummyTWord(int i) {
 		TWord result = new TWord();
@@ -30,6 +32,7 @@ public class TWord {
 	public TWord() {
 		engl = new ArrayList<String>();
 		group = 0;
+		success = new SuccessEntry();
 	}
 
 	public ArrayList<String> getEngl() {
@@ -131,5 +134,17 @@ public class TWord {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public SuccessEntry getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(SuccessEntry success) {
+		this.success = success;
+	}
+	
+	public void update(boolean result) {
+		success.update(result);
 	}
 }

@@ -62,6 +62,7 @@ public class CodeLibary {
 
 	public static void strechFont(Object obj) {
 		if (obj instanceof JLabel) {
+			if (((JLabel) obj).getFont().getSize() <= 1) ((JLabel) obj).setFont(((JLabel) obj).getFont().deriveFont(5.0f));
 			Font font = ((JLabel) obj).getFont();
 			String text = ((JLabel) obj).getText();
 			if (text == null || text.isEmpty()) return;

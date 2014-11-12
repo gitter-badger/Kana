@@ -1,9 +1,8 @@
 package com.zaheylu.kana.gui;
 
 import static com.zaheylu.kana.KanaLibV2.*;
-import static com.zaheylu.snippets.CodeLibary.*;
 import static com.zaheylu.kana.settings.KanaSettings.*;
-
+import static com.zaheylu.snippets.CodeLibary.*;
 import static java.lang.Math.*;
 
 import java.awt.Color;
@@ -43,7 +42,6 @@ import org.xml.sax.SAXException;
 
 import com.zaheylu.gui.JCheckDialog;
 import com.zaheylu.kana.users.Profile;
-import com.zaheylu.kana.users.SuccessEntry;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
 import com.zaheylu.kana.words.TWord;
@@ -56,7 +54,7 @@ import com.zaheylu.snippets.CodeLibary;
 
 public class KanaWindow extends JFrame {
 
-	
+
 	private JPanel panelType;
 	private JPanel panelChoose;
 	private JPanel panelVocabulary;
@@ -80,7 +78,7 @@ public class KanaWindow extends JFrame {
 
 
 	private KanaWindow thisFrame = this;
-	
+
 	public KanaWindow(String[] args) {
 		profile = new Profile();
 		if (args != null) {
@@ -131,7 +129,7 @@ public class KanaWindow extends JFrame {
 	public void onShutdown() {
 		Log.event("hook.shutdown");
 		try {
-			profile.save();
+			vocabulary.saveProfile();
 		} catch (UnsupportedEncodingException | FileNotFoundException | XMLStreamException e) {
 			e.printStackTrace();
 		}
@@ -331,6 +329,7 @@ public class KanaWindow extends JFrame {
 		loadGroups("Groups.xml");
 		loadVocabulary("Vocabulary.xml");
 		loadProfiles();
+		vocabulary.linkProfile(profile);
 	}
 
 	private void loadGroups(String fileName) {
@@ -539,7 +538,6 @@ public class KanaWindow extends JFrame {
 
 	private class TfVocKeyListener extends KeyAdapter {
 
-
 		public void keyReleased(KeyEvent arg0) {
 			if (options[0] == 2) {
 				// TODO: Threaded Converting
@@ -553,11 +551,11 @@ public class KanaWindow extends JFrame {
 				lblVocHira.setText("");
 				lblVocKata.setText("");
 				if (options[1] == KanaCharacterChoose.EXAM) {
-					profile.update(currentWord.getIndex(), false);
+					vocabulary.update(currentWord.getIndex(), false);
 					newExamAnswer(false);
 				} else {
 					if (Log.getBool("vocabulary.removeSkipped")) currentWordPool.remove(currentWord);
-					else profile.update(currentWord.getIndex(), false);
+					else vocabulary.update(currentWord.getIndex(), false);
 					newVocabulary();
 				}
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -569,7 +567,7 @@ public class KanaWindow extends JFrame {
 							tfVoc.setText("");
 							lblVocHira.setText("");
 							lblVocKata.setText("");
-							profile.update(currentWord.getIndex(), true);
+							vocabulary.update(currentWord.getIndex(), true);
 							if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
 							else newVocabulary();
 						}
@@ -637,18 +635,11 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmNewWordsActionListener implements ActionListener {
-		// TODO: those should be applied to the currentWordPool rather than the vocabulary
-		// also TODO: vocabulary<->profileSuccess relation
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
-			for (SuccessEntry item : profile.getSuccess()) {
-				for (TWord word : vocabulary.words) {
-					if (item.getIndex() == word.getIndex()) {
-						if (item.getNumber() <= threshold) words.add(word);
-						break;
-					}
-				}
+			for (TWord word : vocabulary.getWords().values()) {
+				if (word.getSuccess().getNumber() <= threshold) words.add(word);
 			}
 			if (words.size() > 0) {
 				currentWordPool = words;
@@ -663,13 +654,8 @@ public class KanaWindow extends JFrame {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			try {
 				double threshold = Double.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold in percent", "50")) / 100.0;
-				for (SuccessEntry item : profile.getSuccess()) {
-					for (TWord word : vocabulary.words) {
-						if (item.getIndex() == word.getIndex()) {
-							if (item.getNumber() > 0 && item.getRatio() <= threshold) words.add(word);
-							break;
-						}
-					}
+				for (TWord word : vocabulary.getWords().values()) {
+					if (word.getSuccess().getNumber() > 0 && word.getSuccess().getRatio() <= threshold) words.add(word);
 				}
 				if (words.size() > 0) {
 					currentWordPool = words;
@@ -685,7 +671,7 @@ public class KanaWindow extends JFrame {
 	private class MntmHasKanjiActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
-			for (TWord word : vocabulary.words) {
+			for (TWord word : vocabulary.words.values()) {
 				if (word.hasKanji()) {
 					words.add(word);
 				}

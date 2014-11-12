@@ -4,37 +4,45 @@ import static com.zaheylu.kana.KanaLibV2.*;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import com.zaheylu.kana.mp3.Mp3Play;
+import com.zaheylu.kana.users.Profile;
 import com.zaheylu.log.Log;
 import com.zaheylu.snippets.CodeLibary;
 
 public class TVocabulary {
 
-	public ArrayList<TWord> words;
-	private int index;
+	public HashMap<Integer, TWord> words;
 
 	public TVocabulary() {
-		words = new ArrayList<TWord>();
-		index = 0;
+		words = new HashMap<Integer, TWord>();
 	}
 
 	public void add(TWord word) {
-		word.setIndex(index);
-		words.add(word);
-		index++;
+		word.setIndex(words.size());
+		words.put(words.size(), word);
 	}
 
 	public void loadAllSounds() {
-		AudioLoadThread run = new AudioLoadThread(words, false, true);
+		AudioLoadThread run = new AudioLoadThread(words.values(), false, true);
 		run.start();
 	}
 
@@ -45,7 +53,7 @@ public class TVocabulary {
 
 	public ArrayList<TWord> getFiltered(ArrayList<Integer> filter) {
 		ArrayList<TWord> result = new ArrayList<TWord>();
-		for (TWord word : words) {
+		for (TWord word : words.values()) {
 			int iGroup = word.getGroup();
 			for (Integer filt : filter) {
 				if (iGroup == filt) result.add(word);
@@ -56,7 +64,7 @@ public class TVocabulary {
 
 	public ArrayList<TWord> getFiltered(int filter) {
 		ArrayList<TWord> result = new ArrayList<TWord>();
-		for (TWord word : words) {
+		for (TWord word : words.values()) {
 			if (word.getGroup() == filter) result.add(word);
 		}
 		return result;
@@ -72,7 +80,7 @@ public class TVocabulary {
 
 	public int size(int group) {
 		int result = 0;
-		for (TWord word : words) {
+		for (TWord word : words.values()) {
 			if (word.getGroup() == group) result++;
 		}
 		return result;
@@ -82,7 +90,7 @@ public class TVocabulary {
 		Log.event("getPossibleKana");
 		ArrayList<String> result = new ArrayList<String>();
 
-		for (TWord word : words)
+		for (TWord word : words.values())
 			for (String engl : word.getEngl()) {
 				if (equalsIgnoreCase(engl, arg)) {
 					result.add(word.getKana());
@@ -96,7 +104,7 @@ public class TVocabulary {
 	public ArrayList<String> getPossibleEngl(TWord word) {
 		Log.event("getPossibleEngl");
 		ArrayList<String> result = new ArrayList<String>();
-		for (TWord nWord : words) {
+		for (TWord nWord : words.values()) {
 			if (equalsIgnoreCase(nWord.getKana(), word.getKana()) || equalsIgnoreCase(nWord.getKana(), word.getKanji())) {
 				for (String engl : nWord.getEngl()) {
 					result.add(engl);
@@ -108,7 +116,7 @@ public class TVocabulary {
 		return result;
 	}
 
-	public ArrayList<TWord> getWords() {
+	public HashMap<Integer, TWord> getWords() {
 		return words;
 	}
 
@@ -127,8 +135,9 @@ public class TVocabulary {
 
 
 
-		public AudioLoadThread(ArrayList<TWord> words, boolean instantPlay, boolean overwrite) {
-			this.words = words;
+		public AudioLoadThread(Collection<TWord> words, boolean instantPlay, boolean overwrite) {
+			words = new ArrayList<TWord>();
+			this.words.addAll(words);
 			this.instantPlay = instantPlay;
 			this.overwrite = overwrite;
 		}
@@ -195,5 +204,59 @@ public class TVocabulary {
 
 	public String toString() {
 		return words.size() + " words";
+	}
+
+	public void linkProfile(Profile p) {
+		for (int n = 0; n < p.size(); n++) {
+			words.get(n).setSuccess(p.get(n));
+		}
+	}
+
+	public void unlinkProfile() {
+		for (TWord word : words.values()) {
+			word.setSuccess(null);
+		}
+	}
+
+	public void saveProfile() throws UnsupportedEncodingException, FileNotFoundException, XMLStreamException {
+		// TODO: This should be called only if the User wants to.
+		if (size() > 0) {
+			Log.event("vocabulary.profile.save");
+			PrintWriter writerXml = new PrintWriter(new OutputStreamWriter(new FileOutputStream(Log.getString("path.user") + "profiles"
+					+ FileSystems.getDefault().getSeparator() + "default.xml"), "utf-8"));
+			XMLOutputFactory xof = XMLOutputFactory.newInstance();
+			XMLStreamWriter xmlsw = xof.createXMLStreamWriter(writerXml);
+
+			// write declaration
+			xmlsw.writeStartDocument("UTF-8", "1.0");
+			xmlsw.writeCharacters("\r\n");
+			xmlsw.writeStartElement("profile");
+			xmlsw.writeStartElement("success");
+			xmlsw.writeCharacters("\r\n");
+			for (TWord word: words.values()) {
+				xmlsw.writeStartElement("entry");
+
+				xmlsw.writeStartElement("value");
+				xmlsw.writeCharacters(String.valueOf(word.getSuccess().getSuccess()));
+				xmlsw.writeEndElement();
+
+				xmlsw.writeStartElement("number");
+				xmlsw.writeCharacters(String.valueOf(word.getSuccess().getNumber()));
+				xmlsw.writeEndElement();
+
+				xmlsw.writeEndElement();
+				xmlsw.writeCharacters("\r\n");
+			}
+			xmlsw.writeEndElement(); // end success
+			xmlsw.writeEndElement(); // end profile
+			xmlsw.writeEndDocument();
+			xmlsw.flush();
+			xmlsw.close();
+
+		}
+	}
+	
+	public void update(int n, boolean result) {
+		if (result) words.get(n).update(result);
 	}
 }
