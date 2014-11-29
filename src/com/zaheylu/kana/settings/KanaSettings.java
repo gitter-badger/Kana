@@ -9,10 +9,12 @@ import com.zaheylu.kana.words.TWord;
 
 public class KanaSettings {
 
-	private KanaSettings() {
+	private KanaSettings() {}
 
+	static {
+		options = new int[2];
+		profile = new Profile();
 	}
-
 	public static int[] options;
 	public static Profile profile;
 	public static TVocabulary vocabulary;
@@ -24,5 +26,4 @@ public class KanaSettings {
 	public static ArrayList<TWord> examCorrect;
 	public static ArrayList<TWord> examWrong;
 	public static int[] examOrder;
-
 }

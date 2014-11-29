@@ -14,8 +14,7 @@ public class CodeLibary {
 
 	private static Random rand = new Random();
 	private static Canvas can = new Canvas();
-
-	public static void init() {
+	static {
 		randInt(10);
 		for (int n = 0; n < randInt(10); n++) {
 			randInt(10);
@@ -23,7 +22,6 @@ public class CodeLibary {
 	}
 
 	public static int getStringWidth(Font font, String txt) {
-
 		return can.getFontMetrics(font).stringWidth(txt);
 	}
 
@@ -62,7 +60,7 @@ public class CodeLibary {
 
 	public static void strechFont(Object obj) {
 		if (obj instanceof JLabel) {
-			if (((JLabel) obj).getFont().getSize() <= 1) ((JLabel) obj).setFont(((JLabel) obj).getFont().deriveFont(5.0f));
+			if (((JLabel) obj).getFont().getSize() < 1) ((JLabel) obj).setFont(((JLabel) obj).getFont().deriveFont(5.0f));
 			Font font = ((JLabel) obj).getFont();
 			String text = ((JLabel) obj).getText();
 			if (text == null || text.isEmpty()) return;
@@ -94,5 +92,45 @@ public class CodeLibary {
 		} else showmessage(new JTextField(url));
 	}
 
+	public static int daysPast(long time) {
+		return (int) ((System.currentTimeMillis() - time) / (double) (1000 * 60 * 60 * 24));
+	}
 
+	public static String timePast(long time) {
+		StringBuilder s = new StringBuilder();
+		long now = System.currentTimeMillis();
+		long dt = Math.max(now, time) - Math.min(now, time);
+		if (dt != 0) {
+			boolean begin = false;
+			double days = dt / (double) (1000 * 60 * 60 * 24);
+			if (days >= 1.0) {
+				s.append((int) days + "d ");
+			}
+			double hours = (days - (int) days) * 24.0;
+			if (hours >= 1.0 || begin) {
+				s.append((int) hours + "h ");
+				begin = true;
+			}
+			double minutes = (hours - (int) hours) * 60.0;
+			if (minutes >= 1.0 || begin) {
+				s.append((int) minutes + "min ");
+				begin = true;
+			}
+			double seconds = (minutes - (int) minutes) * 60.0;
+			if (seconds >= 1.0 || begin) {
+				s.append((int) seconds + "sec ");
+				begin = true;
+			}
+			double ms = (seconds - (int) seconds) * 1000.0;
+			if (ms >= 1.0 || begin) {
+				s.append((int) ms + "ms ");
+			}
+			if (now < time) {
+				s.append("in the future");
+			} else s.append("ago");
+		} else {
+			s.append("That's now.");
+		}
+		return s.toString();
+	}
 }

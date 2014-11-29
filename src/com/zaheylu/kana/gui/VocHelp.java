@@ -36,6 +36,7 @@ public class VocHelp extends JDialog {
 	public VocHelp(Component frame, TWord word, String group) {
 
 		int cY = 0;
+		setTitle(word.toString() + "; " + word.getSuccess().toString() + "; " + word.getTimePastString());
 		getContentPane().setLayout(null);
 		// kanji
 		if (word.hasKanji()) {
@@ -81,7 +82,6 @@ public class VocHelp extends JDialog {
 		}
 
 		if (Log.getBool("sounds.enabled")) Mp3Play.play(word);
-		if (group != null) this.setTitle("Group: " + group);
 		getContentPane().setPreferredSize(new Dimension(width, cY));
 		pack();
 		this.setLocationRelativeTo(frame);

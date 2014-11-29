@@ -11,11 +11,11 @@ public class ProfileHandler extends DefaultReturnHandler {
 
 	private SuccessEntry tmpEntry;
 	private Profile profile;
-	private boolean value;
-	private boolean number;
+	private boolean value = false;
+	private boolean number = false;
+	private boolean timestamp = false;
 
-	private ProfileHandler() {
-	}
+	private ProfileHandler() {}
 
 	private void init() {
 		profile = new Profile();
@@ -35,6 +35,7 @@ public class ProfileHandler extends DefaultReturnHandler {
 		if (qName.equalsIgnoreCase("ENTRY")) tmpEntry = new SuccessEntry();
 		else if (qName.equalsIgnoreCase("VALUE")) value = true;
 		else if (qName.equalsIgnoreCase("NUMBER")) number = true;
+		else if (qName.equalsIgnoreCase("TIMESTAMP")) timestamp = true;
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -50,6 +51,10 @@ public class ProfileHandler extends DefaultReturnHandler {
 			String s = new String(ch, start, length);
 			tmpEntry.setNumber(Integer.valueOf(s));
 			number = false;
+		} else if (timestamp) {
+			String s = new String(ch, start, length);
+			tmpEntry.setTimestamp(Long.valueOf(s));
+			timestamp = false;
 		}
 	}
 

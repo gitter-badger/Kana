@@ -37,7 +37,7 @@ public class Log {
 	}
 
 	public static void put(String name, LogEntry obj) {
-		if (containsKey(name)) write("put  ", obj);
+		if (containsKey(name)) write("put   ", obj);
 		else write("add  ", obj);
 		log.put(name.toUpperCase(), obj);
 	}

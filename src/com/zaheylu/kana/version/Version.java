@@ -27,12 +27,16 @@ public class Version {
 
 	private static final String LOCALE_ID = "$0407";
 
-	public static void loadVersion() {
+	static {
 		try {
-			MAJOR_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version1"))).readLine());
-			MINOR_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version2"))).readLine());
-			RELEASE_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version3"))).readLine());
-			BUILD_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version4"))).readLine());
+			MAJOR_VERSION = Byte
+					.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version1"))).readLine());
+			MINOR_VERSION = Byte
+					.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version2"))).readLine());
+			RELEASE_VERSION = Byte.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version3")))
+					.readLine());
+			BUILD_VERSION = Byte
+					.valueOf(new BufferedReader(new InputStreamReader(Version.class.getResourceAsStream("/version/version4"))).readLine());
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +56,8 @@ public class Version {
 	}
 
 	public static String getExtendedTitle() {
-		return String.format("%s by %s, Version %d.%d.%d.%d%s %s", TITLE, AUTHOR, MAJOR_VERSION, MINOR_VERSION, RELEASE_VERSION, BUILD_VERSION, ANNEX, ANNEX2);
+		return String.format("%s by %s, Version %d.%d.%d.%d%s %s", TITLE, AUTHOR, MAJOR_VERSION, MINOR_VERSION, RELEASE_VERSION, BUILD_VERSION,
+				ANNEX, ANNEX2);
 	}
 
 	public static String getAuthor() {

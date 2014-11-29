@@ -53,9 +53,12 @@ public class KanaResult extends JDialog {
 			if (profile != null) {
 				double ratio;
 				int r = 0, g = 0, b = 0, number = 0;
-				ratio = word.getSuccess().getRatio();
-				number = word.getSuccess().getNumber();
-
+				if (!word.hasSuccess()) ratio = 0.5;
+				else {
+					ratio = word.getSuccess().getRatio();
+					number = word.getSuccess().getNumber();
+					ratio -= CodeLibary.daysPast(word.getSuccess().getTimestamp()) / 10.0;
+				}
 
 
 				// COLOR
@@ -74,7 +77,7 @@ public class KanaResult extends JDialog {
 				} else {
 					r = (int) (ratio * 510.0);
 					g = (int) (ratio * 255.0);
-					b = (int) (255 - ratio * 255.0);
+					b = (int) (255.0 - ratio * 255.0);
 				}
 				Color c = new Color(r, g, b);
 

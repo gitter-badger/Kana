@@ -250,9 +250,7 @@ public class KanaLibV2 {
 	public static final int HIRA = 1;
 	public static final int KATA = 2;
 
-
-	public static void init() {
-
+	static {
 		specialMap.put('.', '。');
 		specialMap.put(' ', '　');
 

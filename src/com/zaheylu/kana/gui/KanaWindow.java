@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 
 import com.zaheylu.gui.JCheckDialog;
 import com.zaheylu.kana.users.Profile;
+import com.zaheylu.kana.users.SuccessEntry;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
 import com.zaheylu.kana.words.TWord;
@@ -53,8 +54,6 @@ import com.zaheylu.snippets.CodeLibary;
 
 
 public class KanaWindow extends JFrame {
-
-
 	private JPanel panelType;
 	private JPanel panelChoose;
 	private JPanel panelVocabulary;
@@ -69,9 +68,6 @@ public class KanaWindow extends JFrame {
 	private JLabel lblVocKata;
 	private JLabel lblVoc;
 	private JLabel lblVocComment;
-	private JCheckBoxMenuItem chckbxmntmSoundOnNew;
-	private JMenuItem mnLoadAllSounds;
-	private JMenuItem mntmReloadSound;
 	private JPanel panelProgress;
 	private JLabel lblProgess;
 	private JPanel panelHints;
@@ -80,16 +76,12 @@ public class KanaWindow extends JFrame {
 	private KanaWindow thisFrame = this;
 
 	public KanaWindow(String[] args) {
-		profile = new Profile();
 		if (args != null) {
 			for (String arg : args) {
 				if (arg.equalsIgnoreCase("debug")) Log.enableLogOutput();
 				if (arg.equalsIgnoreCase("touch")) Log.put("mode.touch", true);
 			}
 		}
-		options = new int[2];
-		Log.put("path.user", System.getProperty("user.home") + "\\Documents\\kana\\");
-
 		ImageIcon icon = new ImageIcon(KanaWindow.class.getResource("/res/kana_small.png"));
 		setIconImage(icon.getImage());
 		this.setMinimumSize(new Dimension(300, 200));
@@ -116,6 +108,7 @@ public class KanaWindow extends JFrame {
 		showPanel(null);
 
 		loadXMLs();
+		vocabulary.assignProfile(profile);
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
@@ -129,7 +122,7 @@ public class KanaWindow extends JFrame {
 	public void onShutdown() {
 		Log.event("hook.shutdown");
 		try {
-			vocabulary.saveProfile();
+			profile.save();
 		} catch (UnsupportedEncodingException | FileNotFoundException | XMLStreamException e) {
 			e.printStackTrace();
 		}
@@ -207,13 +200,38 @@ public class KanaWindow extends JFrame {
 
 		JMenu mnProgram = new JMenu("Program");
 		JMenu mnProfile = new JMenu("Profile");
-		mnProfile.setEnabled(false);
 		JMenu mnTraining = new JMenu("Training");
 		JMenu mnSettings = new JMenu("Settings");
+		JMenu mnFilter = new JMenu("Filter");
 		JMenu mnInfo = new JMenu("Info");
+		JMenu mnDebug = new JMenu("Debug");
+
+		JMenuItem mnLoadAllSounds = new JMenuItem("Reload all sounds");
+		mnLoadAllSounds.addActionListener(new ChckbxmntmLoadAllSoundsActionListener());
+
+		JMenuItem mntmReloadSound = new JMenuItem("Reload this sound");
+		mntmReloadSound.addActionListener(new MntmReloadSoundActionListener());
+
+		JMenuItem mntmSave = new JMenuItem("Save Profile");
+		mntmSave.addActionListener(new MntmSaveActionListener());
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new MntmExitActionListener());
+
+		JMenuItem mntmLoadGrp = new JMenuItem("Reload Groups.xml");
+		mntmLoadGrp.addActionListener(new MntmLoadGrpActionListener());
+
+		JMenuItem mntmLoadVoc = new JMenuItem("Reload Vocabulary.xml");
+		mntmLoadVoc.addActionListener(new MntmLoadVocActionListener());
+
+		JMenuItem mntmLoadPro = new JMenuItem("Reload Profile");
+		mntmLoadPro.addActionListener(new MntmLoadProActionListener());
+
+		JMenuItem mntmLinkPro = new JMenuItem("Link Vocabulary/Profile");
+		mntmLinkPro.addActionListener(new MntmLinkProActionListener());
+
+		JMenuItem mntmUnLinkPro = new JMenuItem("Unlink Vocabulary/Profile");
+		mntmUnLinkPro.addActionListener(new MntmUnLinkProActionListener());
 
 		JMenuItem mntmCharacters = new JMenuItem("Characters");
 		mntmCharacters.addActionListener(new MntmCharactersActionListener());
@@ -230,17 +248,8 @@ public class KanaWindow extends JFrame {
 		JCheckBoxMenuItem chckbxmntmEnableSounds = new JCheckBoxMenuItem("Enable Sounds");
 		chckbxmntmEnableSounds.addActionListener(new ChckbxmntmEnableSoundsActionListener());
 
-		mnLoadAllSounds = new JMenuItem("Reload all sounds");
-		mnLoadAllSounds.setEnabled(false);
-		mnLoadAllSounds.addActionListener(new ChckbxmntmLoadAllSoundsActionListener());
-
-		chckbxmntmSoundOnNew = new JCheckBoxMenuItem("Sound on new Vocabulary");
-		chckbxmntmSoundOnNew.setEnabled(false);
+		JCheckBoxMenuItem chckbxmntmSoundOnNew = new JCheckBoxMenuItem("Sound on new Vocabulary");
 		chckbxmntmSoundOnNew.addActionListener(new ChckbxmntmSoundOnNewActionListener());
-
-		mntmReloadSound = new JMenuItem("Reload this sound");
-		mntmReloadSound.addActionListener(new MntmReloadSoundActionListener());
-		mntmReloadSound.setEnabled(false);
 
 		JCheckBoxMenuItem chckbxmntmRemoveSkippedWords = new JCheckBoxMenuItem("Remove Skipped Words");
 		chckbxmntmRemoveSkippedWords.addActionListener(new ChckbxmntmRemoveSkippedWordsActionListener());
@@ -264,35 +273,43 @@ public class KanaWindow extends JFrame {
 		menuBar.add(mnProfile);
 		menuBar.add(mnTraining);
 		menuBar.add(mnSettings);
+		menuBar.add(mnFilter);
 		menuBar.add(mnInfo);
+		menuBar.add(mnDebug);
 
 		mnProgram.add(mntmExit);
+
+		mnProfile.add(mntmSave);
 
 		mnTraining.add(mntmCharacters);
 		mnTraining.add(mntmVocabulary);
 
 		mnSettings.add(chckbxmntmEnableSounds);
 		mnSettings.add(chckbxmntmSoundOnNew);
-		mnSettings.add(mnLoadAllSounds);
-		mnSettings.add(mntmReloadSound);
 		mnSettings.add(chckbxmntmRemoveSkippedWords);
 		mnSettings.add(new JPanel());
 		mnSettings.add(chckbxmntmChronologicalOrder);
 		mnSettings.add(new JPanel());
 		mnSettings.add(chckbxmntmTouchMode);
 		mnSettings.add(new JPanel());
-		mnSettings.add(mntmPoolNewWords);
-		mnSettings.add(mntmPoolWrongWords);
-		mnSettings.add(mntmPoolHasKanji);
+
+		mnFilter.add(mntmPoolNewWords);
+		mnFilter.add(mntmPoolWrongWords);
+		mnFilter.add(mntmPoolHasKanji);
 
 		mnInfo.add(mntmAbout);
 		mnInfo.add(mntmCheckForUpdates);
 
-		mnProgram.add(mntmExit);
+		mnDebug.add(mnLoadAllSounds);
+		mnDebug.add(mntmReloadSound);
+		mnDebug.add(mntmLoadGrp);
+		mnDebug.add(mntmLoadVoc);
+		mnDebug.add(mntmLoadPro);
+		mnDebug.add(mntmLinkPro);
+		mnDebug.add(mntmUnLinkPro);
 
 		placeComponents();
 		setLocationRelativeTo(null);
-
 	}
 
 	private void placeComponents() {
@@ -329,7 +346,6 @@ public class KanaWindow extends JFrame {
 		loadGroups("Groups.xml");
 		loadVocabulary("Vocabulary.xml");
 		loadProfiles();
-		vocabulary.linkProfile(profile);
 	}
 
 	private void loadGroups(String fileName) {
@@ -505,7 +521,7 @@ public class KanaWindow extends JFrame {
 			if (vocabulary != null) if (vocabulary.size() > 0) {
 				options = new KanaCharacterChoose(thisFrame).choose(2);
 				if (options[0] != KanaCharacterChoose.CANCEL) {
-					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArray(vocabulary), 2).choose();
+					ArrayList<Integer> choices = new JCheckDialog(thisFrame, groups.toStringArrayCount(vocabulary), 2).choose();
 					if (choices != null && choices.size() > 0 && choices.get(0) >= 0) {
 						currentWordPool = vocabulary.getFiltered(choices);
 						showPanel(panelVocabulary);
@@ -524,7 +540,6 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmAboutActionListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent arg0) {
 			new KanaAbout(thisFrame);
 		}
@@ -537,6 +552,7 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class TfVocKeyListener extends KeyAdapter {
+
 
 		public void keyReleased(KeyEvent arg0) {
 			if (options[0] == 2) {
@@ -551,11 +567,11 @@ public class KanaWindow extends JFrame {
 				lblVocHira.setText("");
 				lblVocKata.setText("");
 				if (options[1] == KanaCharacterChoose.EXAM) {
-					vocabulary.update(currentWord.getIndex(), false);
+					currentWord.update(false);
 					newExamAnswer(false);
 				} else {
 					if (Log.getBool("vocabulary.removeSkipped")) currentWordPool.remove(currentWord);
-					else vocabulary.update(currentWord.getIndex(), false);
+					else currentWord.update(false);
 					newVocabulary();
 				}
 			} else if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -567,7 +583,7 @@ public class KanaWindow extends JFrame {
 							tfVoc.setText("");
 							lblVocHira.setText("");
 							lblVocKata.setText("");
-							vocabulary.update(currentWord.getIndex(), true);
+							currentWord.update(true);
 							if (options[1] == KanaCharacterChoose.EXAM) newExamAnswer(true);
 							else newVocabulary();
 						}
@@ -597,8 +613,6 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem check = (JCheckBoxMenuItem) arg0.getSource();
 			Log.put("sounds.enabled", check.isSelected());
-			chckbxmntmSoundOnNew.setEnabled(check.isSelected());
-			mnLoadAllSounds.setEnabled(check.isSelected());
 			if (check.isSelected()) showmessage("Enabling this will read out the word you're translating in Vocabulary mode when pressing F1."
 					+ "\nIt is using Google's Text-To-Speech Service and JLayer for MP3-output."
 					+ "\nIt may or may not work. If it doesn't, just disable this feature by clicking 'Enable Sounds' again.");
@@ -635,11 +649,17 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmNewWordsActionListener implements ActionListener {
+
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
-			for (TWord word : vocabulary.getWords().values()) {
-				if (word.getSuccess().getNumber() <= threshold) words.add(word);
+			for (SuccessEntry item : profile.getSuccess().values()) {
+				for (TWord word : vocabulary.words.values()) {
+					if (item.getIndex() == word.getIndex()) {
+						if (item.getNumber() <= threshold) words.add(word);
+						break;
+					}
+				}
 			}
 			if (words.size() > 0) {
 				currentWordPool = words;
@@ -654,8 +674,13 @@ public class KanaWindow extends JFrame {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			try {
 				double threshold = Double.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold in percent", "50")) / 100.0;
-				for (TWord word : vocabulary.getWords().values()) {
-					if (word.getSuccess().getNumber() > 0 && word.getSuccess().getRatio() <= threshold) words.add(word);
+				for (SuccessEntry item : profile.getSuccess().values()) {
+					for (TWord word : vocabulary.words.values()) {
+						if (item.getIndex() == word.getIndex()) {
+							if (item.getNumber() > 0 && item.getRatio() <= threshold) words.add(word);
+							break;
+						}
+					}
 				}
 				if (words.size() > 0) {
 					currentWordPool = words;
@@ -685,7 +710,6 @@ public class KanaWindow extends JFrame {
 		}
 	}
 
-
 	private class ChckbxmntmTouchModeListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
@@ -693,6 +717,46 @@ public class KanaWindow extends JFrame {
 			// Thread t = new Thread(new RefreshThread());
 			// t.start();
 			placeComponents();
+		}
+	}
+
+	private class MntmSaveActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				profile.save();
+			} catch (UnsupportedEncodingException | FileNotFoundException | XMLStreamException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class MntmLoadGrpActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			loadGroups("Groups.xml");
+		}
+	}
+
+	private class MntmLoadVocActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			loadVocabulary("Vocabulary.xml");
+		}
+	}
+
+	private class MntmLoadProActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			loadProfiles();
+		}
+	}
+
+	private class MntmLinkProActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			vocabulary.assignProfile(profile);
+		}
+	}
+
+	private class MntmUnLinkProActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			vocabulary.unassignProfile();
 		}
 	}
 
@@ -758,7 +822,6 @@ public class KanaWindow extends JFrame {
 		Log.event("showVoc");
 		panelProgress.setVisible(options[1] == KanaCharacterChoose.EXAM);
 
-		mntmReloadSound.setEnabled(Log.getBool("Sounds.Enabled"));
 		if (Log.getBool("sounds.enabled")) {
 			vocabulary.loadSound(word, Log.getBool("sounds.onVocabulary"), false);
 		}
