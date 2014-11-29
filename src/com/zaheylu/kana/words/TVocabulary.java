@@ -37,18 +37,27 @@ public class TVocabulary {
 
 	public void assignProfile(Profile p) {
 		Log.event("Vocabulary.assignProfile");
-		profile = p;
-		for (SuccessEntry se : profile.success().values()) {
-			words.get(se.getIndex()).setSuccess(se);
-		}
-
-		for (TWord word : words.values()) {
-			if (word.getSuccess() == null) {
-				SuccessEntry se = new SuccessEntry(word.getIndex());
-
-				profile.add(se, word.getIndex());
-				word.setSuccess(se);
+		try {
+			if (p.size() > words.size()) {
+				CodeLibary.showmessage("Cannot load Profile because there was an error loading the vocabulary: " + CodeLibary.newLine()
+						+ p.toString() + "; " + toString() + CodeLibary.newLine() + "The program will not work properly.");
+				throw new IndexException(p, this);
 			}
+			profile = p;
+			for (SuccessEntry se : profile.success().values()) {
+				words.get(se.getIndex()).setSuccess(se);
+			}
+
+			for (TWord word : words.values()) {
+				if (word.getSuccess() == null) {
+					SuccessEntry se = new SuccessEntry(word.getIndex());
+
+					profile.add(se, word.getIndex());
+					word.setSuccess(se);
+				}
+			}
+		} catch (IndexException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -237,8 +246,7 @@ public class TVocabulary {
 	}
 
 	public String toString() {
-		return words.size() + " words";
+		return "[Voc:" + words.size() + " words]";
 	}
-
 
 }

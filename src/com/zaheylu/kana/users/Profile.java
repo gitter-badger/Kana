@@ -72,7 +72,6 @@ public class Profile {
 		success.put(i, se);
 	}
 
-	// TODO: This should be called only if the User wants to.
 	public void save() throws UnsupportedEncodingException, FileNotFoundException, XMLStreamException {
 		if (null != success && size() > 0) {
 			Log.event("profile.save");
@@ -125,5 +124,9 @@ public class Profile {
 
 	public LinkedHashMap<Integer, SuccessEntry> getSuccess() {
 		return success;
+	}
+
+	public String toString() {
+		return "[Profile:" + success.size() + "]";
 	}
 }

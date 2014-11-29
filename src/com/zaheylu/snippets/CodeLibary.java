@@ -133,4 +133,8 @@ public class CodeLibary {
 		}
 		return s.toString();
 	}
+	
+	public static String newLine() {
+		return System.getProperty("line.separator");
+	}
 }

@@ -396,8 +396,9 @@ public class KanaWindow extends JFrame {
 		Log.event("loadProfiles");
 		try {
 			profile = loadProfile("default");
+			Log.put("loaded.profile", profile);
 			if (profile == null) profile = new Profile();
-			loadProfile(); // TODO: Proper Profile Loading
+			loadProfile();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			Log.event("err.kanaWindow.loadProfiles");
 			e.printStackTrace();
@@ -556,7 +557,6 @@ public class KanaWindow extends JFrame {
 
 		public void keyReleased(KeyEvent arg0) {
 			if (options[0] == 2) {
-				// TODO: Threaded Converting
 				lblVocHira.setText(convertStr(tfVoc.getText(), 0, 1));
 				lblVocKata.setText(convertStr(tfVoc.getText(), 0, 2));
 				strechFont(lblVocHira);
@@ -637,7 +637,6 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			JCheckBoxMenuItem ch = (JCheckBoxMenuItem) arg0.getSource();
 			Log.put("vocabulary.removeSkipped", ch.isSelected());
-			// TODO: erase button instead
 		}
 	}
 
@@ -781,9 +780,7 @@ public class KanaWindow extends JFrame {
 			} while (convertChr(getAlphabet()[val], 0, options[0]) == lblType.getText());
 			lblType.setText(convertChr(getAlphabet()[val], 0, options[0]));
 			tfType.requestFocus();
-		} else {
-			// TODO: typeKanji
-		}
+		} else {}
 	}
 
 	private void newExam() {

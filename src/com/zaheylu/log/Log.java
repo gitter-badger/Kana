@@ -37,8 +37,8 @@ public class Log {
 	}
 
 	public static void put(String name, LogEntry obj) {
-		if (containsKey(name)) write("put   ", obj);
-		else write("add  ", obj);
+		if (containsKey(name)) write("put    ", obj);
+		else write("add    ", obj);
 		log.put(name.toUpperCase(), obj);
 	}
 
@@ -57,7 +57,7 @@ public class Log {
 
 	public static void event(String eventMsg) {
 		events.put(eventIndex, eventMsg);
-		write("ev(" + eventIndex + "): " + eventMsg);
+		write(String.format("ev(%3d): %s", eventIndex, eventMsg));
 		eventIndex++;
 	}
 

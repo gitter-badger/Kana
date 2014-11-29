@@ -1,6 +1,8 @@
 package com.zaheylu.kana.exceptions;
 
+import com.zaheylu.kana.users.Profile;
 import com.zaheylu.kana.users.SuccessEntry;
+import com.zaheylu.kana.words.TVocabulary;
 import com.zaheylu.kana.words.TWord;
 
 public class IndexException extends Exception {
@@ -31,5 +33,9 @@ public class IndexException extends Exception {
 
 	public IndexException(int i, TWord word) {
 		super("Ex on " + word.toString() + "; Index :" + i + "=!" + word.getIndex());
+	}
+
+	public IndexException(Profile p, TVocabulary voc) {
+		super("Cannot load Profile because there was an error loading the vocabulary:" + p.toString() + "; " + voc.toString());
 	}
 }
