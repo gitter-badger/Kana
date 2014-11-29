@@ -15,7 +15,7 @@ public class KanaLibV2 {
 	private static HashMap<String, String> KataMap = new HashMap<String, String>();
 
 
-	private static final String[][] DATA = new String[][] {
+	public static final String[][] DATA = new String[][] {
 			{
 					"wi", null, "ウィ" }, {
 					"we", null, "ウェ" }, {

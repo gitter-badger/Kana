@@ -42,7 +42,6 @@ import org.xml.sax.SAXException;
 
 import com.zaheylu.gui.JCheckDialog;
 import com.zaheylu.kana.users.Profile;
-import com.zaheylu.kana.users.SuccessEntry;
 import com.zaheylu.kana.version.Version;
 import com.zaheylu.kana.words.TGroups;
 import com.zaheylu.kana.words.TWord;
@@ -269,6 +268,9 @@ public class KanaWindow extends JFrame {
 		JMenuItem mntmPoolHasKanji = new JMenuItem("Word Pool: Has Kanji");
 		mntmPoolHasKanji.addActionListener(new MntmHasKanjiActionListener());
 
+		JMenuItem mntmPoolOldWords = new JMenuItem("Word Pool: Repeat Old Words");
+		mntmPoolOldWords.addActionListener(new MntmPoolOldWordsActionListener());
+
 		menuBar.add(mnProgram);
 		menuBar.add(mnProfile);
 		menuBar.add(mnTraining);
@@ -296,6 +298,7 @@ public class KanaWindow extends JFrame {
 		mnFilter.add(mntmPoolNewWords);
 		mnFilter.add(mntmPoolWrongWords);
 		mnFilter.add(mntmPoolHasKanji);
+		mnFilter.add(mntmPoolOldWords);
 
 		mnInfo.add(mntmAbout);
 		mnInfo.add(mntmCheckForUpdates);
@@ -652,13 +655,8 @@ public class KanaWindow extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold number", "0"));
-			for (SuccessEntry item : profile.getSuccess().values()) {
-				for (TWord word : vocabulary.words.values()) {
-					if (item.getIndex() == word.getIndex()) {
-						if (item.getNumber() <= threshold) words.add(word);
-						break;
-					}
-				}
+			for (TWord word : currentWordPool) {
+				if (word.getSuccess().getNumber() <= threshold) words.add(word);
 			}
 			if (words.size() > 0) {
 				currentWordPool = words;
@@ -671,32 +669,39 @@ public class KanaWindow extends JFrame {
 	private class MntmWrongWordsActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
-			try {
-				double threshold = Double.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold in percent", "50")) / 100.0;
-				for (SuccessEntry item : profile.getSuccess().values()) {
-					for (TWord word : vocabulary.words.values()) {
-						if (item.getIndex() == word.getIndex()) {
-							if (item.getNumber() > 0 && item.getRatio() <= threshold) words.add(word);
-							break;
-						}
-					}
-				}
-				if (words.size() > 0) {
-					currentWordPool = words;
-					showPanel(panelVocabulary);
-					newVocabulary();
-				} else showmessage("There are no new words.");
-			} catch (Exception e) {
-				e.printStackTrace();
+			double threshold = Double.valueOf(JOptionPane.showInputDialog(thisFrame, "Threshold in percent", "50")) / 100.0;
+			for (TWord word : currentWordPool) {
+				if (word.getSuccess().getNumber() > 0 && word.getSuccess().getRatio() <= threshold) words.add(word);
 			}
+			if (words.size() > 0) {
+				currentWordPool = words;
+				showPanel(panelVocabulary);
+				newVocabulary();
+			} else showmessage("There are no new words.");
 		}
 	}
 
 	private class MntmHasKanjiActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
-			for (TWord word : vocabulary.words.values()) {
-				if (word.hasKanji()) {
+			for (TWord word : currentWordPool) {
+				if (word.hasKanji()) words.add(word);
+			}
+			if (words.size() > 0) {
+				currentWordPool = words;
+				showPanel(panelVocabulary);
+				newVocabulary();
+			} else showmessage("There are no new words.");
+		}
+	}
+
+	private class MntmPoolOldWordsActionListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<TWord> words = new ArrayList<TWord>();
+			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Last time in days", "1"));
+			for (TWord word : currentWordPool) {
+				if (CodeLibary.daysPast(word.getSuccess().getTimestamp()) >= threshold) {
 					words.add(word);
 				}
 			}
