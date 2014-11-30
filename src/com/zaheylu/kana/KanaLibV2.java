@@ -283,38 +283,14 @@ public class KanaLibV2 {
 		if (from == ROMA && to == KATA) return KataMap.get(arg);
 		if (from == HIRA && to == ROMA) return HiraRMap.get(arg);
 		if (from == KATA && to == ROMA) return KataRMap.get(arg);
-		/*if (from == ROMA) {
-			if (to == HIRA) {
-				return HiraMap.get(arg);
-			} else if (to == KATA) {
-				return KataMap.get(arg);
-			}
-		} else if (to == ROMA) {
-			if (from == HIRA) {
-				if (HiraMap.containsValue(arg)) for (Entry<String, String> entry : HiraMap.entrySet()) {
-					if (arg.compareTo(entry.getValue()) == 0) {
-						return entry.getKey();
-					}
-				}
-			} else if (from == KATA) {
-				if (KataMap.containsValue(arg)) for (Entry<String, String> entry : KataMap.entrySet()) {
-					if (arg.compareTo(entry.getValue()) == 0) {
-						return entry.getKey();
-					}
-				}
-			}
-		}*/
 		return null;
 	}
 
 	public static boolean containsChr(String arg, int from, int to) {
-		if (from == ROMA) {
-			if (to == HIRA) return HiraMap.containsKey(arg);
-			else if (to == KATA) return KataMap.containsKey(arg);
-		} else if (to == ROMA) {
-			if (from == HIRA) return HiraMap.containsValue(arg);
-			else if (from == KATA) return KataMap.containsValue(arg);
-		}
+		if (from == ROMA && to == HIRA) return HiraMap.containsKey(arg);
+		if (from == ROMA && to == KATA) return KataMap.containsKey(arg);
+		if (from == HIRA && to == ROMA) return HiraMap.containsValue(arg);
+		if (from == KATA && to == ROMA) return KataMap.containsValue(arg);
 		return false;
 	}
 
@@ -458,8 +434,8 @@ public class KanaLibV2 {
 		int max = 4;
 		if (arg.length() < max) max = arg.length();
 		for (int n = 0; n <= max; n++) {
-			if (HiraMap.containsValue(arg.substring(0, n))) return HIRA;
-			if (KataMap.containsValue(arg.substring(0, n))) return KATA;
+			if (HiraRMap.containsKey(arg.substring(0, n))) return HIRA;
+			if (KataRMap.containsKey(arg.substring(0, n))) return KATA;
 		}
 		return ROMA;
 	}

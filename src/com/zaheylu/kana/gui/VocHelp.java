@@ -70,6 +70,7 @@ public class VocHelp extends JDialog {
 			String txt = "Romaji: ";
 			if (word.hasRomaji()) txt += word.getRomaji();
 			else txt += KanaLibV2.convertStr(word.getKana(), KanaLibV2.findType(word.getKana()), 0);
+			Log.event( KanaLibV2.findType(word.getKana()));
 			lblRomaji = newJLabel(txt, cY, 30, new Font("MS Gothic", Font.PLAIN, 20));
 			cY += lblRomaji.getHeight() + 10;
 			getContentPane().add(lblRomaji);

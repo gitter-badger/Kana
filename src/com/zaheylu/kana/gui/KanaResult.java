@@ -30,7 +30,6 @@ public class KanaResult extends JDialog {
 		int rows = (words.size() / columns) + 1;
 		if ((words.size() % columns) == 0) rows--;
 		int height = rows * 50 + 50;
-		result.setLayout(null);
 		result.setBounds(0, 0, width, height);
 		JLabel lblTitle = new JLabel(title + ": ");
 		lblTitle.setFont(new Font("Tahoma", Font.PLAIN, 45));
@@ -57,9 +56,8 @@ public class KanaResult extends JDialog {
 				else {
 					ratio = word.getSuccess().getRatio();
 					number = word.getSuccess().getNumber();
-					ratio -= CodeLibary.daysPast(word.getSuccess().getTimestamp()) / 10.0;
+					ratio -= ratio * CodeLibary.daysPast(word.getSuccess().getTimestamp()) / 10.0;
 				}
-
 
 				// COLOR
 				if (number != 0) if (ratio >= 0.9 && number > 9) {
@@ -80,7 +78,6 @@ public class KanaResult extends JDialog {
 					b = (int) (255.0 - ratio * 255.0);
 				}
 				Color c = new Color(r, g, b);
-
 				lbl.setBorder(new LineBorder(c));
 				lbl.setForeground(c);
 			} else lbl.setBorder(new LineBorder(Color.BLACK));

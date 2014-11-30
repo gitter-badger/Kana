@@ -662,7 +662,7 @@ public class KanaWindow extends JFrame {
 				currentWordPool = words;
 				showPanel(panelVocabulary);
 				newVocabulary();
-			} else showmessage("There are no new words.");
+			} else showmessage("There are no words matching the filter.");
 		}
 	}
 
@@ -677,7 +677,7 @@ public class KanaWindow extends JFrame {
 				currentWordPool = words;
 				showPanel(panelVocabulary);
 				newVocabulary();
-			} else showmessage("There are no new words.");
+			} else showmessage("There are no words matching the filter.");
 		}
 	}
 
@@ -691,7 +691,7 @@ public class KanaWindow extends JFrame {
 				currentWordPool = words;
 				showPanel(panelVocabulary);
 				newVocabulary();
-			} else showmessage("There are no new words.");
+			} else showmessage("There are no words matching the filter.");
 		}
 	}
 
@@ -700,7 +700,7 @@ public class KanaWindow extends JFrame {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Last time in days", "1"));
 			for (TWord word : currentWordPool) {
-				if (CodeLibary.daysPast(word.getSuccess().getTimestamp()) >= threshold) {
+				if (CodeLibary.daysPast(word.getSuccess().getTimestamp()) >= threshold && word.getSuccess().getTimestamp() > 0) {
 					words.add(word);
 				}
 			}
@@ -708,7 +708,7 @@ public class KanaWindow extends JFrame {
 				currentWordPool = words;
 				showPanel(panelVocabulary);
 				newVocabulary();
-			} else showmessage("There are no new words.");
+			} else showmessage("There are no words matching the filter.");
 
 		}
 	}

@@ -60,6 +60,12 @@ public class Log {
 		write(String.format("ev(%3d): %s", eventIndex, eventMsg));
 		eventIndex++;
 	}
+	
+	public static void event(Object eventObj) {
+		events.put(eventIndex, eventObj.toString());
+		write(String.format("ev(%3d): %s", eventIndex, eventObj.toString()));
+		eventIndex++;
+	}
 
 	public static boolean getBool(String name) {
 		LogEntry entry = get(name);
