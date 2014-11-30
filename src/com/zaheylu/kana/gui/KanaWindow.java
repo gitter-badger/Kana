@@ -696,7 +696,6 @@ public class KanaWindow extends JFrame {
 	}
 
 	private class MntmPoolOldWordsActionListener implements ActionListener {
-
 		public void actionPerformed(ActionEvent arg0) {
 			ArrayList<TWord> words = new ArrayList<TWord>();
 			int threshold = Integer.valueOf(JOptionPane.showInputDialog(thisFrame, "Last time in days", "1"));

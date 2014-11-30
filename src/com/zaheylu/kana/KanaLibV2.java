@@ -12,7 +12,9 @@ public class KanaLibV2 {
 	private static HashMap<Character, Character> specialMap = new HashMap<Character, Character>();
 	private static HashMap<Character, Character> caseMap = new HashMap<Character, Character>();
 	private static HashMap<String, String> HiraMap = new HashMap<String, String>();
+	private static HashMap<String, String> HiraRMap = new HashMap<String, String>();
 	private static HashMap<String, String> KataMap = new HashMap<String, String>();
+	private static HashMap<String, String> KataRMap = new HashMap<String, String>();
 
 
 	public static final String[][] DATA = new String[][] {
@@ -127,9 +129,9 @@ public class KanaLibV2 {
 					"byu", "びゅ", "ビュ" }, {
 					"byo", "びょ", "ビョ" }, {
 
-					"pya", "びゃ", "ピャ" }, {
-					"pyu", "びゅ", "ピュ" }, {
-					"pyo", "びょ", "ピョ" }, {
+					"pya", "ぴゃ", "ピャ" }, {
+					"pyu", "ぴゅ", "ピュ" }, {
+					"pyo", "ぴょ", "ピョ" }, {
 
 					"mya", "みゃ", "ミャ" }, {
 					"myu", "みゅ", "ミュ" }, {
@@ -239,12 +241,6 @@ public class KanaLibV2 {
 			"ga", "gi", "gu", "ge", "go", "za", "zi", "zu", "ze", "zo", "da", "di", "du", "de", "do", "ba", "bi", "bu", "be", "bo", "pa", "pi", "pu",
 			"pe", "po" };
 
-
-
-	// variables to initiate
-	public static ArrayList<String[][]> romaHira;
-	public static ArrayList<String[][]> romaKata;
-
 	// field numbers
 	public static final int ROMA = 0;
 	public static final int HIRA = 1;
@@ -267,8 +263,14 @@ public class KanaLibV2 {
 		caseMap.put('ょ', 'よ');
 
 		for (String[] str : DATA) {
-			if (str[HIRA] != null) HiraMap.put(str[ROMA], str[HIRA]);
-			if (str[KATA] != null) KataMap.put(str[ROMA], str[KATA]);
+			if (str[HIRA] != null) {
+				if (!HiraMap.containsKey(str[ROMA])) HiraMap.put(str[ROMA], str[HIRA]);
+				if (!HiraRMap.containsKey(str[HIRA])) HiraRMap.put(str[HIRA], str[ROMA]);
+			}
+			if (str[KATA] != null) {
+				if (!KataMap.containsKey(str[ROMA])) KataMap.put(str[ROMA], str[KATA]);
+				if (!KataRMap.containsKey(str[KATA])) KataRMap.put(str[KATA], str[ROMA]);
+			}
 		}
 	}
 
@@ -277,7 +279,11 @@ public class KanaLibV2 {
 	}
 
 	public static String convertChr(String arg, int from, int to) {
-		if (from == ROMA) {
+		if (from == ROMA && to == HIRA) return HiraMap.get(arg);
+		if (from == ROMA && to == KATA) return KataMap.get(arg);
+		if (from == HIRA && to == ROMA) return HiraRMap.get(arg);
+		if (from == KATA && to == ROMA) return KataRMap.get(arg);
+		/*if (from == ROMA) {
 			if (to == HIRA) {
 				return HiraMap.get(arg);
 			} else if (to == KATA) {
@@ -286,18 +292,18 @@ public class KanaLibV2 {
 		} else if (to == ROMA) {
 			if (from == HIRA) {
 				if (HiraMap.containsValue(arg)) for (Entry<String, String> entry : HiraMap.entrySet()) {
-					if (arg.equals(entry.getValue())) {
+					if (arg.compareTo(entry.getValue()) == 0) {
 						return entry.getKey();
 					}
 				}
 			} else if (from == KATA) {
 				if (KataMap.containsValue(arg)) for (Entry<String, String> entry : KataMap.entrySet()) {
-					if (arg.equals(entry.getValue())) {
+					if (arg.compareTo(entry.getValue()) == 0) {
 						return entry.getKey();
 					}
 				}
 			}
-		}
+		}*/
 		return null;
 	}
 
