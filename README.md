@@ -2,4 +2,4 @@ Kana
 ====
 
 Kana Trainer
-Complete Rework in progress!
+Complete Rework in progress
