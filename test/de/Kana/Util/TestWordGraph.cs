@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using Kana.src.de.Kana.Util;
 
 namespace Kana {
 	[TestFixture ()]
@@ -46,12 +49,20 @@ namespace Kana {
 		}
 
 		[Test ()]
-		public void TestCase () {
+		public void TestTrie () {
 			wordGraph.Add (v1);
 			wordGraph.Add (v2);
 			wordGraph.Add (v3);
 			wordGraph.Add (v4);
-		}
+
+            Syllable[] syllables = (from elem in wordGraph.Root.Keys.Cast<Element>() select elem.Syllable).ToArray();
+
+            Assert.Contains(v1.Word[0], syllables, "Test 1");
+            Assert.Contains(v4.Word[0], syllables, "Test 2");
+            Assert.AreEqual(syllables.Length, 2, "Test 3");
+
+            
+        }
 	}
 }
 
