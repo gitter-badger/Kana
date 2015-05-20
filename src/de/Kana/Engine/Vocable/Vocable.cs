@@ -65,6 +65,13 @@ namespace Kana {
 		public VocableEnumerator GetEnumerator () {
 			return new VocableEnumerator (this);
 		}
-	}
+
+        public override string ToString() {
+            string voc = "";
+            foreach (Syllable syl in word)
+                voc += syl;
+            return voc;
+        }
+    }
 }
 

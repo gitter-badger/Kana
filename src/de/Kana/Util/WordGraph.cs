@@ -5,7 +5,9 @@ using System.Linq;
 
 namespace Kana.src.de.Kana.Util {
 	public class WordGraph : IKanaDictionary {
-		private ListDictionary root;
+        private int junctionLevel = 0;
+
+        private ListDictionary root;
 		private ElementComparer comparer;
 
 		public ListDictionary Root {
@@ -44,25 +46,23 @@ namespace Kana.src.de.Kana.Util {
             List<Syllable> traverseTmp = new List<Syllable>();
             LinkedList<Vocable> vocabels = new LinkedList<Vocable>();
 
-            traverse(traverseTmp, vocabels, root, 0, 0);
+            traverse(traverseTmp, vocabels, root, 0);
 
             return vocabels;
         }
 
-        private void traverse (List<Syllable> traverseTmp, LinkedList<Vocable> vocabels, ListDictionary syllableSet, int level, int junctionLevel) {
+        private void traverse (List<Syllable> traverseTmp, LinkedList<Vocable> vocabels, ListDictionary syllableSet, int level) {
             if (syllableSet == null)
                 return;
 
-            foreach (Element elem in syllableSet.Keys) { 
+            foreach (Element elem in syllableSet.Keys) {
                 traverseTmp.Add(elem.Syllable);
+              
+                traverse(traverseTmp, vocabels, syllableSet[elem] as ListDictionary, ++level);
 
-                traverse(traverseTmp, vocabels, syllableSet[elem] as ListDictionary, ++level, (syllableSet.Keys.Count > 1)? junctionLevel = level - 1 : junctionLevel);
-
-                if (elem.Eow) {
+                if (elem.Eow)
                     vocabels.AddLast(new Vocable(traverseTmp.ToList()));
-                    traverseTmp.RemoveRange(junctionLevel, (vocabels.Last != null) ? vocabels.Last.Value.Word.Count - junctionLevel : 0);
-                }
-
+                traverseTmp.Remove(traverseTmp.Last());
             }
         }
 	}

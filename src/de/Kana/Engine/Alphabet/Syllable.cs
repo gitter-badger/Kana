@@ -28,6 +28,10 @@ namespace Kana {
 			this.characters = syllable;
 			this.alphabet = alphabet;
 		}
-	}
+
+        public override string ToString() {
+            return Characters;
+        }
+    }
 }
 

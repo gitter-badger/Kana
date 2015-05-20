@@ -42,12 +42,23 @@ namespace Kana
             word.Add(new Syllable("ki", Alphabet.HIRAGANA));
             Vocable v4 = new Vocable(word);
 
+            // Word 4
+            word = new List<Syllable>();
+            word.Add(new Syllable("ka", Alphabet.HIRAGANA));
+            word.Add(new Syllable("ta", Alphabet.HIRAGANA));
+            word.Add(new Syllable("ka", Alphabet.HIRAGANA));
+            word.Add(new Syllable("ro", Alphabet.HIRAGANA));
+            word.Add(new Syllable("go", Alphabet.HIRAGANA));
+            Vocable v5 = new Vocable(word);
+
             graph.Add(v1);
             graph.Add(v2);
             graph.Add(v3);
             graph.Add(v4);
+            graph.Add(v5);
 
-            graph.getContent();
+            foreach (Vocable v in graph.getContent())
+                System.Console.WriteLine(v);
         }
 	}
 }
