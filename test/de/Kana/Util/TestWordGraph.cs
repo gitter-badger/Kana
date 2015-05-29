@@ -47,22 +47,6 @@ namespace Kana {
 			word.Add (new Syllable ("ki", Alphabet.HIRAGANA));
 			v4 = new Vocable (word);
 		}
-
-		[Test ()]
-		public void TestTrie () {
-			wordGraph.Add (v1);
-			wordGraph.Add (v2);
-			wordGraph.Add (v3);
-			wordGraph.Add (v4);
-
-            Syllable[] syllables = (from elem in wordGraph.Root.Keys.Cast<Element>() select elem.Syllable).ToArray();
-
-            Assert.Contains(v1.Word[0], syllables, "Test 1");
-            Assert.Contains(v4.Word[0], syllables, "Test 2");
-            Assert.AreEqual(syllables.Length, 2, "Test 3");
-
-            
-        }
 	}
 }
 

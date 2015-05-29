@@ -44,6 +44,7 @@ namespace Kana {
 		}
 
 		private List<Syllable> word;
+        // Todo: Define Word-Modul
 
 		public List<Syllable> Word {
 			get {

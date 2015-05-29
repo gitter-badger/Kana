@@ -51,11 +51,18 @@ namespace Kana
             word.Add(new Syllable("go", Alphabet.HIRAGANA));
             Vocable v5 = new Vocable(word);
 
-            graph.Add(v1);
-            graph.Add(v2);
-            graph.Add(v3);
-            graph.Add(v4);
-            graph.Add(v5);
+            // Word 5
+            word = new List<Syllable>();
+            word.Add(new Syllable("ka", Alphabet.HIRAGANA));
+            word.Add(new Syllable("ta", Alphabet.HIRAGANA));
+            Vocable v6 = new Vocable(word);
+
+            graph.Add(v1, new List<string>(), new List<string>() { "Test", "Test1" }, new List<string>());
+            graph.Add(v2, new List<string>(), new List<string>() { "Test", "Test2" }, new List<string>());
+            graph.Add(v3, new List<string>(), new List<string>() { "Test", "Test3" }, new List<string>());
+            graph.Add(v4, new List<string>(), new List<string>() { "Test", "Test4" }, new List<string>());
+            graph.Add(v5, new List<string>(), new List<string>() { "Test", "Test5" }, new List<string>());
+            graph.Add(v6, new List<string>(), new List<string>() { "Test", "Test6" }, new List<string>());
 
             foreach (Vocable v in graph.getContent())
                 System.Console.WriteLine(v);

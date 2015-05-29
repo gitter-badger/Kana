@@ -30,16 +30,23 @@ namespace Kana.src.de.Kana.Util {
 			root = new ListDictionary (Comparer);
 		}
 
-		public void Add (Vocable word) {
+		public void Add (Vocable word, List<string> kanji, List<string> engTrans, List<string> deTrans, params Enum[] flags) {
 			ListDictionary currentSyllableSet = root;
 			Element elem = default (Element);
 			foreach (Syllable syl in word) {
-				elem = new Element (syl);
+                if (!currentSyllableSet.Contains(new Element(syl)))
+                    elem = new Element(syl);
+                else
+                    elem = currentSyllableSet.Keys.Cast<Element>().FirstOrDefault(x => x.Syllable.Characters.Equals(syl.Characters));
 				if (!currentSyllableSet.Contains (elem))
 					currentSyllableSet [elem] = new ListDictionary (Comparer);
 				currentSyllableSet = (ListDictionary)currentSyllableSet [elem];
 			}
-			elem.Eow = true;
+            elem.Kanji = kanji;
+            elem.EnWords = engTrans;
+            elem.DeWords = deTrans;
+            elem.Flags = new HashSet<Enum>(flags);
+            elem.Eow = true;
 		}
 
         public LinkedList<Vocable> getContent () {
@@ -50,17 +57,21 @@ namespace Kana.src.de.Kana.Util {
 
             return vocabels;
         }
-
+        
         private void traverse (List<Syllable> traverseTmp, LinkedList<Vocable> vocabels, ListDictionary syllableSet, int level) {
             if (syllableSet == null)
                 return;
 
+
             foreach (Element elem in syllableSet.Keys) {
                 traverseTmp.Add(elem.Syllable);
-              
+
+                if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count != 0)
+                    vocabels.AddLast(new Vocable(traverseTmp.ToList()));
+
                 traverse(traverseTmp, vocabels, syllableSet[elem] as ListDictionary, ++level);
 
-                if (elem.Eow)
+                if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count == 0)
                     vocabels.AddLast(new Vocable(traverseTmp.ToList()));
                 traverseTmp.Remove(traverseTmp.Last());
             }
