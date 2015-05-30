@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using Kana.src.de.Kana.Util;
 
 namespace Kana {
 	[TestFixture ()]
@@ -43,14 +46,6 @@ namespace Kana {
 			word.Add (new Syllable ("sa", Alphabet.HIRAGANA));
 			word.Add (new Syllable ("ki", Alphabet.HIRAGANA));
 			v4 = new Vocable (word);
-		}
-
-		[Test ()]
-		public void TestCase () {
-			wordGraph.Add (v1);
-			wordGraph.Add (v2);
-			wordGraph.Add (v3);
-			wordGraph.Add (v4);
 		}
 	}
 }

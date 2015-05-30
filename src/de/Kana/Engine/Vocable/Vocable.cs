@@ -43,19 +43,28 @@ namespace Kana {
 			}
 		}
 
-		private List<Syllable> word;
+        public List<Syllable> Word { get; set; }
 
-		public List<Syllable> Word {
-			get {
-				return word;
-			}
-			private set {
-				word = value;
-			}
-		}
+        public string Romaji { get; set; }
 
-		public Vocable (List<Syllable> syllables) {
-			word = syllables;
+        public LinkedList<Vocable> Alternatives { get; set; }
+
+        public LinkedList<string> Kanji { get; set; }
+
+        public LinkedList<string> EnWords { get; set; }
+
+        public LinkedList<string> DeWords { get; set; }
+
+        public HashSet<Enum> Flags { get; set; }
+        
+        public Vocable (List<Syllable> syllables) {
+            Word = syllables ?? new List<Syllable>();
+            Romaji = "";
+            Alternatives = new LinkedList<Vocable>();
+            Kanji = new LinkedList<string>();
+            EnWords = new LinkedList<string>();
+            DeWords = new LinkedList<string>();
+            Flags = new HashSet<Enum>();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator () {
@@ -65,6 +74,13 @@ namespace Kana {
 		public VocableEnumerator GetEnumerator () {
 			return new VocableEnumerator (this);
 		}
-	}
+
+        public override string ToString() {
+            string voc = "";
+            foreach (Syllable syl in Word)
+                voc += syl;
+            return voc;
+        }
+    }
 }
 

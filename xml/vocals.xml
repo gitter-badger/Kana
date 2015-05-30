@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Vocals>
+  <Vocal>
+    <Romaji>
+      Katakana
+    </Romaji>
+    <Type>
+      1
+    </Type>
+    <Japanese>
+      カタカナ
+    </Japanese>
+    <Kanji>
+      片仮名
+    </Kanji>
+    <English>
+      Katakana
+    </English>
+    <German>
+      Katakana
+    </German>
+    <Flag>
+    
+    </Flag>
+  </Vocal>
+  <Vocal>
+    <Romaji>
+      Hiragana
+    </Romaji>
+    <Type>
+      0
+    </Type>
+    <Japanese>
+      ひらがな
+    </Japanese>
+    <Kanji>
+      平仮名
+    </Kanji>
+    <English>
+      Hiragana 
+    </English>
+    <German>
+      Hiragana
+    </German>
+    <Flag>
+
+    </Flag>
+  </Vocal>
+</Vocals>

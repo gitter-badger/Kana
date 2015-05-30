@@ -4,7 +4,8 @@ using System.Collections.Generic;
 namespace Kana {
 	public class Element {
 		private Syllable syllable;
-		private bool eow;
+        private Vocable vocable;
+        private bool eow;
 
 		public Syllable Syllable {
 			get {
@@ -15,18 +16,28 @@ namespace Kana {
 			}
 		}
 
-		public bool Eow {
-			get {
-				return eow;
-			}
-			set {
-				eow = value;
-			}
-		}
+        public bool Eow {
+            get {
+                return eow;
+            }
 
-		public Element (Syllable syllable) {
+            set {
+                eow = value;
+            }
+        }
+
+        public Vocable Vocable {
+            get {
+                return vocable;
+            }
+
+            set {
+                vocable = value;
+            }
+        }
+
+        public Element (Syllable syllable) {
 			this.syllable = syllable;
-			eow = false;
 		}
 	}
 }
