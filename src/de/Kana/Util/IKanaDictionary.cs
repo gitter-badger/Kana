@@ -7,7 +7,7 @@ namespace Kana.src.de.Kana.Util
 {
     interface IKanaDictionary
     {
-        void Add(Vocable word, List<string> kanji, List<string> enTrans, List<string> deTrans, params Enum[] flags);
+        void Add(Vocable word);
         LinkedList<Vocable> getContent();
     }
 }

@@ -30,7 +30,7 @@ namespace Kana.src.de.Kana.Util {
 			root = new ListDictionary (Comparer);
 		}
 
-		public void Add (Vocable word, List<string> kanji, List<string> engTrans, List<string> deTrans, params Enum[] flags) {
+        public void Add(Vocable word) {
 			ListDictionary currentSyllableSet = root;
 			Element elem = default (Element);
 			foreach (Syllable syl in word) {
@@ -42,10 +42,7 @@ namespace Kana.src.de.Kana.Util {
 					currentSyllableSet [elem] = new ListDictionary (Comparer);
 				currentSyllableSet = (ListDictionary)currentSyllableSet [elem];
 			}
-            elem.Kanji = kanji;
-            elem.EnWords = engTrans;
-            elem.DeWords = deTrans;
-            elem.Flags = new HashSet<Enum>(flags);
+            elem.Vocable = word;
             elem.Eow = true;
 		}
 
