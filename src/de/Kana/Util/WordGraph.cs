@@ -30,10 +30,10 @@ namespace Kana.src.de.Kana.Util {
 			root = new ListDictionary (Comparer);
 		}
 
-        public void Add(Vocable word) {
+        public void Add(Vocable voc) {
 			ListDictionary currentSyllableSet = root;
 			Element elem = default (Element);
-			foreach (Syllable syl in word) {
+			foreach (Syllable syl in voc) {
                 if (!currentSyllableSet.Contains(new Element(syl)))
                     elem = new Element(syl);
                 else
@@ -42,35 +42,30 @@ namespace Kana.src.de.Kana.Util {
 					currentSyllableSet [elem] = new ListDictionary (Comparer);
 				currentSyllableSet = (ListDictionary)currentSyllableSet [elem];
 			}
-            elem.Vocable = word;
+            elem.Vocable = voc;
             elem.Eow = true;
 		}
 
-        public LinkedList<Vocable> getContent () {
-            List<Syllable> traverseTmp = new List<Syllable>();
-            LinkedList<Vocable> vocabels = new LinkedList<Vocable>();
+        public List<Vocable> getContent () {
+            List<Vocable> vocabels = new List<Vocable>();
 
-            traverse(traverseTmp, vocabels, root, 0);
+            traverse(vocabels, root);
 
             return vocabels;
         }
         
-        private void traverse (List<Syllable> traverseTmp, LinkedList<Vocable> vocabels, ListDictionary syllableSet, int level) {
+        private void traverse (List<Vocable> vocabels, ListDictionary syllableSet) {
             if (syllableSet == null)
                 return;
 
-
             foreach (Element elem in syllableSet.Keys) {
-                traverseTmp.Add(elem.Syllable);
-
                 if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count != 0)
-                    vocabels.AddLast(new Vocable(traverseTmp.ToList()));
+                    vocabels.Add(elem.Vocable);
 
-                traverse(traverseTmp, vocabels, syllableSet[elem] as ListDictionary, ++level);
+                traverse(vocabels, syllableSet[elem] as ListDictionary);
 
                 if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count == 0)
-                    vocabels.AddLast(new Vocable(traverseTmp.ToList()));
-                traverseTmp.Remove(traverseTmp.Last());
+                    vocabels.Add(elem.Vocable);
             }
         }
 	}

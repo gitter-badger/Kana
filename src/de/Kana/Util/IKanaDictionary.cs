@@ -8,6 +8,6 @@ namespace Kana.src.de.Kana.Util
     interface IKanaDictionary
     {
         void Add(Vocable word);
-        LinkedList<Vocable> getContent();
+        List<Vocable> getContent();
     }
 }

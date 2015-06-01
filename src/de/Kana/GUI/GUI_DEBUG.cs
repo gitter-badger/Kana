@@ -9,20 +9,30 @@ using System.Windows.Forms;
 
 namespace Kana.src.de.Kana.GUI {
     public partial class DebugForm : Form {
+        private List<Vocable> items;
+
         public DebugForm() {
             InitializeComponent();
-            
+            init();
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
-
+        private void init() {
+            items = new List<Vocable>();
         }
 
-        public void showItems(LinkedList<Vocable> items) {
+        public void ShowItems(List<Vocable> items) {
+            this.items = items;
             foreach (object obj in items) {
-                debugBox.Items.Add(obj);
+                hiraKataBox.Items.Add(obj);
             }
-            debugBox.Refresh();
+            hiraKataBox.Refresh();
+        }
+
+        private void hiraKataBox_SelectedIndexChanged(object sender, EventArgs e) {
+            foreach (object obj in ((Vocable)((ListBox)sender).SelectedItem).Kanji) {
+                kanjiBox.Items.Add(obj);
+            }
+            kanjiBox.Refresh();
         }
     }
 }

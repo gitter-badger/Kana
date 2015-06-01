@@ -16,10 +16,12 @@ namespace Kana
 
             ImportXml.XmlToWordGraph("vocals.xml", out graph);
 
-            foreach (Vocable v in graph.getContent())
+            List<Vocable> vocs = graph.getContent();
+
+            foreach (Vocable v in vocs)
                 System.Console.WriteLine(v);
 
-            debugWindow.showItems(graph.getContent());
+            debugWindow.ShowItems(vocs);
 
 
             Application.EnableVisualStyles();
