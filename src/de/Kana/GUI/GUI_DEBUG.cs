@@ -29,10 +29,23 @@ namespace Kana.src.de.Kana.GUI {
         }
 
         private void hiraKataBox_SelectedIndexChanged(object sender, EventArgs e) {
+            kanjiBox.Items.Clear();
+            englishBox.Items.Clear();
+            germanBox.Items.Clear();
             foreach (object obj in ((Vocable)((ListBox)sender).SelectedItem).Kanji) {
                 kanjiBox.Items.Add(obj);
             }
+            foreach (object obj in ((Vocable)((ListBox)sender).SelectedItem).EnWords) {
+                englishBox.Items.Add(obj);
+            }
+            foreach (object obj in ((Vocable)((ListBox)sender).SelectedItem).DeWords) {
+                germanBox.Items.Add(obj);
+            }
             kanjiBox.Refresh();
+            englishBox.Refresh();
+            germanBox.Refresh();
+
+            romajiLabel.Text = ((Vocable)((ListBox)sender).SelectedItem).Romaji;
         }
     }
 }

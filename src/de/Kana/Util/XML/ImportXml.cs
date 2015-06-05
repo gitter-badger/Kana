@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Linq;
-using System.Text;
 using System.Xml;
 
 namespace Kana.src.de.Kana.Util.XML {
@@ -61,6 +58,7 @@ namespace Kana.src.de.Kana.Util.XML {
                         graph.Add(voc);
                 }
             } catch (FileNotFoundException ex) {
+                Console.WriteLine(ex.Message);
                 graph = null;
                 return false;
             }

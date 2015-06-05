@@ -1,43 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Kana {
+﻿namespace Kana {
 	public class Element {
-		private Syllable syllable;
-        private Vocable vocable;
-        private bool eow;
 
-		public Syllable Syllable {
-			get {
-				return syllable;
-			}
-			set {
-				syllable = value;
-			}
-		}
+		public Syllable Syllable { get; set; }
 
-        public bool Eow {
-            get {
-                return eow;
-            }
+        public bool Eow { get; set; }
 
-            set {
-                eow = value;
-            }
-        }
-
-        public Vocable Vocable {
-            get {
-                return vocable;
-            }
-
-            set {
-                vocable = value;
-            }
-        }
+        public Vocable Vocable { get; set; }
 
         public Element (Syllable syllable) {
-			this.syllable = syllable;
+			Syllable = syllable;
 		}
 	}
 }

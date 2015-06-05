@@ -1,37 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
 namespace Kana.src.de.Kana.Util {
 	public class WordGraph : IKanaDictionary {
-        private int junctionLevel = 0;
 
-        private ListDictionary root;
-		private ElementComparer comparer;
+		public ListDictionary Root { get; private set; }
 
-		public ListDictionary Root {
-			get {
-				return root;
-			}
-			private set {
-				root = value;
-			}
-		}
-
-		private ElementComparer Comparer {
-			get {
-				return comparer;
-			}
-		}
+		private ElementComparer Comparer { get; }
 
 		public WordGraph () {
-			comparer = new ElementComparer ();
-			root = new ListDictionary (Comparer);
+			Comparer = new ElementComparer ();
+			Root = new ListDictionary (Comparer);
 		}
 
         public void Add(Vocable voc) {
-			ListDictionary currentSyllableSet = root;
+			ListDictionary currentSyllableSet = Root;
 			Element elem = default (Element);
 			foreach (Syllable syl in voc) {
                 if (!currentSyllableSet.Contains(new Element(syl)))
@@ -48,9 +32,7 @@ namespace Kana.src.de.Kana.Util {
 
         public List<Vocable> getContent () {
             List<Vocable> vocabels = new List<Vocable>();
-
-            traverse(vocabels, root);
-
+            traverse(vocabels, Root);
             return vocabels;
         }
         
