@@ -46,4 +46,42 @@
 
     </Flag>
   </Vocal>
+  <Vocal>
+    <Romaji>
+      inu
+    </Romaji>
+    <Type>
+      0
+    </Type>
+    <Japanese>
+      いぬ
+    </Japanese>
+    <Kanji>
+      犬
+    </Kanji>
+    <English>
+      dog
+      snoop
+      loser
+      asshole
+      counterfeit
+      inferior
+      useless
+      wasteful
+    </English>
+    <German>
+      Hund
+      Schnüffler
+      Verlierer
+      Arschloch
+      Fälschung
+      Falschgeld
+      minderwertig
+      nutzlos
+      verschwenderisch
+    </German>
+    <Flag>
+
+    </Flag>
+  </Vocal>
 </Vocals>

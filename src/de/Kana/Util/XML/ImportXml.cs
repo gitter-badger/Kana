@@ -38,17 +38,23 @@ namespace Kana.src.de.Kana.Util.XML {
                             case "Kanji":
                                 if (reader.Read())
                                     if (reader.NodeType == XmlNodeType.Text && reader.Value.Trim() != "")
-                                        voc.Kanji.AddFirst(reader.Value.Trim());
+                                        foreach (string obj in reader.Value.Split('\n'))
+                                            if (!obj.Trim().Equals(""))
+                                                voc.Kanji.AddLast(obj.Trim());
                                 continue;
                             case "English":
                                 if (reader.Read())
                                     if (reader.NodeType == XmlNodeType.Text && reader.Value.Trim() != "")
-                                        voc.EnWords.AddFirst(reader.Value.Trim());
+                                        foreach (string obj in reader.Value.Split('\n'))
+                                            if (!obj.Trim().Equals(""))
+                                                voc.EnWords.AddLast(obj.Trim());
                                 continue;
                             case "German":
                                 if (reader.Read())
                                     if (reader.NodeType == XmlNodeType.Text && reader.Value.Trim() != "")
-                                        voc.DeWords.AddFirst(reader.Value.Trim());
+                                        foreach (string obj in reader.Value.Split('\n'))
+                                            if (!obj.Trim().Equals(""))
+                                                voc.DeWords.AddLast(obj.Trim());
                                 continue;
                             default:
                                 continue;
