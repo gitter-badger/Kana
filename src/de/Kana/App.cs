@@ -12,18 +12,6 @@ namespace Kana
 		public static void Main(string[] args) {
             DebugForm debugWindow = new DebugForm();
 
-            WordGraph graph = new WordGraph();
-
-            ImportXml.XmlToWordGraph("vocals.xml", out graph);
-
-            List<Vocable> vocs = graph.getContent();
-
-            foreach (Vocable v in vocs)
-                System.Console.WriteLine(v);
-
-            debugWindow.ShowItems(vocs);
-
-
             Application.EnableVisualStyles();
             Application.Run(debugWindow);
         }

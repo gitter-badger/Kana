@@ -6,46 +6,61 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Kana.Transwriting;
 
-namespace Kana.src.de.Kana.GUI {
-    public partial class DebugForm : Form {
-        private List<Vocable> items;
-
-        public DebugForm() {
+namespace Kana.src.de.Kana.GUI
+{
+    public partial class DebugForm : Form
+    {
+        private Trie<string> TransTrie { get; set; }
+        private int prevL = 0;
+        public DebugForm()
+        {
             InitializeComponent();
             init();
         }
 
-        private void init() {
-            items = new List<Vocable>();
+        private void init()
+        {
+            TransTrie = new Trie<string>();
+            TransTrie.Add("a", "あ");
+            TransTrie.Add("i", "い");
+            TransTrie.Add("o", "お");
+
+            TransTrie.Add("sa", "さ");
+            TransTrie.Add("si", "し");
+            TransTrie.Add("so", "そ");
+
+            TransTrie.Add("ssa", "っさ");
+            TransTrie.Add("ssi", "っし");
+            TransTrie.Add("sso", "っそ");
+
+            TransTrie.Add("sha", "しゃ");
+            TransTrie.Add("shi", "し");
+            TransTrie.Add("sho", "しょ");
+
+            TransTrie.Add("ssha", "っしゃ");
+            TransTrie.Add("sshi", "っし");
+            TransTrie.Add("ssho", "っしょ");
         }
 
-        public void ShowItems(List<Vocable> items) {
-            this.items = items;
-            foreach (object obj in items) {
-                hiraKataBox.Items.Add(obj);
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Text.Length == prevL + 1 && textBox1.SelectionStart == textBox1.Text.Length) //Only 1 input
+            {
+                string news = textBox1.Text.Substring(Math.Max(prevL - 3, 0));
+                string[] result = TransTrie.Retrieve(news).ToArray();
+                int count = result.Length;
+                if (count == 1)
+                    textBox1.
+                    
             }
-            hiraKataBox.Refresh();
+            prevL = textBox1.Text.Length;
         }
 
-        private void hiraKataBox_SelectedIndexChanged(object sender, EventArgs e) {
-            kanjiBox.Items.Clear();
-            englishBox.Items.Clear();
-            germanBox.Items.Clear();
-            foreach (string obj in ((Vocable)((ListBox)sender).SelectedItem).Kanji) {
-                kanjiBox.Items.Add(obj);
-            }
-            foreach (string obj in ((Vocable)((ListBox)sender).SelectedItem).EnWords) {
-                englishBox.Items.Add(obj);
-            }
-            foreach (string obj in ((Vocable)((ListBox)sender).SelectedItem).DeWords) {
-                germanBox.Items.Add(obj);
-            }
-            kanjiBox.Refresh();
-            englishBox.Refresh();
-            germanBox.Refresh();
-
-            romajiLabel.Text = ((Vocable)((ListBox)sender).SelectedItem).Romaji;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button1.Text = TransTrie.Retrieve("").Count().ToString();
         }
     }
 }
