@@ -55,6 +55,10 @@
     <Compile Include="src\de\Kana\App.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Alphabet.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
+    <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />
+    <Compile Include="src\de\Kana\Engine\Transwriting\Trie.cs" />
+    <Compile Include="src\de\Kana\Engine\Transwriting\TrieNode.cs" />
+    <Compile Include="src\de\Kana\Engine\Transwriting\TrieNodeBase.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\Vocable.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\VocableFlags.cs" />
     <Compile Include="src\de\Kana\GUI\GUI_DEBUG.cs">
