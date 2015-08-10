@@ -12,7 +12,7 @@ namespace Kana.src.de.Kana.GUI
 {
     public partial class DebugForm : Form
     {
-        private Trie<string> TransTrie { get; set; }
+        private Trie TTrie { get; set; }
         private int prevL = 0;
         public DebugForm()
         {
@@ -22,45 +22,47 @@ namespace Kana.src.de.Kana.GUI
 
         private void init()
         {
-            TransTrie = new Trie<string>();
-            TransTrie.Add("a", "あ");
-            TransTrie.Add("i", "い");
-            TransTrie.Add("o", "お");
+            TTrie = new Trie();
+            TTrie.Add("a", "あ");
+            TTrie.Add("i", "い");
+            TTrie.Add("o", "お");
 
-            TransTrie.Add("sa", "さ");
-            TransTrie.Add("si", "し");
-            TransTrie.Add("so", "そ");
+            TTrie.Add("sa", "さ");
+            TTrie.Add("si", "し");
+            TTrie.Add("so", "そ");
 
-            TransTrie.Add("ssa", "っさ");
-            TransTrie.Add("ssi", "っし");
-            TransTrie.Add("sso", "っそ");
+            TTrie.Add("ssa", "っさ");
+            TTrie.Add("ssi", "っし");
+            TTrie.Add("sso", "っそ");
 
-            TransTrie.Add("sha", "しゃ");
-            TransTrie.Add("shi", "し");
-            TransTrie.Add("sho", "しょ");
+            TTrie.Add("sha", "しゃ");
+            TTrie.Add("shi", "し");
+            TTrie.Add("sho", "しょ");
 
-            TransTrie.Add("ssha", "っしゃ");
-            TransTrie.Add("sshi", "っし");
-            TransTrie.Add("ssho", "っしょ");
+            TTrie.Add("ssha", "っしゃ");
+            TTrie.Add("sshi", "っし");
+            TTrie.Add("ssho", "っしょ");
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (textBox1.Text.Length == prevL + 1 && textBox1.SelectionStart == textBox1.Text.Length) //Only 1 input
+            int maxL = 4;
+            int len;
+            if (((len = textBox1.Text.Length) == prevL + 1))
             {
-                string news = textBox1.Text.Substring(Math.Max(prevL - 3, 0));
-                string[] result = TransTrie.Retrieve(news).ToArray();
-                int count = result.Length;
-                if (count == 1)
-                    textBox1.
-                    
+                int sel = textBox1.SelectionStart;
+                int n1 = Math.Max(sel - maxL, 0);
+                int n2 = Math.Min(sel - n1, maxL);
+                string news = textBox1.Text.Substring(n1, n2);
+                int res = TTrie.Retrieve(news).Count();
+                button1.Text = "start: " + n1 + " length : " + n2 + " text: " + news + "res: " + res;
             }
             prevL = textBox1.Text.Length;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.Text = TransTrie.Retrieve("").Count().ToString();
+            button1.Text = TTrie.Retrieve("").Count().ToString();
         }
     }
 }
