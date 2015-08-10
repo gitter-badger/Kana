@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Kana.Transwriting
 {
-    public interface ITrie<TValue>
+    public interface ITrie
     {
-        IEnumerable<TValue> Retrieve(string query);
-        void Add(string key, TValue value);
+        IEnumerable<string> Retrieve(string query);
+        void Add(string key, string value);
     }
 }
