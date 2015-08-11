@@ -55,7 +55,7 @@ namespace Kana.src.de.Kana.GUI
                 int n2 = Math.Min(sel - n1, maxL);
                 string news = textBox1.Text.Substring(n1, n2);
                 int res = TTrie.Retrieve(news).Count();
-                button1.Text = "start: " + n1 + " length : " + n2 + " text: " + news + "res: " + res;
+                button1.Text = "start: [" + n1 + "] length : [" + n2 + "] text: [" + news + "] res: [" + res + "]";
             }
             prevL = textBox1.Text.Length;
         }

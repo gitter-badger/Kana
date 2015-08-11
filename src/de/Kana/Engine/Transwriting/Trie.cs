@@ -17,6 +17,8 @@ namespace Kana.Transwriting
             return Retrieve(query, 0);
         }
     }
+
+
     public class TrieNode
     {
         private Dictionary<char, TrieNode> Children;
@@ -28,7 +30,7 @@ namespace Kana.Transwriting
             Values = new Queue<string>();
         }
 
-        protected TrieNode GetOrCreateChild(char key)
+        private TrieNode GetOrCreateChild(char key)
         {
             TrieNode result;
             if (!Children.TryGetValue(key, out result))
@@ -39,7 +41,7 @@ namespace Kana.Transwriting
             return result;
         }
 
-        protected TrieNode GetChildOrNull(string query, int position)
+        private TrieNode GetChildOrNull(string query, int position)
         {
             if (query == null) throw new ArgumentNullException("query");
             TrieNode childNode;
@@ -60,22 +62,22 @@ namespace Kana.Transwriting
             child.Add(key, position + 1, value);
         }
 
-        protected void AddValue(string value)
+        private void AddValue(string value)
         {
             Values.Enqueue(value);
         }
 
-        protected static bool EndOfString(int position, string text)
+        private static bool EndOfString(int position, string text)
         {
             return position >= text.Length;
         }
 
-        protected IEnumerable<string> ValuesDeep()
+        private IEnumerable<string> ValuesDeep()
         {
             return Subtree().SelectMany(node => node.Values);
         }
 
-        protected IEnumerable<TrieNode> Subtree()
+        private IEnumerable<TrieNode> Subtree()
         {
             return Enumerable.Repeat(this, 1).Concat(Children.Values.SelectMany(child => child.Subtree()));
         }
@@ -88,7 +90,7 @@ namespace Kana.Transwriting
                     : SearchDeep(query, position);
         }
 
-        protected IEnumerable<string> SearchDeep(string query, int position)
+        private IEnumerable<string> SearchDeep(string query, int position)
         {
             TrieNode nextNode = GetChildOrNull(query, position);
             return nextNode != null
