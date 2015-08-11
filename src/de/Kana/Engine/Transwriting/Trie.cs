@@ -16,6 +16,10 @@ namespace Kana.Transwriting
         {
             return Retrieve(query, 0);
         }
+
+        //TODO halfword-wise translating
+        //TODO string translating
+        //TODO hira-to-kana
     }
 
 

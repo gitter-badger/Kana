@@ -7,14 +7,15 @@ using Kana.src.de.Kana.Util.XML;
 
 namespace Kana
 {
-	public class App
-	{
-		public static void Main(string[] args) {
+    public class App
+    {
+        public static void Main(string[] args)
+        {
             DebugForm debugWindow = new DebugForm();
 
             Application.EnableVisualStyles();
             Application.Run(debugWindow);
         }
-	}
+    }
 }
 
