@@ -17,6 +17,17 @@ namespace Kana.Transwriting
             return Retrieve(query, 0);
         }
 
+        public string halfword(string query)
+        {
+            /*string result = query;
+            int index = 0;
+            TrieNode node = this;
+            while (index > query.Length)
+            {*/
+                string ret = RetrieveFirst(query, 0);
+            //}
+            return ret;
+        }
         //TODO halfword-wise translating
         //TODO string translating
         //TODO hira-to-kana
@@ -34,7 +45,7 @@ namespace Kana.Transwriting
             Values = new Queue<string>();
         }
 
-        private TrieNode GetOrCreateChild(char key)
+        protected TrieNode GetOrCreateChild(char key)
         {
             TrieNode result;
             if (!Children.TryGetValue(key, out result))
@@ -45,7 +56,7 @@ namespace Kana.Transwriting
             return result;
         }
 
-        private TrieNode GetChildOrNull(string query, int position)
+        protected TrieNode GetChildOrNull(string query, int position)
         {
             if (query == null) throw new ArgumentNullException("query");
             TrieNode childNode;
@@ -53,7 +64,7 @@ namespace Kana.Transwriting
                 Children.TryGetValue(query[position], out childNode) ? childNode : null;
         }
 
-        public void Add(string key, int position, string value)
+        protected void Add(string key, int position, string value)
         {
             if (key == null) throw new ArgumentNullException("key");
             if (EndOfString(position, key))
@@ -86,12 +97,17 @@ namespace Kana.Transwriting
             return Enumerable.Repeat(this, 1).Concat(Children.Values.SelectMany(child => child.Subtree()));
         }
 
-        public IEnumerable<string> Retrieve(string query, int position)
+        protected IEnumerable<string> Retrieve(string query, int position)
         {
             return
                 EndOfString(position, query)
                     ? ValuesDeep()
                     : SearchDeep(query, position);
+        }
+
+        protected string RetrieveFirst(string query, int position)
+        {
+            //TODO:
         }
 
         private IEnumerable<string> SearchDeep(string query, int position)
