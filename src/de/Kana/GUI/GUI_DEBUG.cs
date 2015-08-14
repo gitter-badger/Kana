@@ -62,7 +62,8 @@ namespace Kana.src.de.Kana.GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.Text = TTrie.Retrieve("").Count().ToString();
+            string str = TTrie.halfword(textBox1.Text);
+            button1.Text = (str == null) ? "NULL" : str;
         }
     }
 }
