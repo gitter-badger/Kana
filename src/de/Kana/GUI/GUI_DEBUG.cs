@@ -62,8 +62,12 @@ namespace Kana.src.de.Kana.GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
+<<<<<<< b0eb1fdac9ad92a9efd725c315eb88ddb2a4c12a
             string str = TTrie.halfword(textBox1.Text);
             button1.Text = (str == null) ? "NULL" : str;
+=======
+            button1.Text = TTrie.Replace(textBox1.Text);
+>>>>>>> romaji: how to not do it
         }
     }
 }
