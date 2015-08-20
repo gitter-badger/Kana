@@ -62,7 +62,7 @@ namespace Kana.src.de.Kana.GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            button1.Text = TTrie.Retrieve("").Count().ToString();
+            button1.Text = TTrie.Replace(textBox1.Text);
         }
     }
 }

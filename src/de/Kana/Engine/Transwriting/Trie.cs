@@ -17,16 +17,43 @@ namespace Kana.Transwriting
             return Retrieve(query, 0);
         }
 
-        //TODO halfword-wise translating
+        public string Replace(string query)
+        {
+            string result = "";
+            int index = 0;
+            TrieNode node = null, lastNode = null;
+
+            while (index <= query.Length)
+            {
+                if (EndOfString(index, query)) {
+                    if (node != null && node.Values.Count > 0)
+                        result += node.Values.First();
+                }
+                else
+                {g
+                    lastNode = node;
+                    if (node == null)
+                        node = GetChildOrNull(query, index++);
+                    else
+                        node = node.GetChildOrNull(query, index++);
+                    if (node == null)
+                        if (lastNode != null && lastNode.Values.Count > 0)
+                            result += lastNode.Values.First();
+                        else
+                            result += query[index - 1];
+                }
+            }
+            //TODO halfword-wise translating
+            return result;
+        }
         //TODO string translating
         //TODO hira-to-kana
     }
 
-
     public class TrieNode
     {
         private Dictionary<char, TrieNode> Children;
-        private Queue<string> Values;
+        public Queue<string> Values { get; }
 
         protected TrieNode()
         {
@@ -34,7 +61,7 @@ namespace Kana.Transwriting
             Values = new Queue<string>();
         }
 
-        private TrieNode GetOrCreateChild(char key)
+        protected TrieNode GetOrCreateChild(char key)
         {
             TrieNode result;
             if (!Children.TryGetValue(key, out result))
@@ -45,7 +72,7 @@ namespace Kana.Transwriting
             return result;
         }
 
-        private TrieNode GetChildOrNull(string query, int position)
+        public TrieNode GetChildOrNull(string query, int position)
         {
             if (query == null) throw new ArgumentNullException("query");
             TrieNode childNode;
@@ -71,7 +98,7 @@ namespace Kana.Transwriting
             Values.Enqueue(value);
         }
 
-        private static bool EndOfString(int position, string text)
+        public static bool EndOfString(int position, string text)
         {
             return position >= text.Length;
         }
