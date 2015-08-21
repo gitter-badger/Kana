@@ -6,5 +6,6 @@ namespace Kana.Transwriting
     {
         IEnumerable<string> Retrieve(string query);
         void Add(string key, string value);
+        string Replace(string query);
     }
 }
