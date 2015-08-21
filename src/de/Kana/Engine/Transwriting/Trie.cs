@@ -55,11 +55,6 @@ namespace Kana.Transwriting
             TTrie.Add("ssu", "っす");
             TTrie.Add("sse", "っせ");
             TTrie.Add("sso", "っそ");
-            TTrie.Add("nna", "んな");
-            TTrie.Add("nni", "んに");
-            TTrie.Add("nnu", "んぬ");
-            TTrie.Add("nne", "んね");
-            TTrie.Add("nno", "んの");
             TTrie.Add("kya", "きゃ");
             TTrie.Add("kyu", "きゅ");
             TTrie.Add("kyo", "きょ");
@@ -182,6 +177,7 @@ namespace Kana.Transwriting
             TTrie.Add("n", "ん");
         }
 
+<<<<<<< bb187dba4971edf334648ad595eb1097a0973300
 <<<<<<< 13857d8ea3500a8a93c35d4745474e76cc44874c
 <<<<<<< b0eb1fdac9ad92a9efd725c315eb88ddb2a4c12a
         public string halfword(string query)
@@ -199,6 +195,9 @@ namespace Kana.Transwriting
 =======
 =======
         
+=======
+
+>>>>>>> Romaji: Why does this work
 
         public void Add(string key, string value) { Add(key, 0, value); }
 
@@ -207,6 +206,7 @@ namespace Kana.Transwriting
 >>>>>>> romaji: almost
         public string Replace(string query)
         {
+            Console.WriteLine(query);
             string result = null;
             int index = 0, length = 0;
             TrieNode node = null, lastNode = null;
@@ -223,7 +223,9 @@ namespace Kana.Transwriting
                     if (EndOfString(index + length, query))
                     {
                         result += (node.Values.Count > 0)
-                            ? node.Values.Peek()
+                            ? ((node.Children.Count == 0)
+                                ? node.Values.Peek()
+                                : query.Substring(index, length))
                             : query.Substring(index, length);
                     }
                 }
@@ -232,7 +234,7 @@ namespace Kana.Transwriting
                     if (isset(lastNode) && lastNode.Values.Count > 0)
                     {
                         result += lastNode.Values.Peek();
-                        index += length;
+                        index += length - 1;
                         length = 0;
                     }
                     else
@@ -255,7 +257,7 @@ namespace Kana.Transwriting
 
     public class TrieNode
     {
-        private Dictionary<char, TrieNode> Children;
+        public Dictionary<char, TrieNode> Children;
         public Queue<string> Values { get; }
 
         protected TrieNode()
