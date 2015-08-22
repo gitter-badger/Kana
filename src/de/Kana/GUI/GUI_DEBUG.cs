@@ -26,8 +26,8 @@ namespace Kana.src.de.Kana.GUI
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             int maxL = 4;
-            int len;
-            if (((len = textBox1.TextLength) == prevL + 1))
+            int len = textBox1.TextLength;
+            if (len == prevL + 1)
             {
                 int sel = textBox1.SelectionStart;
                 int n1 = Math.Max(sel - maxL, 0);

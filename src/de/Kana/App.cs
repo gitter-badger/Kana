@@ -12,7 +12,7 @@ namespace Kana
         public static void Main(string[] args)
         {
             DebugForm debugWindow = new DebugForm();
-
+            List<LinkedList<string>> test = VocableCollection.RawGerman;
             Application.EnableVisualStyles();
             Application.Run(debugWindow);
         }

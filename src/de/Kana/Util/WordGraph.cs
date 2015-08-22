@@ -30,24 +30,24 @@ namespace Kana.src.de.Kana.Util {
             elem.Eow = true;
 		}
 
-        public List<Vocable> getContent () {
-            List<Vocable> vocabels = new List<Vocable>();
+        public LinkedList<Vocable> getContent () {
+            LinkedList<Vocable> vocabels = new LinkedList<Vocable>();
             traverse(vocabels, Root);
             return vocabels;
         }
         
-        private void traverse (List<Vocable> vocabels, ListDictionary syllableSet) {
+        private void traverse (LinkedList<Vocable> vocabels, ListDictionary syllableSet) {
             if (syllableSet == null)
                 return;
 
             foreach (Element elem in syllableSet.Keys) {
                 if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count != 0)
-                    vocabels.Add(elem.Vocable);
+                    vocabels.AddLast(elem.Vocable);
 
                 traverse(vocabels, syllableSet[elem] as ListDictionary);
 
                 if (elem.Eow && ((ListDictionary)syllableSet[elem]).Keys.Count == 0)
-                    vocabels.Add(elem.Vocable);
+                    vocabels.AddLast(elem.Vocable);
             }
         }
 	}
