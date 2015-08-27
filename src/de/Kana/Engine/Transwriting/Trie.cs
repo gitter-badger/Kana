@@ -222,10 +222,13 @@ namespace Kana.Transwriting
                     ? node.GetChildOrNull(query, index + length++)
                     : GetChildOrNull(query, index + length++);
 
-                if (isset(node) && EndOfString(index + length, query))
-                    result += (node.Values.Count > 0 && (node.Children.Count == 0 || end))
-                         ? node.Values.Peek()
-                         : query.Substring(index, length);
+                if (isset(node))
+                {
+                    if (EndOfString(index + length, query))
+                        result += (node.Values.Count > 0 && (node.Children.Count == 0 || end))
+                             ? node.Values.Peek()
+                             : query.Substring(index, length);
+                }
                 else
                 {
                     result += (isset(lastNode))
