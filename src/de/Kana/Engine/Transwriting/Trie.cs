@@ -174,6 +174,7 @@ namespace Kana.Transwriting
             TTrie.Add("u", "う");
             TTrie.Add("e", "え");
             TTrie.Add("o", "お");
+            TTrie.Add("nn", "ん");
             TTrie.Add("n", "ん");
         }
 
@@ -206,7 +207,10 @@ namespace Kana.Transwriting
 >>>>>>> romaji: almost
         public string Replace(string query)
         {
-            Console.WriteLine(query);
+            return Replace(query, false);
+        }
+        public string Replace(string query, bool end)
+        {
             string result = null;
             int index = 0, length = 0;
             TrieNode node = null, lastNode = null;
@@ -222,19 +226,25 @@ namespace Kana.Transwriting
                 {
                     if (EndOfString(index + length, query))
                     {
-                        result += (node.Values.Count > 0)
-                            ? ((node.Children.Count == 0)
-                                ? node.Values.Peek()
-                                : query.Substring(index, length))
+                        result += (node.Values.Count > 0 && (node.Children.Count == 0 || end))
+                            ? node.Values.Peek()
                             : query.Substring(index, length);
                     }
                 }
                 else
                 {
-                    if (isset(lastNode) && lastNode.Values.Count > 0)
+                    if (isset(lastNode))
                     {
-                        result += lastNode.Values.Peek();
-                        index += length - 1;
+                        if (lastNode.Values.Count > 0)
+                        {
+                            result += lastNode.Values.Peek();
+                            index += length - 1;
+                        }
+                        else
+                        {
+                            result += query.Substring(index, 1);
+                            index += 1;
+                        }
                         length = 0;
                     }
                     else
