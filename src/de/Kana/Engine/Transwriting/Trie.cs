@@ -133,6 +133,7 @@ namespace Kana.Transwriting
             TTrie.Add("sa", "さ");
             TTrie.Add("shi", "し");
             TTrie.Add("si", "し");
+            TTrie.Add("sh", "し");
             TTrie.Add("su", "す");
             TTrie.Add("se", "せ");
             TTrie.Add("so", "そ");
