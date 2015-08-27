@@ -222,37 +222,23 @@ namespace Kana.Transwriting
                     ? node.GetChildOrNull(query, index + length++)
                     : GetChildOrNull(query, index + length++);
 
-                if (isset(node))
-                {
-                    if (EndOfString(index + length, query))
-                    {
-                        result += (node.Values.Count > 0 && (node.Children.Count == 0 || end))
-                            ? node.Values.Peek()
-                            : query.Substring(index, length);
-                    }
-                }
+                if (isset(node) && EndOfString(index + length, query))
+                    result += (node.Values.Count > 0 && (node.Children.Count == 0 || end))
+                         ? node.Values.Peek()
+                         : query.Substring(index, length);
                 else
                 {
-                    if (isset(lastNode))
-                    {
-                        if (lastNode.Values.Count > 0)
-                        {
-                            result += lastNode.Values.Peek();
-                            index += length - 1;
-                        }
-                        else
-                        {
-                            result += query.Substring(index, 1);
-                            index += 1;
-                        }
-                        length = 0;
-                    }
-                    else
-                    {
-                        result += query.Substring(index, length);
-                        index += length;
-                        length = 0;
-                    }
+                    result += (isset(lastNode))
+                        ? ((lastNode.Values.Count > 0)
+                            ? lastNode.Values.Peek()
+                            : query.Substring(index, 1))
+                        : query.Substring(index, length);
+                    index += (isset(lastNode))
+                        ? ((lastNode.Values.Count > 0)
+                            ? length - 1
+                            : 1)
+                        : length;
+                    length = 0;
                 }
             }
             return result;
