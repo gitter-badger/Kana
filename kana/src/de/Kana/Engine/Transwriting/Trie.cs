@@ -179,33 +179,12 @@ namespace Kana.Transwriting
             TTrie.Add("n", "ん");
         }
 
-<<<<<<< bb187dba4971edf334648ad595eb1097a0973300
-<<<<<<< 13857d8ea3500a8a93c35d4745474e76cc44874c
-<<<<<<< b0eb1fdac9ad92a9efd725c315eb88ddb2a4c12a
-        public string halfword(string query)
-        {
-            /*string result = query;
-            int index = 0;
-            TrieNode node = this;
-            while (index > query.Length)
-            {*/
-                string ret = RetrieveFirst(query, 0);
-            //}
-            return ret;
-        }
-        //TODO halfword-wise translating
-=======
-=======
-        
-=======
 
->>>>>>> Romaji: Why does this work
 
         public void Add(string key, string value) { Add(key, 0, value); }
 
         public IEnumerable<string> Retrieve(string query) { return Retrieve(query, 0); }
 
->>>>>>> romaji: almost
         public string Replace(string query)
         {
             return Replace(query, false);
@@ -247,12 +226,6 @@ namespace Kana.Transwriting
             }
             return result;
         }
-<<<<<<< 13857d8ea3500a8a93c35d4745474e76cc44874c
->>>>>>> romaji: how to not do it
-        //TODO string translating
-        //TODO hira-to-kana
-=======
->>>>>>> romaji: almost
     }
 
     public class TrieNode
@@ -277,11 +250,7 @@ namespace Kana.Transwriting
             return result;
         }
 
-<<<<<<< b0eb1fdac9ad92a9efd725c315eb88ddb2a4c12a
-        protected TrieNode GetChildOrNull(string query, int position)
-=======
         public TrieNode GetChildOrNull(string query, int position)
->>>>>>> romaji: how to not do it
         {
             if (query == null) throw new ArgumentNullException("query");
             TrieNode childNode;
@@ -289,7 +258,7 @@ namespace Kana.Transwriting
                 Children.TryGetValue(query[position], out childNode) ? childNode : null;
         }
 
-        protected void Add(string key, int position, string value)
+        public void Add(string key, int position, string value)
         {
             if (key == null) throw new ArgumentNullException("key");
             if (EndOfString(position, key))
@@ -319,17 +288,12 @@ namespace Kana.Transwriting
                 .Concat(Children.Values.SelectMany(child => child.Subtree()));
         }
 
-        protected IEnumerable<string> Retrieve(string query, int position)
+        public IEnumerable<string> Retrieve(string query, int position)
         {
             return
                 EndOfString(position, query)
                     ? ValuesDeep()
                     : SearchDeep(query, position);
-        }
-
-        protected string RetrieveFirst(string query, int position)
-        {
-            //TODO:
         }
 
         private IEnumerable<string> SearchDeep(string query, int position)

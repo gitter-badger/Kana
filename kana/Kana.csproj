@@ -89,29 +89,17 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\de\Kana\App.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Alphabet.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\Trie.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\Vocable.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\VocableFlags.cs" />
-    <Compile Include="src\de\Kana\GUI\GUI_DEBUG.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\de\Kana\GUI\GUI_DEBUG.Designer.cs">
-      <DependentUpon>GUI_DEBUG.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\de\Kana\Util\Element.cs" />
     <Compile Include="src\de\Kana\Util\ElementComparer.cs" />
     <Compile Include="src\de\Kana\Util\IKanaDictionary.cs" />
     <Compile Include="src\de\Kana\Util\WordGraph.cs" />
     <Compile Include="src\de\Kana\Util\XML\ImportXml.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="src\de\Kana\GUI\GUI_DEBUG.resx">
-      <DependentUpon>GUI_DEBUG.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include=".git\" />
