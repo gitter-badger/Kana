@@ -91,7 +91,7 @@
     <Compile Include="src\de\Kana\Engine\Transwriting\TrieTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kana.csproj">
+    <ProjectReference Include="..\kana\Kana.csproj">
       <Project>{A1149E06-D695-43AD-B617-7E495C01536D}</Project>
       <Name>Kana</Name>
     </ProjectReference>
