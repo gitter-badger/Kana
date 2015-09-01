@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:KanaFrame"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button x:Name="button1" Content="Button" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Top"/>
-        <Button x:Name="button2" Content="Button" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Center"/>
-        <Button x:Name="button3" Content="Button" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Bottom"/>
-    </Grid>
+    <UniformGrid Rows="3" Columns="1">
+        <Button x:Name="button1" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
+        <Button x:Name="button2" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
+        <Button x:Name="button3" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
+    </UniformGrid>
 </Window>
