@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("KanaFrame")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Gemalto")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KanaFrame")]
-[assembly: AssemblyCopyright("Copyright © Gemalto 2015")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

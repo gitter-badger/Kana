@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("KanaTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Gemalto")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KanaTests")]
-[assembly: AssemblyCopyright("Copyright © Gemalto 2015")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

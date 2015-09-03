@@ -6,9 +6,7 @@
         xmlns:local="clr-namespace:KanaFrame"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <UniformGrid Rows="3" Columns="1">
-        <Button x:Name="button1" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
-        <Button x:Name="button2" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
-        <Button x:Name="button3" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
-    </UniformGrid>
+    <DockPanel>
+        <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden"/>
+    </DockPanel>
 </Window>

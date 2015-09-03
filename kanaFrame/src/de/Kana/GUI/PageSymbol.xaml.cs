@@ -16,14 +16,16 @@ using System.Windows.Shapes;
 namespace KanaFrame
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for PageSymbol.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class PageSymbol : Page
     {
-        public MainWindow()
+        private Frame _mainFrame;
+
+        public PageSymbol(Frame _mainFrame)
         {
             InitializeComponent();
-            _mainFrame.Navigate(new PageMain(_mainFrame));
+            this._mainFrame = _mainFrame;
         }
     }
 }
