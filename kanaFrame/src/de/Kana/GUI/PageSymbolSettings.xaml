@@ -1,0 +1,25 @@
+﻿<Page x:Class="KanaFrame.PageSymbolSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KanaFrame"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+      Title="PageSymbolSettings">
+    <Grid>
+        <StackPanel Margin="0,0,10,10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="40">
+            <Button x:Name="button3" Content="Cancel" Margin="10,0,0,0" Click="button4_Click"/>
+            <Button x:Name="button4" Content="OK" Margin="10,0,0,0" Click="button4_Click"/>
+        </StackPanel>
+        <GroupBox x:Name="groupBox" Header="GroupBox" Margin="10,10,10,60" VerticalAlignment="Top" >
+            <StackPanel Margin="0,0,0,0" >
+                <CheckBox x:Name="checkBox1" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <CheckBox x:Name="checkBox2" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <CheckBox x:Name="checkBox3" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+                <CheckBox x:Name="checkBox4" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+
+    </Grid>
+</Page>

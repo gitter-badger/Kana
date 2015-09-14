@@ -8,7 +8,8 @@ namespace Kana.Transwriting
     public class Trie : TrieNode, ITrie
     {
 
-        public static Trie TTrie { get; }
+        private static Trie TTrie { get; }
+
         static Trie()
         {
             TTrie = new Trie();
@@ -179,16 +180,14 @@ namespace Kana.Transwriting
             TTrie.Add("n", "ん");
         }
 
-
-
         public void Add(string key, string value) { Add(key, 0, value); }
 
         public IEnumerable<string> Retrieve(string query) { return Retrieve(query, 0); }
 
-        public string Replace(string query)
-        {
-            return Replace(query, false);
-        }
+        public static string ReplaceToKana(string query) { return TTrie.Replace(query); }
+        public static string ReplaceToKana(string query, bool end) { return TTrie.Replace(query, end); }
+        public string Replace(string query) { return Replace(query, false); }
+
         public string Replace(string query, bool end)
         {
             string result = null;

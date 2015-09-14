@@ -112,6 +112,9 @@
     <Compile Include="src\de\Kana\GUI\PageSymbol.xaml.cs">
       <DependentUpon>PageSymbol.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\de\Kana\GUI\PageSymbolSettings.xaml.cs">
+      <DependentUpon>PageSymbolSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\de\Kana\Logics\Logics.cs" />
     <Compile Include="src\de\Kana\GUI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -122,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\de\Kana\GUI\PageSymbol.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\de\Kana\GUI\PageSymbolSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,28 +12,28 @@ namespace Kana.Transwriting.Tests
     public class TrieTests
     {
         [TestMethod()]
-        public void ReplaceTest()
+        public void ReplaceToKanaTest()
         {
-            Assert.AreEqual("あsっしょ", Trie.TTrie.Replace("asssho"));
-            Assert.AreEqual("あ", Trie.TTrie.Replace("a"));
-            Assert.AreEqual("ああ", Trie.TTrie.Replace("aa"));
-            Assert.AreEqual("ああああ", Trie.TTrie.Replace("aaaa"));
-            Assert.AreEqual("あえ", Trie.TTrie.Replace("ae"));
-            Assert.AreEqual("ふ", Trie.TTrie.Replace("hu"));
-            Assert.AreEqual("fふ", Trie.TTrie.Replace("fhu"));
-            Assert.AreEqual("ふう", Trie.TTrie.Replace("fuu"));
-            Assert.AreEqual("づ", Trie.TTrie.Replace("du"));
-            Assert.AreEqual("っしょ", Trie.TTrie.Replace("ssho"));
-            Assert.AreEqual("しょ", Trie.TTrie.Replace("sho"));
-            Assert.AreEqual("し", Trie.TTrie.Replace("shi"));
-            Assert.AreEqual("あし", Trie.TTrie.Replace("ashi"));
-            Assert.AreEqual("ありがとう ございます", Trie.TTrie.Replace("arigatou gozaimasu"));
-            Assert.AreEqual("に", Trie.TTrie.Replace("ni"));
-            Assert.AreEqual("んに", Trie.TTrie.Replace("nnni"));
-            Assert.AreEqual("ん", Trie.TTrie.Replace("nn"));
-            Assert.AreEqual("んい", Trie.TTrie.Replace("nni"));
-            Assert.AreEqual("n", Trie.TTrie.Replace("n"));
-            Assert.AreEqual("ん", Trie.TTrie.Replace("n", true));
+            Assert.AreEqual("あsっしょ", Trie.ReplaceToKana("asssho"));
+            Assert.AreEqual("あ", Trie.ReplaceToKana("a"));
+            Assert.AreEqual("ああ", Trie.ReplaceToKana("aa"));
+            Assert.AreEqual("ああああ", Trie.ReplaceToKana("aaaa"));
+            Assert.AreEqual("あえ", Trie.ReplaceToKana("ae"));
+            Assert.AreEqual("ふ", Trie.ReplaceToKana("hu"));
+            Assert.AreEqual("fふ", Trie.ReplaceToKana("fhu"));
+            Assert.AreEqual("ふう", Trie.ReplaceToKana("fuu"));
+            Assert.AreEqual("づ", Trie.ReplaceToKana("du"));
+            Assert.AreEqual("っしょ", Trie.ReplaceToKana("ssho"));
+            Assert.AreEqual("しょ", Trie.ReplaceToKana("sho"));
+            Assert.AreEqual("し", Trie.ReplaceToKana("shi"));
+            Assert.AreEqual("あし", Trie.ReplaceToKana("ashi"));
+            Assert.AreEqual("ありがとう ございます", Trie.ReplaceToKana("arigatou gozaimasu"));
+            Assert.AreEqual("に", Trie.ReplaceToKana("ni"));
+            Assert.AreEqual("んに", Trie.ReplaceToKana("nnni"));
+            Assert.AreEqual("ん", Trie.ReplaceToKana("nn"));
+            Assert.AreEqual("んい", Trie.ReplaceToKana("nni"));
+            Assert.AreEqual("n", Trie.ReplaceToKana("n"));
+            Assert.AreEqual("ん", Trie.ReplaceToKana("n", true));
         }
     }
 }
