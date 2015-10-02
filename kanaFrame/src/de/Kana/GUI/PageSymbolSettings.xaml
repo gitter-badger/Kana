@@ -8,18 +8,23 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbolSettings">
     <Grid>
-        <StackPanel Margin="0,0,10,10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="40">
-            <Button x:Name="button3" Content="Cancel" Margin="10,0,0,0" Click="button4_Click"/>
-            <Button x:Name="button4" Content="OK" Margin="10,0,0,0" Click="button4_Click"/>
-        </StackPanel>
-        <GroupBox x:Name="groupBox" Header="GroupBox" Margin="10,10,10,60" VerticalAlignment="Top" >
-            <StackPanel Margin="0,0,0,0" >
-                <CheckBox x:Name="checkBox1" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-                <CheckBox x:Name="checkBox2" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-                <CheckBox x:Name="checkBox3" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-                <CheckBox x:Name="checkBox4" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" CornerRadius="6" BorderBrush="Gray" Background="#FFF5F4F4" BorderThickness="2" Padding="0,8">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="10,-5" Orientation="Horizontal">
+                    <Button x:Name="btn_cancel" Content="Cancel" Margin="5,0" />
+                    <Button x:Name="btn_ok" Content="OK" Margin="5,0" Height="30" />
+                </StackPanel>
             </StackPanel>
-        </GroupBox>
+        </Border>
 
+
+        <Border Margin="10,10,10,60" CornerRadius="6" BorderBrush="Gray"  BorderThickness="2" Padding="0,8" VerticalAlignment="Top">
+            <StackPanel>
+                <CheckBox x:Name="checkBox1" Content="CheckBox" Margin="5"/>
+                <CheckBox x:Name="checkBox2" Content="CheckBox" Margin="5"/>
+                <CheckBox x:Name="checkBox3" Content="CheckBox" Margin="5"/>
+                <CheckBox x:Name="checkBox4" Content="CheckBox" Margin="5"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Page>

@@ -8,12 +8,16 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbol">
     <Grid>
-        <StackPanel Margin="10,10,10,0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="40">
-            <Button x:Name="button1" Content="Back" Click="button1_Click" Margin="10,0,0,0"/>
-            <Button x:Name="button2" Content="Settings" Margin="10,0,0,0" Click="button2_Click"/>
-            <Button x:Name="button3" Content="What do I know" Margin="10,0,0,0"/>
-            <Button x:Name="button4" Content="Button" Margin="10,0,0,0"/>
+        <StackPanel>
+            <Border>
+                <StackPanel Orientation="Horizontal" >
+                    <Button Content="Back" Height="30" Click="button1_Click"/>
+                    <Button Content="Settings" Click="button2_Click"/>
+                    <Button Content="What do I know" />
+                    <Button Content="Button"/>
+                </StackPanel>
+            </Border>
+            <GroupBox x:Name="groupBox" Header="GroupBox" Margin="10" />
         </StackPanel>
-        <GroupBox x:Name="groupBox" Header="GroupBox" Margin="10,50,10,10" />
     </Grid>
 </Page>

@@ -7,12 +7,18 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageMain">
-    
+
     <Grid>
         <UniformGrid Rows="3" Columns="1">
-            <Button x:Name="button1" Content="Button" Margin="5" IsTabStop="False" Focusable="False" Click="button1_Click"/>
-            <Button x:Name="button2" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
-            <Button x:Name="button3" Content="Button" Margin="5" IsTabStop="False" Focusable="False"/>
+            <Border >
+                <Button x:Name="btnSymbol" IsTabStop="False" Focusable="False" Click="btnSymbol_Click"/>
+            </Border >
+            <Border >
+                <Button IsTabStop="False" Focusable="False"/>
+            </Border>
+            <Border>
+                <Button IsTabStop="False" Focusable="False"/>
+            </Border>
         </UniformGrid>
     </Grid>
 </Page>
