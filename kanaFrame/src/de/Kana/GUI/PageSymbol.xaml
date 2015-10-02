@@ -8,16 +8,26 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbol">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="BorderBrush" Value="Gray"/>
+                <Setter Property="Background" Value="#FFF5F4F4"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Padding" Value="0,8"/>
+            </Style>
+        </Grid.Resources>
         <StackPanel>
-            <Border>
-                <StackPanel Orientation="Horizontal" >
+            <Border HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
                     <Button Content="Back" Height="30" Click="button1_Click"/>
                     <Button Content="Settings" Click="button2_Click"/>
                     <Button Content="What do I know" />
                     <Button Content="Button"/>
                 </StackPanel>
             </Border>
-            <GroupBox x:Name="groupBox" Header="GroupBox" Margin="10" />
+            <GroupBox Header="GroupBox" Margin="10" />
         </StackPanel>
     </Grid>
 </Page>

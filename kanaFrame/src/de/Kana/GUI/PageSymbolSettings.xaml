@@ -8,9 +8,19 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbolSettings">
     <Grid>
-        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" CornerRadius="6" BorderBrush="Gray" Background="#FFF5F4F4" BorderThickness="2" Padding="0,8">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Border}">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="CornerRadius" Value="6"/>
+                <Setter Property="BorderBrush" Value="Gray"/>
+                <Setter Property="Background" Value="#FFF5F4F4"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Padding" Value="0,8"/>
+            </Style>
+        </Grid.Resources>
+        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="10,-5" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
                     <Button x:Name="btn_cancel" Content="Cancel" Margin="5,0" />
                     <Button x:Name="btn_ok" Content="OK" Margin="5,0" Height="30" />
                 </StackPanel>
