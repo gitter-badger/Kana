@@ -19,16 +19,20 @@
                 <Setter Property="Padding" Value="0,8"/>
             </Style>
         </Grid.Resources>
-        <UniformGrid Rows="3" Columns="1">
-            <Border>
-                <Button x:Name="btnSymbol" IsTabStop="False" Focusable="False" Click="btnSymbol_Click"/>
-            </Border>
-            <Border>
-                <Button IsTabStop="False" Focusable="False"/>
-            </Border>
-            <Border>
-                <Button IsTabStop="False" Focusable="False"/>
-            </Border>
-        </UniformGrid>
+        <DockPanel >
+            <Label DockPanel.Dock="Top">Label</Label>
+            <Rectangle DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Stroke="#FFA24C4C"/>
+            <UniformGrid Rows="3" Columns="1">
+                <Border>
+                    <Button x:Name="btnSymbol" IsTabStop="False" Focusable="False" Click="btnSymbol_Click"/>
+                </Border>
+                <Border>
+                    <Button IsTabStop="False" Focusable="False"/>
+                </Border>
+                <Border>
+                    <Button IsTabStop="False" Focusable="False"/>
+                </Border>
+            </UniformGrid>
+        </DockPanel>
     </Grid>
 </Page>

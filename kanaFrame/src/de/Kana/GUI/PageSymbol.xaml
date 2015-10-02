@@ -18,8 +18,8 @@
                 <Setter Property="Padding" Value="0,8"/>
             </Style>
         </Grid.Resources>
-        <StackPanel>
-            <Border HorizontalAlignment="Right">
+        <DockPanel>
+            <Border DockPanel.Dock="Top" HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
                     <Button Content="Back" Height="30" Click="button1_Click"/>
                     <Button Content="Settings" Click="button2_Click"/>
@@ -28,6 +28,6 @@
                 </StackPanel>
             </Border>
             <GroupBox Header="GroupBox" Margin="10" />
-        </StackPanel>
+        </DockPanel>
     </Grid>
 </Page>
