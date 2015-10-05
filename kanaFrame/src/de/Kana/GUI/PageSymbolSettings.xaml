@@ -8,17 +8,7 @@
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbolSettings">
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="{x:Type Border}">
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="CornerRadius" Value="6"/>
-                <Setter Property="BorderBrush" Value="Gray"/>
-                <Setter Property="Background" Value="#FFF5F4F4"/>
-                <Setter Property="BorderThickness" Value="2"/>
-                <Setter Property="Padding" Value="0,8"/>
-            </Style>
-        </Grid.Resources>
-        <Border HorizontalAlignment="Right" VerticalAlignment="Bottom">
+        <Border Style="{StaticResource StdBorder}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btn_cancel" Content="Cancel" Margin="5,0" />
@@ -28,7 +18,7 @@
         </Border>
 
 
-        <Border Margin="10,10,10,60" CornerRadius="6" BorderBrush="Gray"  BorderThickness="2" Padding="0,8" VerticalAlignment="Top">
+        <Border Style="{StaticResource StdBorder}" VerticalAlignment="Top">
             <StackPanel>
                 <CheckBox x:Name="checkBox1" Content="CheckBox" Margin="5"/>
                 <CheckBox x:Name="checkBox2" Content="CheckBox" Margin="5"/>

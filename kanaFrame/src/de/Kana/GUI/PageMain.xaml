@@ -9,26 +9,16 @@
       Title="PageMain">
 
     <Grid>
-        <Grid.Resources>
-            <Style TargetType="{x:Type Border}">
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="CornerRadius" Value="6"/>
-                <Setter Property="BorderBrush" Value="Gray"/>
-                <Setter Property="Background" Value="#FFF5F4F4"/>
-                <Setter Property="BorderThickness" Value="2"/>
-                <Setter Property="Padding" Value="0,8"/>
-            </Style>
-        </Grid.Resources>
-        <DockPanel >
+        <DockPanel>
             <Label DockPanel.Dock="Top">Label</Label>
-            <Rectangle DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Stroke="#FFA24C4C"/>
+            <Border DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Margin="0" Padding="0" />
             <UniformGrid Rows="3" Columns="1">
-                <Border>
+                <Border Style="{StaticResource StdBorder}">
                     <Button x:Name="btnSymbol" IsTabStop="False" Focusable="False" Click="btnSymbol_Click"/>
                 </Border>
-                <Border>
+                <Border Style="{StaticResource StdBorder}">
                     <Button IsTabStop="False" Focusable="False"/>
-                </Border>
+                </Border Style="{StaticResource StdBorder}">
                 <Border>
                     <Button IsTabStop="False" Focusable="False"/>
                 </Border>
