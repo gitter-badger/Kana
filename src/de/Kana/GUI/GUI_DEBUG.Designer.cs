@@ -27,6 +27,7 @@
             this.vocableL = new System.Windows.Forms.Label();
             this.nextB = new System.Windows.Forms.Button();
             this.streamOutputLabel = new System.Windows.Forms.Label();
+            this.checkButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1
@@ -48,7 +49,7 @@
             // 
             // nextB
             // 
-            this.nextB.Location = new System.Drawing.Point(675, 223);
+            this.nextB.Location = new System.Drawing.Point(673, 223);
             this.nextB.Name = "nextB";
             this.nextB.Size = new System.Drawing.Size(75, 23);
             this.nextB.TabIndex = 2;
@@ -65,11 +66,22 @@
             this.streamOutputLabel.TabIndex = 3;
             this.streamOutputLabel.Text = "label1";
             // 
+            // checkButton
+            // 
+            this.checkButton.Location = new System.Drawing.Point(592, 223);
+            this.checkButton.Name = "checkButton";
+            this.checkButton.Size = new System.Drawing.Size(75, 23);
+            this.checkButton.TabIndex = 4;
+            this.checkButton.Text = "check";
+            this.checkButton.UseVisualStyleBackColor = true;
+            this.checkButton.Click += new System.EventHandler(this.checkButton_Click);
+            // 
             // DebugForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(762, 257);
+            this.Controls.Add(this.checkButton);
             this.Controls.Add(this.streamOutputLabel);
             this.Controls.Add(this.nextB);
             this.Controls.Add(this.vocableL);
@@ -88,5 +100,6 @@
         private System.Windows.Forms.Label vocableL;
         private System.Windows.Forms.Button nextB;
         private System.Windows.Forms.Label streamOutputLabel;
+        private System.Windows.Forms.Button checkButton;
     }
 }

@@ -55,6 +55,7 @@
     <Compile Include="src\de\Kana\App.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Alphabet.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
+    <Compile Include="src\de\Kana\Engine\Trainer\Matcher.cs" />
     <Compile Include="src\de\Kana\Engine\Trainer\VocableStream.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\Trie.cs" />
@@ -68,6 +69,7 @@
     </Compile>
     <Compile Include="src\de\Kana\Util\Element.cs" />
     <Compile Include="src\de\Kana\Util\ElementComparer.cs" />
+    <Compile Include="src\de\Kana\Util\HiraganaComparer.cs" />
     <Compile Include="src\de\Kana\Util\IKanaDictionary.cs" />
     <Compile Include="src\de\Kana\Util\WordGraph.cs" />
     <Compile Include="src\de\Kana\Util\XML\ImportXml.cs" />

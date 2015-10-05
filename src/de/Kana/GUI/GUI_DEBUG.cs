@@ -46,6 +46,11 @@ namespace Kana.src.de.Kana.GUI
 
         private void nextB_Click(object sender, EventArgs e) {
             streamOutputLabel.Text = stream.Next();
+            nextB.Enabled = false;
+        }
+
+        private void checkButton_Click(object sender, EventArgs e) {
+            //if (Matcher.Matches())
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace Kana {
-	public struct Syllable {
+	public class Syllable {
 
 		public string Characters { get; private set; }
 
