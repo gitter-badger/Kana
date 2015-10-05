@@ -70,9 +70,11 @@ namespace Kana
                         }
                         stream.AddLast(tmp);
                     } else {
-                        foreach (string s in str as ICollection) {
-                            stream.AddLast(s);
-                        }
+                        stream.AddLast(((LinkedList<string>)str)
+                            .Select(x => new { Index = Guid.NewGuid(), Value = x})
+                            .OrderBy(x => x.Index).Select(x => x.Value)
+                            .ToList()
+                            .First());
                     }
                 }
                 else
