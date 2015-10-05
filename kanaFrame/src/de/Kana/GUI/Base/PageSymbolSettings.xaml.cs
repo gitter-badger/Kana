@@ -16,23 +16,25 @@ using System.Windows.Shapes;
 namespace KanaFrame
 {
     /// <summary>
-    /// Interaction logic for PageMain.xaml
+    /// Interaction logic for PageSymbolSettings.xaml
     /// </summary>
-    public partial class PageMain : Page
+    public partial class PageSettings : Page
     {
-        private Frame _mainFrame;
-        private PageSymbol _pageSymbol;
+        private MainWindow _main;
 
-        public PageMain(Frame _mainFrame)
+        public PageSettings(MainWindow _main)
         {
             InitializeComponent();
-            this._mainFrame = _mainFrame;
-            _pageSymbol = new PageSymbol(_mainFrame);
+            this._main = _main;
         }
 
-        private void btnSymbol_Click(object sender, RoutedEventArgs e)
+        private void btnCancelClick(object sender, RoutedEventArgs e)
         {
-            _mainFrame.Navigate(_pageSymbol);
+
+        }
+
+        private void btnOkClick(object sender, RoutedEventArgs e)
+        {
 
         }
     }

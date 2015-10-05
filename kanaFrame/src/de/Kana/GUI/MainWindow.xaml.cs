@@ -44,9 +44,7 @@ namespace KanaFrame
         public MainWindow()
         {
             InitializeComponent();
-            _mainFrame.Navigate(new PageMain(this));
-            _topBar.MouseDown += WindowDrag;
-            ResizeCorner.PreviewMouseLeftButtonDown += WindowResize;
+            _mainFrame.Navigate(new PageMain(_mainFrame));
         }
     }
 }

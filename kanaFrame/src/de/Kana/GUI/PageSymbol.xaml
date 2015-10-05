@@ -11,8 +11,8 @@
         <DockPanel>
             <Border Style="{StaticResource StdBorder}" DockPanel.Dock="Top" HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <Button Content="Back" Height="30" Click="button1_Click"/>
-                    <Button Content="Settings" Click="button2_Click"/>
+                    <Button Content="Back" Height="30"/>
+                    <Button Content="Settings"/>
                     <Button Content="What do I know" />
                     <Button Content="Button"/>
                 </StackPanel>

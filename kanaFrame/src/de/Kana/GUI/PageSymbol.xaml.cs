@@ -20,24 +20,14 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbol : Page
     {
-        private MainWindow _main;
+        private Frame _mainFrame;
         private PageSymbolSettings _pageSymbolSettings;
 
-        public PageSymbol(MainWindow _main)
+        public PageSymbol(Frame _mainFrame)
         {
             InitializeComponent();
-            this._main = _main;
-            _pageSymbolSettings = new PageSymbolSettings(_main);
-        }
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            _main._mainFrame.NavigationService.GoBack();
-        }
-
-        private void button2_Click(object sender, RoutedEventArgs e)
-        {
-            _main._mainFrame.Navigate(_pageSymbolSettings);
+            this._mainFrame = _mainFrame;
+            _pageSymbolSettings = new PageSymbolSettings(_mainFrame);
         }
     }
 }
