@@ -12,7 +12,8 @@ namespace Kana
         public static void Main(string[] args)
         {
             DebugForm debugWindow = new DebugForm();
-            List<LinkedList<string>> test = VocableCollection.RawGerman;
+            VocableCollection coll = new VocableCollection();
+            coll.InitializeStream(VocableCollection.Type.Kana);
             Application.EnableVisualStyles();
             Application.Run(debugWindow);
         }
