@@ -13,15 +13,12 @@
             <Label DockPanel.Dock="Top">Label</Label>
             <Border DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Margin="0" Padding="0" />
             <UniformGrid Rows="3" Columns="1">
-                <Border Style="{StaticResource StdBorder}">
-                    <Button x:Name="btnSymbol" IsTabStop="False" Focusable="False" Click="btnSymbol_Click"/>
-                </Border>
-                <Border Style="{StaticResource StdBorder}">
-                    <Button IsTabStop="False" Focusable="False"/>
-                </Border Style="{StaticResource StdBorder}">
-                <Border>
-                    <Button IsTabStop="False" Focusable="False"/>
-                </Border>
+                <UniformGrid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource MainBtn}"/>
+                </UniformGrid.Resources>
+                <Button x:Name="btnSymbol" Click="btnSymbol_Click" Content="Symbol"/>
+                <Button x:Name="btnVocabulary" Content="Vocabulary"/>
+                <Button x:Name="btnKanji" Content="Kanji"/>
             </UniformGrid>
         </DockPanel>
     </Grid>

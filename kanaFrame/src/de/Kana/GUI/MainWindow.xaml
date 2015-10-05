@@ -1,12 +1,39 @@
-﻿<Window x:Name="window" x:Class="KanaFrame.MainWindow"
+﻿<Window x:Class="KanaFrame.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KanaFrame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <DockPanel>
-        <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden"/>
-    </DockPanel>
+        Title="MainWindow" Height="350" Width="525"
+        WindowStyle="None" ResizeMode="NoResize" BorderBrush="#FF080808" Background="#FFC3C3C3">
+    <Border Style="{StaticResource StdBorder}" CornerRadius="0" Margin="0" Padding="0">
+        <DockPanel>
+
+            <StatusBar x:Name="_topBar" x:FieldModifier="public" DockPanel.Dock="Top" Height="22"/>
+
+            <StatusBar x:Name="_botBar" x:FieldModifier="public" DockPanel.Dock="Bottom" Height="22">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="22" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+
+                </StatusBarItem>
+                <Separator Grid.Column="1" />
+                <StatusBarItem x:Name="ResizeCorner" Grid.Column="2">
+                    <!--ProgressBar Value="50" Width="90" Height="16" /-->
+                </StatusBarItem>
+            </StatusBar>
+            
+            <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden"/>
+        </DockPanel>
+    </Border>
 </Window>
