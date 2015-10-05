@@ -13,6 +13,7 @@ namespace Kana.src.de.Kana.GUI
     public partial class DebugForm : Form
     {
         private int prevL = 0;
+        VocableStream stream;
         public DebugForm()
         {
             InitializeComponent();
@@ -21,6 +22,8 @@ namespace Kana.src.de.Kana.GUI
 
         private void init()
         {
+            stream = new VocableStream();
+            stream.InitializeStream(VocableStream.Type.German);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -39,6 +42,10 @@ namespace Kana.src.de.Kana.GUI
                 textBox1.SelectionStart = textBox1.TextLength;
             }
             prevL = textBox1.TextLength;
+        }
+
+        private void nextB_Click(object sender, EventArgs e) {
+            streamOutputLabel.Text = stream.Next();
         }
     }
 }

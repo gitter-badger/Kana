@@ -7,7 +7,7 @@ using Kana.src.de.Kana.Util.XML;
 
 namespace Kana
 {
-    struct VocableCollection
+    struct VocableStream
     {
         public enum Type
         {
@@ -18,8 +18,9 @@ namespace Kana
         static Dictionary<string, ICollection> streamCollection;
 
         private LinkedList<string> stream;
+        private Type currentStreamType;
 
-        static VocableCollection()
+        static VocableStream()
         {
             WordGraph graph = new WordGraph();
             ImportXml.XmlToWordGraph("vocals.xml", out graph);
@@ -55,24 +56,37 @@ namespace Kana
         
         public void InitializeStream(Type type)
         {
+            currentStreamType = type;
             stream = new LinkedList<string>();
             foreach (var str in streamCollection[type.ToString()])
             {
 
                 if (str is ICollection)
                 {
-                    string tmp = "";
-                    foreach (var s in str as ICollection)
-                    {
-                        tmp += s;
+                    if (currentStreamType == Type.Kanji) {
+                        string tmp = "";
+                        foreach (var s in str as ICollection) {
+                            tmp += s;
+                        }
+                        stream.AddLast(tmp);
+                    } else {
+                        foreach (string s in str as ICollection) {
+                            stream.AddLast(s);
+                        }
                     }
-                    stream.AddLast(tmp);
                 }
                 else
                 {
                     stream.AddLast(str.ToString());
                 }
             }
+        }
+
+        public string Next() {
+            if (stream.Count == 0) InitializeStream(currentStreamType);
+            string tmp = stream.First.Value;
+            stream.RemoveFirst();
+            return tmp;
         }
     }
 }

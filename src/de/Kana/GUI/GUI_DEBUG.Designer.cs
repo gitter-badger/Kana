@@ -26,12 +26,13 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.vocableL = new System.Windows.Forms.Label();
             this.nextB = new System.Windows.Forms.Button();
+            this.streamOutputLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("MS Gothic", 48F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(12, 39);
+            this.textBox1.Location = new System.Drawing.Point(12, 146);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(736, 71);
             this.textBox1.TabIndex = 0;
@@ -47,18 +48,29 @@
             // 
             // nextB
             // 
-            this.nextB.Location = new System.Drawing.Point(675, 116);
+            this.nextB.Location = new System.Drawing.Point(675, 223);
             this.nextB.Name = "nextB";
             this.nextB.Size = new System.Drawing.Size(75, 23);
             this.nextB.TabIndex = 2;
             this.nextB.Text = "next";
             this.nextB.UseVisualStyleBackColor = true;
+            this.nextB.Click += new System.EventHandler(this.nextB_Click);
+            // 
+            // streamOutputLabel
+            // 
+            this.streamOutputLabel.AutoSize = true;
+            this.streamOutputLabel.Location = new System.Drawing.Point(18, 9);
+            this.streamOutputLabel.Name = "streamOutputLabel";
+            this.streamOutputLabel.Size = new System.Drawing.Size(35, 13);
+            this.streamOutputLabel.TabIndex = 3;
+            this.streamOutputLabel.Text = "label1";
             // 
             // DebugForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(762, 161);
+            this.ClientSize = new System.Drawing.Size(762, 257);
+            this.Controls.Add(this.streamOutputLabel);
             this.Controls.Add(this.nextB);
             this.Controls.Add(this.vocableL);
             this.Controls.Add(this.textBox1);
@@ -75,5 +87,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label vocableL;
         private System.Windows.Forms.Button nextB;
+        private System.Windows.Forms.Label streamOutputLabel;
     }
 }
