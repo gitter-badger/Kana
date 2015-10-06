@@ -46,7 +46,9 @@
   <ItemGroup>
     <Content Include=".gitattributes" />
     <Content Include=".gitignore" />
-    <Content Include="xml\vocals.xml" />
+    <Content Include="xml\vocals.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -67,10 +69,6 @@
     <Compile Include="src\de\Kana\GUI\GUI_DEBUG.Designer.cs">
       <DependentUpon>GUI_DEBUG.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\Util\Element.cs" />
-    <Compile Include="src\de\Kana\Util\ElementComparer.cs" />
-    <Compile Include="src\de\Kana\Util\HiraganaComparer.cs" />
-    <Compile Include="src\de\Kana\Util\IKanaDictionary.cs" />
     <Compile Include="src\de\Kana\Util\WordGraph.cs" />
     <Compile Include="src\de\Kana\Util\XML\ImportXml.cs" />
   </ItemGroup>

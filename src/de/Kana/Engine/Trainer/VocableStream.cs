@@ -22,9 +22,9 @@ namespace Kana
 
         static VocableStream()
         {
-            WordGraph graph = new WordGraph();
-            ImportXml.XmlToWordGraph("vocals.xml", out graph);
-            vocs = graph.getContent();
+            Dictionary<WordGraph.Type, WordGraph> graphs;
+            ImportXml.XmlToWordGraph("vocals.xml", out graphs);
+            vocs = graphs[WordGraph.Type.Japanese].getContent();
 
             streamCollection = new Dictionary<string, ICollection>();
             streamCollection.Add("German",
@@ -48,7 +48,7 @@ namespace Kana
                     .Select(x => x.Value)
                     .ToList());
             streamCollection.Add("Kana",
-                vocs.Select(x => new { Index = Guid.NewGuid(), Value = x.Word })
+                vocs.Select(x => new { Index = Guid.NewGuid(), Value = x })
                     .OrderBy(x => x.Index)
                     .Select(x => x.Value)
                     .ToList());
@@ -70,11 +70,14 @@ namespace Kana
                         }
                         stream.AddLast(tmp);
                     } else {
-                        stream.AddLast(((LinkedList<string>)str)
-                            .Select(x => new { Index = Guid.NewGuid(), Value = x})
-                            .OrderBy(x => x.Index).Select(x => x.Value)
-                            .ToList()
-                            .First());
+                        if (type != Type.Kana)
+                            stream.AddLast(((LinkedList<string>)str)
+                                .Select(x => new { Index = Guid.NewGuid(), Value = x})
+                                .OrderBy(x => x.Index).Select(x => x.Value)
+                                .ToList()
+                                .First());
+                        else
+                            stream.AddLast(str.ToString());
                     }
                 }
                 else

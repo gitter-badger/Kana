@@ -1,33 +1,43 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace Kana.src.de.Kana.Util {
-	public class WordGraph : IKanaDictionary {
+	public class WordGraph {
 
-		public ListDictionary Root { get; private set; }
+        public enum Type {
+            Japanese,
+            English,
+            German
+        }
 
-		private HiraganaComparer Comparer { get; }
+        class Node {
+            public Dictionary<char, Node> Childs { get; set; }
+            public Vocable Vocable { get; set; }
+            public bool EOW { get; set; }
 
+            public Node() {
+                Vocable = default(Vocable);
+                Childs = new Dictionary<char, Node>();
+                EOW = false;
+            } 
+        }
+
+		private Node Root { get; set; }
+        
 		public WordGraph () {
-			Comparer = new HiraganaComparer ();
-			Root = new ListDictionary (Comparer);
+			Root = new Node ();
 		}
 
-        public void Add(Vocable voc) {
-			ListDictionary currentSyllableSet = Root;
-			Element elem = default (Element);
-			foreach (Syllable syl in voc) {
-                if (!currentSyllableSet.Contains(syl))
-                    elem = new Element(syl);
-                else
-                    elem = currentSyllableSet.Keys.Cast<Element>().FirstOrDefault(x => x.Syllable.Characters.Equals(syl.Characters));
-				if (!currentSyllableSet.Contains (elem.Syllable))
-					currentSyllableSet [elem] = new ListDictionary (Comparer);
-				currentSyllableSet = (ListDictionary)currentSyllableSet [elem.Syllable];
+        public void Add(Vocable voc, string keyString) {
+			Node currentNode = Root;
+
+			foreach (char syl in keyString) {
+                if (!currentNode.Childs.ContainsKey(syl))
+                    currentNode.Childs[syl] = new Node();
+                currentNode = currentNode.Childs[syl];
 			}
-            elem.Vocable = voc;
-            elem.Eow = true;
+            currentNode.Vocable = voc;
+            currentNode.EOW = true;
 		}
 
         public LinkedList<Vocable> getContent () {
@@ -35,31 +45,31 @@ namespace Kana.src.de.Kana.Util {
             traverse(vocabels, Root);
             return vocabels;
         }
-
+        
         public Vocable getVocable(string searchString) {
-            ListDictionary curLevel = Root;
-            foreach (char elem in searchString) {
-                if (elem.Equals(searchString.Last()))
-                    break;
-                curLevel = (ListDictionary)curLevel[new Syllable(char.ToString(elem), Alphabet.HIRAGANA)];
+            Node node = Root;
+            foreach (char c in searchString) {
+                if (!node.Childs.ContainsKey(c))
+                    return null;
+                node = node.Childs[c];
             }
-            Element[] tmp = new Element[curLevel.Keys.Count];
-            curLevel.Keys.CopyTo(tmp, 0);
-            return (from key in tmp where key.Syllable.Characters.Equals(char.ToString(searchString.Last())) select key).ToList().First().Vocable;
+            if (!node.EOW)
+                return null;
+            return node.Vocable;
         }
         
-        private void traverse (LinkedList<Vocable> vocabels, ListDictionary syllableSet) {
-            if (syllableSet == null)
+        private void traverse (LinkedList<Vocable> vocabels, Node node) {
+            if (node == null)
                 return;
 
-            foreach (Element elem in syllableSet.Keys) {
-                if (elem.Eow && ((ListDictionary)syllableSet[elem.Syllable]).Keys.Count != 0)
-                    vocabels.AddLast(elem.Vocable);
+            foreach (char syl in node.Childs.Keys) {
+                if (node.Childs[syl].EOW && node.Childs.Count != 0)
+                    vocabels.AddLast(node.Childs[syl].Vocable);
 
-                traverse(vocabels, syllableSet[elem.Syllable] as ListDictionary);
+                traverse(vocabels, node.Childs[syl]);
 
-                if (elem.Eow && ((ListDictionary)syllableSet[elem.Syllable]).Keys.Count == 0)
-                    vocabels.AddLast(elem.Vocable);
+                if (node.Childs[syl].EOW && node.Childs.Count == 0)
+                    vocabels.AddLast(node.Childs[syl].Vocable);
             }
         }
 	}
