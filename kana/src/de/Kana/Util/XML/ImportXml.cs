@@ -68,7 +68,7 @@ namespace Kana.src.de.Kana.Util.XML {
                 graph = null;
                 return false;
             }
-
+            Vocable vocs = graph.getVocable("ひらがな");
             return true;
         }
     }
