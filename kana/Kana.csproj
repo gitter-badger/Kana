@@ -111,6 +111,7 @@
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\Trie.cs" />
+    <Compile Include="src\de\Kana\Engine\Vocables\Vocabulary.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\Vocable.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\VocableFlags.cs" />
     <Compile Include="src\de\Kana\Util\Element.cs" />

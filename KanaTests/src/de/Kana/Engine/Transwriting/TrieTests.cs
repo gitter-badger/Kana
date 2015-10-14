@@ -34,6 +34,7 @@ namespace Kana.Transwriting.Tests
             Assert.AreEqual("んい", Trie.ReplaceToKana("nni"));
             Assert.AreEqual("n", Trie.ReplaceToKana("n"));
             Assert.AreEqual("ん", Trie.ReplaceToKana("n", true));
+            Assert.AreEqual("つっちょちょ", Trie.ReplaceToKana("tsucchocho", true));   
         }
     }
 }
