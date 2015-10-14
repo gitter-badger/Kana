@@ -113,9 +113,6 @@
     <Compile Include="src\de\Kana\Engine\Transwriting\Trie.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\Vocable.cs" />
     <Compile Include="src\de\Kana\Engine\Vocable\VocableFlags.cs" />
-    <Compile Include="src\de\Kana\Util\Element.cs" />
-    <Compile Include="src\de\Kana\Util\ElementComparer.cs" />
-    <Compile Include="src\de\Kana\Util\IKanaDictionary.cs" />
     <Compile Include="src\de\Kana\Util\WordGraph.cs" />
     <Compile Include="src\de\Kana\Util\XML\ImportXml.cs" />
   </ItemGroup>
