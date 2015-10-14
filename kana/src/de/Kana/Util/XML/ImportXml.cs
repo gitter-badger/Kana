@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Xml;
 
 namespace Kana.src.de.Kana.Util.XML {
     class ImportXml {
-        public static bool XmlToWordGraph(string pathToXml, out WordGraph graph) {
+        public static bool XmlToWordGraph(string pathToXml, out Dictionary<WordGraph.Type, WordGraph> graphs) {
             string exeLoc = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             try {
                 XmlTextReader reader = new XmlTextReader(Path.Combine(exeLoc, "..\\..\\xml\\vocals.xml"));
-                graph = new WordGraph();
                 Vocable voc = default (Vocable);
                 Alphabet type = default (Alphabet);
+                graphs = new Dictionary<WordGraph.Type, WordGraph>();
+                graphs[WordGraph.Type.Japanese] = new WordGraph();
+                graphs[WordGraph.Type.German] = new WordGraph();
+                graphs[WordGraph.Type.English] = new WordGraph();
                 while (reader.Read()) {
                     if (reader.NodeType == XmlNodeType.Element) {
                         switch (reader.Name) {
@@ -60,15 +64,19 @@ namespace Kana.src.de.Kana.Util.XML {
                                 continue;
                         }
                     }
-                    if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "Vocal")
-                        graph.Add(voc);
+                    if (reader.NodeType == XmlNodeType.EndElement && reader.Name == "Vocal") {
+                        graphs[WordGraph.Type.Japanese].Add(voc, voc.ToString());
+                        foreach (string word in voc.DeWords)
+                            graphs[WordGraph.Type.German].Add(voc, word);
+                        foreach (string word in voc.EnWords)
+                            graphs[WordGraph.Type.English].Add(voc, word);
+                    }
                 }
             } catch (FileNotFoundException ex) {
                 Console.WriteLine(ex.Message);
-                graph = null;
+                graphs = null;
                 return false;
             }
-            Vocable vocs = graph.getVocable("ひらがな");
             return true;
         }
     }

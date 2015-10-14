@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 namespace Kana {
-	public struct Vocable : IEnumerable {
-		public class VocableEnumerator : IEnumerator<Syllable> {
+	public class Vocable : IEnumerable {
+		public class VocableEnumerator : IEnumerator<string> {
 			private Vocable vocable;
 			private int curIndex;
 			private Syllable curSyllable;
 
-			public Syllable Current {
+			public string Current {
 				get {
-					return curSyllable;
+					return curSyllable.Characters;
 				}
 			}
 
