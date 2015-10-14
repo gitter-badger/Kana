@@ -89,7 +89,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\TrieTests.cs" />
-    <Compile Include="src\de\Kana\Engine\Vocables\RootNodeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\kana\Kana.csproj">
