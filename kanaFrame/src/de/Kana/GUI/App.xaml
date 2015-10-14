@@ -24,6 +24,9 @@
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Padding" Value="3,8"/>
         </Style>
-        
+        <Style x:Key="HeaderLabel" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="30"/>
+        </Style>
+
     </Application.Resources>
 </Application>

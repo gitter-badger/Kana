@@ -11,10 +11,8 @@
         <DockPanel>
             <Border Style="{StaticResource StdBorder}" DockPanel.Dock="Top" HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                    <Button Content="Back" Height="30"/>
-                    <Button Content="Settings"/>
-                    <Button Content="What do I know" />
-                    <Button Content="Button"/>
+                    <Button x:Name="btnBack" Content="Back" Click="btnBack_Click"/>
+                    <Button x:Name="btnSettings" Content="Settings" Click="btnSettings_Click"/>
                 </StackPanel>
             </Border>
             <GroupBox Header="GroupBox" Margin="10" />

@@ -11,8 +11,8 @@
         <Border Style="{StaticResource StdBorder}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btn_cancel" Content="Cancel" Margin="5,0" />
-                    <Button x:Name="btn_ok" Content="OK" Margin="5,0" Height="30" />
+                    <Button x:Name="btnCancel" Content="Cancel" Click="btnCancel_Click"/>
+                    <Button x:Name="btnOk" Content="OK" Click="btnOk_Click"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -20,10 +20,12 @@
 
         <Border Style="{StaticResource StdBorder}" VerticalAlignment="Top">
             <StackPanel>
-                <CheckBox x:Name="checkBox1" Content="CheckBox" Margin="5"/>
-                <CheckBox x:Name="checkBox2" Content="CheckBox" Margin="5"/>
-                <CheckBox x:Name="checkBox3" Content="CheckBox" Margin="5"/>
-                <CheckBox x:Name="checkBox4" Content="CheckBox" Margin="5"/>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <RadioButton x:Name="rbtnMatch" Margin="5" IsChecked="True">Match</RadioButton>
+                <RadioButton x:Name="rbtnFlow" Margin="5">Flow</RadioButton>
             </StackPanel>
         </Border>
     </Grid>

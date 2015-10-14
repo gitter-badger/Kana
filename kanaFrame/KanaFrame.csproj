@@ -98,10 +98,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="src\de\Kana\GUI\Base\ContentControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="src\de\Kana\GUI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,9 +106,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\Base\ContentControl.xaml.cs">
-      <DependentUpon>ContentControl.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="src\de\Kana\GUI\Base\PageBases.cs" />
     <Compile Include="src\de\Kana\GUI\PageMain.xaml.cs">
       <DependentUpon>PageMain.xaml</DependentUpon>
     </Compile>

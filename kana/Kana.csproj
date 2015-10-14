@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="src\de\Kana\Engine\Alphabet\Alphabet.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
+    <Compile Include="src\de\Kana\Engine\Symbol\aaa.cs" />
     <Compile Include="src\de\Kana\Engine\Trainer\Matcher.cs" />
     <Compile Include="src\de\Kana\Engine\Trainer\VocableStream.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />
@@ -125,6 +126,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />

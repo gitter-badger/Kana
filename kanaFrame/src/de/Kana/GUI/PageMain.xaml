@@ -10,7 +10,6 @@
 
     <Grid>
         <DockPanel>
-            <Label DockPanel.Dock="Top">Label</Label>
             <Border DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Margin="0" Padding="0" />
             <UniformGrid Rows="3" Columns="1">
                 <UniformGrid.Resources>
