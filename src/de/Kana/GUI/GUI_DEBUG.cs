@@ -46,11 +46,17 @@ namespace Kana.src.de.Kana.GUI
 
         private void nextB_Click(object sender, EventArgs e) {
             streamOutputLabel.Text = stream.Next();
-            //nextB.Enabled = false;
+            nextB.Enabled = false;
+            textBox1.BackColor = Color.White;
         }
 
         private void checkButton_Click(object sender, EventArgs e) {
-            //if (Matcher.Matches())
+            if (Matcher.Matches(textBox1.Text, streamOutputLabel.Text)) {
+                nextB.Enabled = true;
+                textBox1.BackColor = Color.Aqua;
+            } else {
+                textBox1.BackColor = Color.Red;
+            }
         }
     }
 }
