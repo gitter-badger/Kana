@@ -22,6 +22,9 @@ namespace KanaFrame
     {
         private Frame _mainFrame;
         private PageSymbolSettings _pageSymbolSettings;
+        private Dictionary<String, String> currentSettings;
+
+
 
         public PageSymbol(Frame _mainFrame)
         {
@@ -30,9 +33,16 @@ namespace KanaFrame
             _pageSymbolSettings = new PageSymbolSettings(_mainFrame, this);
         }
 
+
         public void applySettings(Dictionary<string, string> settings)
         {
-            throw new NotImplementedException();
+            currentSettings = settings;
+            switch (currentSettings[Settings.MODE_KEY])
+            {
+                case PageSymbolSettings.MODE_FLOW:; break;
+                case PageSymbolSettings.MODE_MATCH:; break;
+                default: break;
+            }
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -43,6 +53,12 @@ namespace KanaFrame
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             _mainFrame.Navigate(_pageSymbolSettings);
+        }
+
+        public void onNavigate(IPage page)
+        {
+            if (currentSettings == null)
+                _mainFrame.Navigate(_pageSymbolSettings);
         }
     }
 }

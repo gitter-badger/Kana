@@ -20,6 +20,10 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbolSettings : Page, ISettingsPageBase
     {
+
+        public const string MODE_MATCH = "MATCH";
+        public const string MODE_FLOW = "FLOW";
+
         private Frame _mainFrame;
         private IMainPageBase _parent;
         private Dictionary<String, String> currentSettings;
@@ -30,30 +34,41 @@ namespace KanaFrame
             InitializeComponent();
             this._mainFrame = _mainFrame;
             this._parent = _parent;
-
+            currentSettings = new Dictionary<string, string>();
+            currentSettings[Settings.MODE_KEY] = MODE_MATCH;
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _mainFrame.NavigationService.GoBack();
             revertContent();
+            _mainFrame.NavigationService.GoBack();
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            _mainFrame.NavigationService.GoBack();
             setSettings();
             _parent.applySettings(currentSettings);
+            _mainFrame.NavigationService.GoBack();
         }
 
         public void setSettings()
         {
-            throw new NotImplementedException();
+            if ((bool)rbtnMatch.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_MATCH;
+            else if ((bool)rbtnFlow.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_FLOW;
         }
 
         public void revertContent()
         {
-            throw new NotImplementedException();
+            switch (currentSettings[Settings.MODE_KEY])
+            {
+                case MODE_MATCH: rbtnMatch.IsChecked = true; break;
+                case MODE_FLOW: rbtnFlow.IsChecked = true; break;
+            }
+        }
+
+        public void onNavigate(IPage page)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

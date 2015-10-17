@@ -17,11 +17,11 @@
             </StackPanel>
         </Border>
 
-
+        
         <Border Style="{StaticResource StdBorder}" VerticalAlignment="Top">
             <StackPanel>
                 <StackPanel HorizontalAlignment="Left">
-                    <Label Style="{StaticResource HeaderLabel}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
+                    <Label Style="{StaticResource HeaderLabel2}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
                     <Separator DockPanel.Dock="Top" />
                 </StackPanel>
                 <RadioButton x:Name="rbtnMatch" Margin="5" IsChecked="True">Match</RadioButton>

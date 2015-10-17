@@ -22,10 +22,20 @@ namespace KanaFrame
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IPage lastPage;
         public MainWindow()
         {
+
             InitializeComponent();
             _mainFrame.Navigate(new PageMain(_mainFrame));
+            //pageTransitionControl.ShowPage(new PageMain(new Frame()));
+        }
+
+        private void _mainFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            IPage page = ((IPage)(_mainFrame.NavigationService.Content));
+            page.onNavigate(lastPage);
+            lastPage = page;
         }
     }
 }

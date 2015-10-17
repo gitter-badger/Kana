@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:KanaFrame"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="PageSymbol">
+      Title="PageSymbol"
+      x:Name="TestPage">
     <Grid>
         <DockPanel>
             <Border Style="{StaticResource StdBorder}" DockPanel.Dock="Top" HorizontalAlignment="Right">
