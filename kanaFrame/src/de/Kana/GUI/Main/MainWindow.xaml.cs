@@ -20,7 +20,7 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : KanaWindow
+    public partial class MainWindow : Window, INavigate
     {
         KanaPage page;
         public MainWindow()
@@ -43,12 +43,12 @@ namespace KanaFrame
             page.HandleKeyDown(e);
         }
 
-        public override void Navigate(KanaPage page)
+        public void Navigate(KanaPage page)
         {
             _mainFrame.Navigate(page);
         }
 
-        public override void NavigateBack()
+        public void NavigateBack()
         {
             _mainFrame.NavigationService.GoBack();
         }

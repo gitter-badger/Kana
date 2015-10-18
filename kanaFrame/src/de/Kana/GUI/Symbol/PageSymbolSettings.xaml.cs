@@ -24,12 +24,12 @@ namespace KanaFrame
         public const string MODE_MATCH = "MATCH";
         public const string MODE_FLOW = "FLOW";
 
-        private KanaWindow _window;
+        private INavigate _window;
         private IContentPage _parent;
         private Dictionary<String, String> currentSettings;
 
 
-        public PageSymbolSettings(KanaWindow _window, IContentPage _parent)
+        public PageSymbolSettings(INavigate _window, IContentPage _parent)
         {
             InitializeComponent();
             this._window = _window;

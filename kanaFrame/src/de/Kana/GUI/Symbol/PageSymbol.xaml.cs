@@ -20,13 +20,13 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbol : KanaPage, IContentPage
     {
-        private KanaWindow _window;
+        private INavigate _window;
         private PageSymbolSettings _pageSymbolSettings;
         private Dictionary<String, String> currentSettings;
 
 
 
-        public PageSymbol(KanaWindow _window)
+        public PageSymbol(INavigate _window)
         {
             InitializeComponent();
             this._window = _window;

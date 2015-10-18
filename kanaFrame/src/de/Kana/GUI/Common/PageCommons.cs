@@ -38,11 +38,10 @@ namespace KanaFrame
         { }
     }
 
-    public abstract class KanaWindow : Window
+    public interface INavigate
     {
-        public abstract void Navigate(KanaPage page);
-        public abstract void NavigateBack();
-        protected abstract override void OnPreviewKeyDown(KeyEventArgs e);
+        void Navigate(KanaPage page);
+        void NavigateBack();
     }
 
     public class Settings

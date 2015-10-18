@@ -20,10 +20,10 @@ namespace KanaFrame
     /// </summary>
     public partial class PageMain : KanaPage, IMenuPage
     {
-        private KanaWindow _window;
+        private INavigate _window;
         private PageSymbol _pageSymbol;
 
-        public PageMain(KanaWindow _window)
+        public PageMain(INavigate _window)
         {
             InitializeComponent();
             this._window = _window;
