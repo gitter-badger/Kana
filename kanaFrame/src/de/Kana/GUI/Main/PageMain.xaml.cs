@@ -20,19 +20,19 @@ namespace KanaFrame
     /// </summary>
     public partial class PageMain : KanaPage, IMenuPage
     {
-        private Frame _mainFrame;
+        private KanaWindow _window;
         private PageSymbol _pageSymbol;
 
-        public PageMain(Frame _mainFrame)
+        public PageMain(KanaWindow _window)
         {
             InitializeComponent();
-            this._mainFrame = _mainFrame;
-            _pageSymbol = new PageSymbol(_mainFrame);
+            this._window = _window;
+            _pageSymbol = new PageSymbol(_window);
         }
 
         private void btnSymbol_Click(object sender, RoutedEventArgs e)
         {
-            _mainFrame.Navigate(_pageSymbol);
+            _window.Navigate(_pageSymbol);
         }
     }
 }

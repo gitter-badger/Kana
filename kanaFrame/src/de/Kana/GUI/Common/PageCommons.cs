@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -13,13 +14,14 @@ namespace KanaFrame
 
     public interface IContentPage
     {
-        void applySettings(Dictionary<String, String> settings);
+        void ApplySettings(Dictionary<String, String> settings);
     }
 
     public interface ISettingsPage
     {
-        void setSettings();
-        void revertContent();
+        void SetSettings();
+        void RevertContent();
+        void DefaultSettings(bool apply);
     }
 
     public interface IPage
@@ -34,6 +36,13 @@ namespace KanaFrame
 
         public virtual void HandleKeyDown(KeyEventArgs e)
         { }
+    }
+
+    public abstract class KanaWindow : Window
+    {
+        public abstract void Navigate(KanaPage page);
+        public abstract void NavigateBack();
+        protected abstract override void OnPreviewKeyDown(KeyEventArgs e);
     }
 
     public class Settings

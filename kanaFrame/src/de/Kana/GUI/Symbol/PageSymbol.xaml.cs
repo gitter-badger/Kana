@@ -20,27 +20,31 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbol : KanaPage, IContentPage
     {
-        private Frame _mainFrame;
+        private KanaWindow _window;
         private PageSymbolSettings _pageSymbolSettings;
         private Dictionary<String, String> currentSettings;
 
 
 
-        public PageSymbol(Frame _mainFrame)
+        public PageSymbol(KanaWindow _window)
         {
             InitializeComponent();
-            this._mainFrame = _mainFrame;
-            _pageSymbolSettings = new PageSymbolSettings(_mainFrame, this);
+            this._window = _window;
+            _pageSymbolSettings = new PageSymbolSettings(_window, this);
         }
 
 
-        public void applySettings(Dictionary<string, string> settings)
+        public void ApplySettings(Dictionary<string, string> settings)
         {
             if (Settings.Mode_Changed(settings, currentSettings))
                 switch (settings[Settings.MODE_KEY])
                 {
-                    case PageSymbolSettings.MODE_FLOW:; break;
-                    case PageSymbolSettings.MODE_MATCH:; break;
+                    case PageSymbolSettings.MODE_FLOW:
+                        ;
+                        break;
+                    case PageSymbolSettings.MODE_MATCH:
+                        ;
+                        break;
                     default: break;
                 }
             currentSettings = settings;
@@ -48,18 +52,23 @@ namespace KanaFrame
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            _mainFrame.NavigationService.GoBack();
+            _window.NavigateBack();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            _mainFrame.Navigate(_pageSymbolSettings);
+            _window.Navigate(_pageSymbolSettings);
         }
 
         public override void HandleOnNavigate()
         {
             if (currentSettings == null)
-                _mainFrame.Navigate(_pageSymbolSettings);
+            {
+                _window.Navigate(_pageSymbolSettings);
+                if (currentSettings == null)
+                    _pageSymbolSettings.DefaultSettings(true);
+            }
+
         }
     }
 }

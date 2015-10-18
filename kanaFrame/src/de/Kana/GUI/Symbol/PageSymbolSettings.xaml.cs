@@ -24,46 +24,53 @@ namespace KanaFrame
         public const string MODE_MATCH = "MATCH";
         public const string MODE_FLOW = "FLOW";
 
-        private Frame _mainFrame;
+        private KanaWindow _window;
         private IContentPage _parent;
         private Dictionary<String, String> currentSettings;
 
 
-        public PageSymbolSettings(Frame _mainFrame, IContentPage _parent)
+        public PageSymbolSettings(KanaWindow _window, IContentPage _parent)
         {
             InitializeComponent();
-            this._mainFrame = _mainFrame;
+            this._window = _window;
             this._parent = _parent;
-            currentSettings = new Dictionary<string, string>();
-            currentSettings[Settings.MODE_KEY] = MODE_MATCH;
+            DefaultSettings(false);
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            revertContent();
-            _mainFrame.NavigationService.GoBack();
+            RevertContent();
+            _window.NavigateBack();
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
-            setSettings();
-            _parent.applySettings(currentSettings);
-            _mainFrame.NavigationService.GoBack();
+            SetSettings();
+            _parent.ApplySettings(currentSettings);
+            _window.NavigateBack();
         }
 
-        public void setSettings()
+        public void SetSettings()
         {
             if ((bool)rbtnMatch.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_MATCH;
             else if ((bool)rbtnFlow.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_FLOW;
         }
 
-        public void revertContent()
+        public void RevertContent()
         {
             switch (currentSettings[Settings.MODE_KEY])
             {
                 case MODE_MATCH: rbtnMatch.IsChecked = true; break;
                 case MODE_FLOW: rbtnFlow.IsChecked = true; break;
             }
+        }
+
+        public void DefaultSettings(bool apply)
+        {
+            currentSettings = new Dictionary<String, String>();
+            currentSettings[Settings.MODE_KEY] = MODE_MATCH;
+            RevertContent();
+            if (apply) _parent.ApplySettings(currentSettings);
         }
 
         public override void HandleKeyDown(KeyEventArgs e)

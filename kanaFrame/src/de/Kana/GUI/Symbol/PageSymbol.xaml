@@ -16,7 +16,9 @@
                     <Button x:Name="btnSettings" Content="Settings" Click="btnSettings_Click"/>
                 </StackPanel>
             </Border>
-            <GroupBox Header="GroupBox" Margin="10" />
+                    <TextBox DockPanel.Dock="Bottom" Margin="10"/>
+            <Grid>
+            </Grid>
         </DockPanel>
     </Grid>
 </local:KanaPage>
