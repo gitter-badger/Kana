@@ -13,6 +13,10 @@ namespace Kana.Transwriting
         static Trie()
         {
             TTrie = new Trie();
+            TTrie.Add(".", "。");
+            TTrie.Add(",", "、");
+            TTrie.Add(" ", "　");
+            TTrie.Add("-", "ー");
             TTrie.Add("ssha", "っしゃ");
             TTrie.Add("ssya", "っしゃ");
             TTrie.Add("sshu", "っしゅ");

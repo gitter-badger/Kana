@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace KanaFrame
@@ -10,10 +11,6 @@ namespace KanaFrame
     public class TranlationBox : TextBox
     {
         private int prevL = 0;
-        public TranlationBox()
-        {
-
-        }
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -33,6 +30,12 @@ namespace KanaFrame
                 SelectionStart = Text.Length;
             }
             prevL = Text.Length;
+        }
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (String.Compare(e.Property.Name, "Height") == 0)
+                FontSize = Double.Parse(e.NewValue.ToString()) - 10;
         }
     }
 }

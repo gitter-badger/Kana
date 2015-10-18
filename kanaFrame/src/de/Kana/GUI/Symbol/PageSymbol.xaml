@@ -16,7 +16,7 @@
                     <Button x:Name="btnSettings" Content="Settings" Click="btnSettings_Click"/>
                 </StackPanel>
             </Border>
-            <local:TranlationBox DockPanel.Dock="Bottom" Margin="10" />
+            <local:TranlationBox DockPanel.Dock="Bottom" Margin="10" Height="40" />
             <Grid>
             </Grid>
         </DockPanel>
