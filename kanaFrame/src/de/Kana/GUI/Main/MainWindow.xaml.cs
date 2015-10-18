@@ -32,14 +32,14 @@ namespace KanaFrame
         private void _mainFrame_Navigated(object sender, NavigationEventArgs e)
         {
             page = ((KanaPage)(_mainFrame.NavigationService.Content));
-            Console.Out.WriteLine("Navigate: " + page);
+            //Console.Out.WriteLine("Navigate: " + page);
             page.HandleOnNavigate();
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            Console.Out.WriteLine("KeyDown: " + page + " Key: " + e.Key);
+            //Console.Out.WriteLine("KeyDown: " + page + " Key: " + e.Key);
             page.HandleKeyDown(e);
         }
 
