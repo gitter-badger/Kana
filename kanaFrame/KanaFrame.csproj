@@ -94,50 +94,41 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="src\de\Kana\GUI\App.xaml">
+    <ApplicationDefinition Include="src\de\Kana\GUI\Main\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="src\de\Kana\GUI\Base\Transition.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="src\de\Kana\GUI\MainWindow.xaml">
+    <Page Include="src\de\Kana\GUI\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="src\de\Kana\GUI\App.xaml.cs">
+    <Compile Include="src\de\Kana\GUI\Main\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\Base\Converter.cs" />
-    <Compile Include="src\de\Kana\GUI\Base\PageBases.cs" />
-    <Compile Include="src\de\Kana\GUI\Base\Transition.xaml.cs">
-      <DependentUpon>Transition.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="src\de\Kana\GUI\PageMain.xaml.cs">
+    <Compile Include="src\de\Kana\GUI\Common\PageCommons.cs" />
+    <Compile Include="src\de\Kana\GUI\Main\PageMain.xaml.cs">
       <DependentUpon>PageMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\PageSymbol.xaml.cs">
+    <Compile Include="src\de\Kana\GUI\Symbol\PageSymbol.xaml.cs">
       <DependentUpon>PageSymbol.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\PageSymbolSettings.xaml.cs">
+    <Compile Include="src\de\Kana\GUI\Symbol\PageSymbolSettings.xaml.cs">
       <DependentUpon>PageSymbolSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\Logics\Logics.cs" />
-    <Compile Include="src\de\Kana\GUI\MainWindow.xaml.cs">
+    <Compile Include="src\de\Kana\GUI\Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="src\de\Kana\GUI\PageMain.xaml">
+    <Page Include="src\de\Kana\GUI\Main\PageMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="src\de\Kana\GUI\PageSymbol.xaml">
+    <Page Include="src\de\Kana\GUI\Symbol\PageSymbol.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="src\de\Kana\GUI\PageSymbolSettings.xaml">
+    <Page Include="src\de\Kana\GUI\Symbol\PageSymbolSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

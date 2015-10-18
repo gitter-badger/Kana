@@ -1,4 +1,4 @@
-﻿<Page x:Class="KanaFrame.PageSymbol"
+﻿<local:KanaPage x:Class="KanaFrame.PageSymbol"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,4 +19,4 @@
             <GroupBox Header="GroupBox" Margin="10" />
         </DockPanel>
     </Grid>
-</Page>
+</local:KanaPage>

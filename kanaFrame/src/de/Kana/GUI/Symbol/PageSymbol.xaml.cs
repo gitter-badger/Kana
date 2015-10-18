@@ -18,7 +18,7 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbol.xaml
     /// </summary>
-    public partial class PageSymbol : Page, IMainPageBase
+    public partial class PageSymbol : KanaPage, IContentPage
     {
         private Frame _mainFrame;
         private PageSymbolSettings _pageSymbolSettings;
@@ -36,13 +36,14 @@ namespace KanaFrame
 
         public void applySettings(Dictionary<string, string> settings)
         {
+            if (Settings.Mode_Changed(settings, currentSettings))
+                switch (settings[Settings.MODE_KEY])
+                {
+                    case PageSymbolSettings.MODE_FLOW:; break;
+                    case PageSymbolSettings.MODE_MATCH:; break;
+                    default: break;
+                }
             currentSettings = settings;
-            switch (currentSettings[Settings.MODE_KEY])
-            {
-                case PageSymbolSettings.MODE_FLOW:; break;
-                case PageSymbolSettings.MODE_MATCH:; break;
-                default: break;
-            }
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -55,7 +56,7 @@ namespace KanaFrame
             _mainFrame.Navigate(_pageSymbolSettings);
         }
 
-        public void onNavigate(IPage page)
+        public override void HandleOnNavigate()
         {
             if (currentSettings == null)
                 _mainFrame.Navigate(_pageSymbolSettings);

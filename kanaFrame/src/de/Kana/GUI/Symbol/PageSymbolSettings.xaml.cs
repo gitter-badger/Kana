@@ -18,18 +18,18 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbolSettings.xaml
     /// </summary>
-    public partial class PageSymbolSettings : Page, ISettingsPageBase
+    public partial class PageSymbolSettings : KanaPage, ISettingsPage
     {
 
         public const string MODE_MATCH = "MATCH";
         public const string MODE_FLOW = "FLOW";
 
         private Frame _mainFrame;
-        private IMainPageBase _parent;
+        private IContentPage _parent;
         private Dictionary<String, String> currentSettings;
 
 
-        public PageSymbolSettings(Frame _mainFrame, IMainPageBase _parent)
+        public PageSymbolSettings(Frame _mainFrame, IContentPage _parent)
         {
             InitializeComponent();
             this._mainFrame = _mainFrame;
@@ -66,9 +66,11 @@ namespace KanaFrame
             }
         }
 
-        public void onNavigate(IPage page)
+        public override void HandleKeyDown(KeyEventArgs e)
         {
-            //throw new NotImplementedException();
+            base.HandleKeyDown(e);
+            if (e.Key == Key.Escape)
+                btnCancel_Click(null, null);
         }
     }
 }

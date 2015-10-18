@@ -18,7 +18,7 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageMain.xaml
     /// </summary>
-    public partial class PageMain : Page, IMenuPageBase
+    public partial class PageMain : KanaPage, IMenuPage
     {
         private Frame _mainFrame;
         private PageSymbol _pageSymbol;
@@ -28,11 +28,6 @@ namespace KanaFrame
             InitializeComponent();
             this._mainFrame = _mainFrame;
             _pageSymbol = new PageSymbol(_mainFrame);
-        }
-
-        public void onNavigate(IPage page)
-        {
-            //throw new NotImplementedException();
         }
 
         private void btnSymbol_Click(object sender, RoutedEventArgs e)

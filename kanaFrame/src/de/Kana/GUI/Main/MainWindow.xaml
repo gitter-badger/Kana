@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <DockPanel>
-        <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden" Navigated="_mainFrame_Navigated" />
-        <!--local:Transition x:Name="pageTransitionControl" Margin="25" /-->
+        <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden" Navigated="_mainFrame_Navigated" IsTabStop="False"/>
     </DockPanel>
 </Window>
