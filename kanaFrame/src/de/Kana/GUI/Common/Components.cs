@@ -8,13 +8,32 @@ using System.Windows.Controls;
 
 namespace KanaFrame
 {
-    public class TranlationBox : TextBox
+    public class TranslationBox : TextBox
     {
         private int prevL = 0;
+
+        public TranslationBox()
+        {
+            TranslationEnabled = true;
+        }
+
+
+        public bool TranslationEnabled
+        {
+            get { return (bool)GetValue(TranslationEnabledProperty); }
+            set { SetValue(TranslationEnabledProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TranslationEnabled.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TranslationEnabledProperty =
+            DependencyProperty.Register("TranslationEnabled", typeof(bool), typeof(TranslationBox));
+
+
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
+            if (!TranslationEnabled) return;
             //Console.Out.WriteLine("Text: " + Text + " Length: " + Text.Length);
             int maxL = 4;
             int len = Text.Length;
