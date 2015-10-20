@@ -27,7 +27,7 @@ namespace Kana.Transwriting.Tests
             Assert.AreEqual("しょ", Trie.ReplaceToKana("sho"));
             Assert.AreEqual("し", Trie.ReplaceToKana("shi"));
             Assert.AreEqual("あし", Trie.ReplaceToKana("ashi"));
-            Assert.AreEqual("ありがとう ございます", Trie.ReplaceToKana("arigatou gozaimasu"));
+            Assert.AreEqual("ありがとう　ございます", Trie.ReplaceToKana("arigatou gozaimasu"));
             Assert.AreEqual("に", Trie.ReplaceToKana("ni"));
             Assert.AreEqual("んに", Trie.ReplaceToKana("nnni"));
             Assert.AreEqual("ん", Trie.ReplaceToKana("nn"));
