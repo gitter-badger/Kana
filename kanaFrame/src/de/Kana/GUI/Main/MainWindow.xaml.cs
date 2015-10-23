@@ -22,18 +22,35 @@ namespace KanaFrame
     /// </summary>
     public partial class MainWindow : Window, INavigate
     {
-        KanaPage page;
+        private static INavigate navigation;
+        public static INavigate Navigation
+        {
+            get
+            {
+                return navigation;
+            }
+            protected set
+            {
+                navigation = value;
+            }
+        }
+
+        private KanaPage page;
+
+
         public MainWindow()
         {
             InitializeComponent();
-            _mainFrame.Navigate(new PageMain(this));
+            Navigation = this;
+            _mainFrame.Navigate(new PageMain());
         }
 
         private void _mainFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            KanaPage last = page;
             page = ((KanaPage)(_mainFrame.NavigationService.Content));
             //Console.Out.WriteLine("Navigate: " + page);
-            page.HandleOnNavigate();
+            page.HandleOnNavigate(last);
         }
 
         protected override void OnPreviewKeyDown(KeyEventArgs e)

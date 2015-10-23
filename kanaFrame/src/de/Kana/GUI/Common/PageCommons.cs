@@ -9,34 +9,48 @@ using System.Windows.Input;
 
 namespace KanaFrame
 {
-    public interface IMenuPage
-    { }
 
-    public interface IContentPage
+    public interface IContentControl { }
+
+
+    public abstract partial class MenuPage : KanaPage { }
+
+
+
+
+    public abstract class ContentPage : KanaPage
     {
-        void ApplySettings(Dictionary<String, String> settings);
+        protected Dictionary<string, string> currentSettings { get; set; }
+        public abstract void ApplySettings(Dictionary<string, string> settings);
     }
 
-    public interface ISettingsPage
+
+
+
+
+
+    public abstract class SettingsPage : KanaPage
     {
-        void SetSettings();
-        void RevertContent();
-        void DefaultSettings(bool apply);
+        protected Dictionary<string, string> currentSettings { get; set; }
+
+        protected abstract void ReadGUI();
+        protected abstract void SetGUI();
+        public abstract void DefaultSettings(bool apply);
+        public abstract Dictionary<string, string> GetDefaultSettings();
     }
 
-    public interface IPage
+
+
+
+
+
+    public abstract class KanaPage : Page
     {
-        void HandleOnNavigate();
+        public virtual void HandleOnNavigate(KanaPage last) { }
+        public virtual void HandleKeyDown(KeyEventArgs e) { }
     }
 
-    public class KanaPage : Page, IPage
-    {
-        public virtual void HandleOnNavigate()
-        { }
 
-        public virtual void HandleKeyDown(KeyEventArgs e)
-        { }
-    }
 
     public interface INavigate
     {
@@ -44,16 +58,27 @@ namespace KanaFrame
         void NavigateBack();
     }
 
+
+
+
+
     public class Settings
     {
         public const string MODE_KEY = "MODE";
-
-        public static bool Mode_Changed(Dictionary<String, String> oldS, Dictionary<String, String> newS)
+        public static bool Mode_Changed(Dictionary<string, string> oldS, Dictionary<string, string> newS)
         {
             if (newS == null | oldS == null) return true;
-            return (!oldS[MODE_KEY].Equals(newS[MODE_KEY]));
+            return (String.Compare(oldS[MODE_KEY], newS[MODE_KEY]) != 0);
         }
     }
+
+
+
+
+
+
+
+
 
     public enum ESettings
     {

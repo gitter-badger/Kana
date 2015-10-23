@@ -18,45 +18,27 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbolSettings.xaml
     /// </summary>
-    public partial class PageSymbolSettings : KanaPage, ISettingsPage
+    public partial class PageSymbolSettings : SettingsPage
     {
-
         public const string MODE_MATCH = "MATCH";
         public const string MODE_FLOW = "FLOW";
 
-        private INavigate _window;
-        private IContentPage _parent;
-        private Dictionary<String, String> currentSettings;
+        private ContentPage _parent;
 
-
-        public PageSymbolSettings(INavigate _window, IContentPage _parent)
+        public PageSymbolSettings(ContentPage _parent)
         {
             InitializeComponent();
-            this._window = _window;
             this._parent = _parent;
-            DefaultSettings(false);
+            currentSettings = GetDefaultSettings();
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            RevertContent();
-            _window.NavigateBack();
-        }
-
-        private void btnOk_Click(object sender, RoutedEventArgs e)
-        {
-            SetSettings();
-            _parent.ApplySettings(currentSettings);
-            _window.NavigateBack();
-        }
-
-        public void SetSettings()
+        protected override void ReadGUI()
         {
             if ((bool)rbtnMatch.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_MATCH;
             else if ((bool)rbtnFlow.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_FLOW;
         }
 
-        public void RevertContent()
+        protected override void SetGUI()
         {
             switch (currentSettings[Settings.MODE_KEY])
             {
@@ -65,19 +47,44 @@ namespace KanaFrame
             }
         }
 
-        public void DefaultSettings(bool apply)
+        public override void DefaultSettings(bool apply)
         {
-            currentSettings = new Dictionary<String, String>();
-            currentSettings[Settings.MODE_KEY] = MODE_MATCH;
-            RevertContent();
+            currentSettings = GetDefaultSettings();
+            SetGUI();
             if (apply) _parent.ApplySettings(currentSettings);
         }
+
+        public override Dictionary<string, string> GetDefaultSettings()
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            result[Settings.MODE_KEY] = MODE_MATCH;
+            return result;
+        }
+
+
+
 
         public override void HandleKeyDown(KeyEventArgs e)
         {
             base.HandleKeyDown(e);
             if (e.Key == Key.Escape)
                 btnCancel_Click(null, null);
+        }
+
+
+
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            SetGUI();
+            MainWindow.Navigation.NavigateBack();
+        }
+
+        private void btnOk_Click(object sender, RoutedEventArgs e)
+        {
+            ReadGUI();
+            _parent.ApplySettings(currentSettings);
+            MainWindow.Navigation.NavigateBack();
         }
     }
 }

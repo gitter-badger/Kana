@@ -18,57 +18,55 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbol.xaml
     /// </summary>
-    public partial class PageSymbol : KanaPage, IContentPage
+    public partial class PageSymbol : ContentPage
     {
-        private INavigate _window;
-        private PageSymbolSettings _pageSymbolSettings;
-        private Dictionary<String, String> currentSettings;
+        private SettingsPage _pageSymbolSettings;
 
-
-
-        public PageSymbol(INavigate _window)
+        public PageSymbol()
         {
             InitializeComponent();
-            this._window = _window;
-            _pageSymbolSettings = new PageSymbolSettings(_window, this);
+            _pageSymbolSettings = new PageSymbolSettings(this);
         }
 
 
-        public void ApplySettings(Dictionary<string, string> settings)
+        public override void ApplySettings(Dictionary<string, string> settings)
         {
-            if (Settings.Mode_Changed(settings, currentSettings))
-                switch (settings[Settings.MODE_KEY])
-                {
-                    case PageSymbolSettings.MODE_FLOW:
-                        ;
-                        break;
-                    case PageSymbolSettings.MODE_MATCH:
-                        ;
-                        break;
-                    default: break;
-                }
+            switch (settings[Settings.MODE_KEY])
+            {
+                case PageSymbolSettings.MODE_FLOW:
+                    Console.WriteLine("Mode: Flow");
+                    symbolFlow.Visibility = Visibility.Visible;
+                    symbolMatch.Visibility = Visibility.Hidden;
+                    break;
+                case PageSymbolSettings.MODE_MATCH:
+                    Console.WriteLine("Mode: Match");
+                    symbolFlow.Visibility = Visibility.Hidden;
+                    symbolMatch.Visibility = Visibility.Visible;
+                    break;
+                default: break;
+            }
             currentSettings = settings;
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
-            _window.NavigateBack();
+            MainWindow.Navigation.NavigateBack();
         }
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            _window.Navigate(_pageSymbolSettings);
+            MainWindow.Navigation.Navigate(_pageSymbolSettings);
         }
 
-        public override void HandleOnNavigate()
+        public override void HandleOnNavigate(KanaPage last)
         {
             if (currentSettings == null)
-            {
-                _window.Navigate(_pageSymbolSettings);
-                if (currentSettings == null)
+                if (last == _pageSymbolSettings)
                     _pageSymbolSettings.DefaultSettings(true);
-            }
-
+                else
+                    MainWindow.Navigation.Navigate(_pageSymbolSettings);
+            else
+                box.Focus();
         }
     }
 }

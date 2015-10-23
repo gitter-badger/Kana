@@ -16,21 +16,13 @@ using System.Windows.Shapes;
 namespace KanaFrame
 {
     /// <summary>
-    /// Interaction logic for PageMain.xaml
+    /// Interaction logic for SymbolFlow.xaml
     /// </summary>
-    public partial class PageMain : MenuPage
+    public partial class SymbolFlow : UserControl
     {
-        private ContentPage _pageSymbol;
-
-        public PageMain()
+        public SymbolFlow()
         {
             InitializeComponent();
-            _pageSymbol = new PageSymbol();
-        }
-
-        private void btnSymbol_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow.Navigation.Navigate(_pageSymbol);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace KanaFrame
     public class TranslationBox : TextBox
     {
         private int prevL = 0;
+        private bool textLock = false;
 
         public TranslationBox()
         {
@@ -32,6 +33,8 @@ namespace KanaFrame
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
+            if (textLock) return;
+            textLock = true;
             base.OnTextChanged(e);
             if (!TranslationEnabled) return;
             //Console.Out.WriteLine("Text: " + Text + " Length: " + Text.Length);
@@ -39,6 +42,7 @@ namespace KanaFrame
             int len = Text.Length;
             if (len == prevL + 1)
             {
+                Console.Out.WriteLine("Before: Text: " + Text + " Length: " + Text.Length);
                 int sel = SelectionStart;
                 int n1 = Math.Max(sel - maxL, 0);
                 int n2 = Math.Min(sel - n1, maxL);
@@ -46,9 +50,11 @@ namespace KanaFrame
                 sb.Remove(n1, n2);
                 sb.Insert(n1, Kana.Transwriting.Trie.ReplaceToKana(Text.Substring(n1, n2)));
                 Text = sb.ToString();
-                SelectionStart = Text.Length;
+                SelectionStart = sel + (Text.Length - prevL - 1);
+                Console.Out.WriteLine("After: Text: " + Text + " Length: " + Text.Length + " prevL: " + prevL + " len: " + len + " sel: " + sel);
             }
             prevL = Text.Length;
+            textLock = false;
         }
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {

@@ -98,6 +98,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\de\Kana\GUI\Symbol\SymbolFlow.xaml.cs">
+      <DependentUpon>SymbolFlow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\de\Kana\GUI\Symbol\SymbolMatch.xaml.cs">
+      <DependentUpon>SymbolMatch.xaml</DependentUpon>
+    </Compile>
     <Page Include="src\de\Kana\GUI\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -130,6 +136,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\de\Kana\GUI\Symbol\PageSymbolSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\de\Kana\GUI\Symbol\SymbolFlow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\de\Kana\GUI\Symbol\SymbolMatch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
