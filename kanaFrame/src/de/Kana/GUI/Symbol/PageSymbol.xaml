@@ -16,10 +16,16 @@
                 </StackPanel>
             </Border>
             <local:TranslationBox x:Name="box" DockPanel.Dock="Bottom" Margin="10" Height="40" TranslationEnabled="True"/>
-            <Grid>
-                <local:SymbolMatch x:Name="symbolMatch" Visibility="Hidden" />
-                <local:SymbolFlow x:Name="symbolFlow" Visibility="Hidden" />
-            </Grid>
+
+            <UniformGrid Rows="1" Columns="2">
+                <Grid>
+                    <local:SymbolMatch x:Name="symbolMatch" Visibility="Hidden" />
+                    <local:SymbolFlow x:Name="symbolFlow" Visibility="Hidden" />
+                </Grid>
+                <Border Style="{StaticResource StdBorder}">
+                    <local:SymbolProgress />
+                </Border>
+            </UniformGrid>
         </DockPanel>
     </Grid>
 </local:ContentPage>

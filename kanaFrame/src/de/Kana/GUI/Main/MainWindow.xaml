@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KanaFrame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="490" Width="735">
     <DockPanel>
         <Frame x:Name="_mainFrame"  NavigationUIVisibility="Hidden" Navigated="_mainFrame_Navigated" IsTabStop="False"/>
     </DockPanel>

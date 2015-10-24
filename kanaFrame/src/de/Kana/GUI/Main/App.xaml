@@ -8,6 +8,7 @@
         <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Height" Value="30" />
+            <Setter Property="MinWidth" Value="40" />
         </Style>
 
         <Style x:Key="MainBtn" TargetType="{x:Type Button}">

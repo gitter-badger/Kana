@@ -42,7 +42,7 @@ namespace KanaFrame
             int len = Text.Length;
             if (len == prevL + 1)
             {
-                Console.Out.WriteLine("Before: Text: " + Text + " Length: " + Text.Length);
+                //Console.Out.WriteLine("Before: Text: " + Text + " Length: " + Text.Length);
                 int sel = SelectionStart;
                 int n1 = Math.Max(sel - maxL, 0);
                 int n2 = Math.Min(sel - n1, maxL);
@@ -51,7 +51,7 @@ namespace KanaFrame
                 sb.Insert(n1, Kana.Transwriting.Trie.ReplaceToKana(Text.Substring(n1, n2)));
                 Text = sb.ToString();
                 SelectionStart = sel + (Text.Length - prevL - 1);
-                Console.Out.WriteLine("After: Text: " + Text + " Length: " + Text.Length + " prevL: " + prevL + " len: " + len + " sel: " + sel);
+                //Console.Out.WriteLine("After: Text: " + Text + " Length: " + Text.Length + " prevL: " + prevL + " len: " + len + " sel: " + sel);
             }
             prevL = Text.Length;
             textLock = false;
