@@ -95,7 +95,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -109,7 +108,6 @@
   <ItemGroup>
     <Compile Include="src\de\Kana\Engine\Alphabet\Alphabet.cs" />
     <Compile Include="src\de\Kana\Engine\Alphabet\Syllable.cs" />
-    <Compile Include="src\de\Kana\Util\Symbol\SymbolUtils.cs" />
     <Compile Include="src\de\Kana\Engine\Trainer\Matcher.cs" />
     <Compile Include="src\de\Kana\Engine\Trainer\VocableStream.cs" />
     <Compile Include="src\de\Kana\Engine\Transwriting\ITrie.cs" />

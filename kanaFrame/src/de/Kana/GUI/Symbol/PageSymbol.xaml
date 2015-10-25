@@ -15,7 +15,7 @@
                     <Button x:Name="btnSettings" Content="Settings" Click="btnSettings_Click"/>
                 </StackPanel>
             </Border>
-            <local:TranslationBox x:Name="box" DockPanel.Dock="Bottom" Margin="10" Height="40" TranslationEnabled="True" TextChanged="box_TextChanged"/>
+            <local:TranslationBox x:Name="box" DockPanel.Dock="Bottom" Margin="10" Height="40" />
 
             <UniformGrid Rows="1" Columns="2">
                 <Grid>
@@ -23,7 +23,7 @@
                     <local:SymbolFlow x:Name="symbolFlow" Visibility="Hidden" />
                 </Grid>
                 <Border Style="{StaticResource StdBorder}">
-                    <local:SymbolProgress x:Name="progress"/>
+                    <local:SymbolProgress x:Name="symbolProgress"/>
                 </Border>
             </UniformGrid>
         </DockPanel>

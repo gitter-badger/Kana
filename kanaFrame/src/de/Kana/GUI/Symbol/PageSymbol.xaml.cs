@@ -12,8 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-using Kana.Symbol;
+using System.Threading;
 
 namespace KanaFrame
 {
@@ -22,56 +21,57 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbol : ContentPage
     {
-        private SettingsPage _pageSymbolSettings;
+        public new SymbolSettings Settings { get { return settings; } }
+        private SymbolSettings settings;
         private UserProgress userProgress;
+        private PageSymbolSettings _pageSymbolSettings;
 
         public PageSymbol()
         {
             InitializeComponent();
-            userProgress = new UserProgress(SymbolUtils.Hiragana);
             _pageSymbolSettings = new PageSymbolSettings(this);
-            progress.OnSymbolClick += Progress_OnSymbolClick;
+            userProgress = new UserProgress(Hiragana.Alphabet);
+            symbolProgress.OnSymbolClick += Progress_OnSymbolClick;
             foreach (var item in userProgress.Progress)
+                item.OnChange += Progress_OnChange;
+            string _init = "お";
+            foreach (var item in (from sylls
+                                  in Hiragana.Alphabet
+                                  where sylls.Flags.HasFlag(SymbolFlags.None)
+                                  select sylls.Characters))
             {
-                userProgress[item.Key].OnChange += PageSymbol_OnChange;
+                userProgress[item].Enabled = true;
+                if (String.Compare(item, _init) == 0) break;
+
             }
+            symbolMatch.p.SetUserProgress(userProgress);
         }
 
-        private void PageSymbol_OnChange(object sender, EventArgs e)
+        private void Progress_OnChange(object sender, EventArgs e)
         {
             var item = (Progress)sender;
-            ColorBorder border = progress.Borders[item.Symbol.Characters];
-            border.setColor(item.Enabled ? Color.FromRgb(50, 100, 150) : Color.FromArgb(0, 0, 0, 0));
+            ISymbolIcon border = symbolProgress.Borders[item.Symbol.Characters];
+            border.Color = item.ToColor();
         }
 
         private void Progress_OnSymbolClick(object sender, EventArgs e)
         {
             bool stat = true;
-            foreach (var item in SymbolProgress.HIRAGANA)
+            foreach (var item in (from sylls
+                                  in Hiragana.Alphabet
+                                  where sylls.Flags.HasFlag(SymbolFlags.None)
+                                  select sylls.Characters))
                 if (String.Compare(item, SymbolProgress.EMPTY) != 0)
                 {
                     userProgress[item].Enabled = stat;
                     if (String.Compare((string)sender, item) == 0) stat = false;
                 }
+            symbolMatch.p.UpdatePool();
         }
 
-        public override void ApplySettings(Dictionary<string, string> settings)
+        public override void ApplySettings(Settings settings)
         {
-            switch (settings[Settings.MODE_KEY])
-            {
-                case PageSymbolSettings.MODE_FLOW:
-                    Console.WriteLine("Mode: Flow");
-                    symbolFlow.Visibility = Visibility.Visible;
-                    symbolMatch.Visibility = Visibility.Hidden;
-                    break;
-                case PageSymbolSettings.MODE_MATCH:
-                    Console.WriteLine("Mode: Match");
-                    symbolFlow.Visibility = Visibility.Hidden;
-                    symbolMatch.Visibility = Visibility.Visible;
-                    break;
-                default: break;
-            }
-            currentSettings = settings;
+            this.settings = (SymbolSettings)settings;
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -86,18 +86,13 @@ namespace KanaFrame
 
         public override void HandleOnNavigate(KanaPage last)
         {
-            if (currentSettings == null)
+            if (settings == null)
                 if (last == _pageSymbolSettings)
-                    _pageSymbolSettings.DefaultSettings(true);
+                    ApplySettings(settings = new SymbolSettings());
                 else
                     MainWindow.Navigation.Navigate(_pageSymbolSettings);
             else
                 box.Focus();
         }
-
-        private void box_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-    }
-}
+    }//END class PageSymbol
+}//END namespace

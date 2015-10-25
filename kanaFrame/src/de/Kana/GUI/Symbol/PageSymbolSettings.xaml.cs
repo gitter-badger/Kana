@@ -20,58 +20,16 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbolSettings : SettingsPage
     {
-        public const string MODE_MATCH = "MATCH";
-        public const string MODE_FLOW = "FLOW";
-        public const string OPTION_KEY_MARKS = "MARKS";
-        public const string OPTION_KEY_LEARNING = "LEARNING";
+        private SymbolSettings settings;
+        private PageSymbol _parent;
 
-        private ContentPage _parent;
-
-        public PageSymbolSettings(ContentPage _parent)
+        public PageSymbolSettings(PageSymbol _parent)
         {
             InitializeComponent();
             this._parent = _parent;
-            currentSettings = GetDefaultSettings();
+            this.settings = (settings != null) ? settings.Clone() : new SymbolSettings();
             SetGUI();
         }
-
-        protected override void ReadGUI()
-        {
-            if ((bool)rbtnMatch.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_MATCH;
-            else if ((bool)rbtnFlow.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_FLOW;
-            currentSettings[OPTION_KEY_LEARNING] = (chboxLeaning.IsChecked == true) ? Settings.OPTION_TRUE : Settings.OPTION_FALSE;
-            currentSettings[OPTION_KEY_MARKS] = (chboxMarks.IsChecked == true) ? Settings.OPTION_TRUE : Settings.OPTION_FALSE;
-        }
-
-        protected override void SetGUI()
-        {
-            switch (currentSettings[Settings.MODE_KEY])
-            {
-                case MODE_MATCH: rbtnMatch.IsChecked = true; break;
-                case MODE_FLOW: rbtnFlow.IsChecked = true; break;
-            }
-            chboxLeaning.IsChecked = Settings.ToBool(currentSettings[OPTION_KEY_LEARNING]);
-            chboxMarks.IsChecked = Settings.ToBool(currentSettings[OPTION_KEY_MARKS]);
-        }
-
-        public override void DefaultSettings(bool apply)
-        {
-            currentSettings = GetDefaultSettings();
-            SetGUI();
-            if (apply) _parent.ApplySettings(currentSettings);
-        }
-
-        public override Dictionary<string, string> GetDefaultSettings()
-        {
-            Dictionary<string, string> result = new Dictionary<string, string>();
-            result[Settings.MODE_KEY] = MODE_MATCH;
-            result[OPTION_KEY_LEARNING] = Settings.OPTION_TRUE;
-            result[OPTION_KEY_MARKS] = Settings.OPTION_FALSE;
-            return result;
-        }
-
-
-
 
         public override void HandleKeyDown(KeyEventArgs e)
         {
@@ -80,8 +38,26 @@ namespace KanaFrame
                 btnCancel_Click(null, null);
         }
 
+        public override void HandleOnNavigate(KanaPage last)
+        {
+            settings = _parent.Settings != null
+                ? (SymbolSettings)_parent.Settings.Clone()
+                : new SymbolSettings();
+        }
 
+        protected override void ReadGUI()
+        {
+            settings[Settings.KEY_MODE] = (rbtnFlow.IsChecked == true) ? SymbolSettings.MODE_FLOW : SymbolSettings.MODE_MATCH;
+            settings.Bool(SymbolSettings.KEY_LEARNING, chboxLeaning.IsChecked == true);
+            settings.Bool(SymbolSettings.KEY_MARKS, chboxMarks.IsChecked == true);
+        }
 
+        protected override void SetGUI()
+        {
+            if (settings.Equals(Settings.KEY_MODE, SymbolSettings.MODE_MATCH)) rbtnMatch.IsChecked = true; else rbtnFlow.IsChecked = true;
+            chboxLeaning.IsChecked = settings.Bool(SymbolSettings.KEY_LEARNING);
+            chboxMarks.IsChecked = settings.Bool(SymbolSettings.KEY_MARKS);
+        }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -92,7 +68,7 @@ namespace KanaFrame
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
             ReadGUI();
-            _parent.ApplySettings(currentSettings);
+            _parent.ApplySettings(settings);
             MainWindow.Navigation.NavigateBack();
         }
     }

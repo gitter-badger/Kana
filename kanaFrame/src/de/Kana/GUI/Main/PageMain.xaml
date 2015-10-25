@@ -11,14 +11,16 @@
     <Grid>
         <DockPanel>
             <Border DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="4" Margin="0" Padding="0" />
+            <Viewbox>
             <UniformGrid Rows="3" Columns="1">
                 <UniformGrid.Resources>
                     <Style TargetType="Button" BasedOn="{StaticResource MainBtn}"/>
                 </UniformGrid.Resources>
-                <Button x:Name="btnSymbol" Click="btnSymbol_Click" Content="Symbol"/>
-                <Button x:Name="btnVocabulary" Content="Vocabulary"/>
-                <Button x:Name="btnKanji" Content="Kanji"/>
-            </UniformGrid>
+                    <Button x:Name="btnSymbol" Click="btnSymbol_Click" Content="Symbol"/>
+                    <Button x:Name="btnVocabulary" Content="Vocabulary"/>
+                    <Button x:Name="btnKanji" Content="Kanji"/>
+                </UniformGrid>
+            </Viewbox>
         </DockPanel>
     </Grid>
 </local:MenuPage>

@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:KanaFrame"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="200">
-    <UniformGrid x:Name="grid" Rows="10" Columns="5" Initialized="UniformGrid_Initialized">
+    <UniformGrid x:Name="grid" Rows="10" Columns="5">
     </UniformGrid>
 </UserControl>

@@ -20,91 +20,95 @@ namespace KanaFrame
     /// </summary>
     public partial class SymbolProgress : UserControl
     {
-        public const string EMPTY = "";
-        public static readonly string[] HIRAGANA = new string[] { "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ", "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と", "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ", "ま", "み", "む", "め", "も", "や", EMPTY, "ゆ", EMPTY, "よ", "ら", "り", "る", "れ", "ろ", "わ", EMPTY, "ん", EMPTY, "を" };
+        public static readonly string EMPTY = "";
         public event EventHandler OnSymbolClick;
-        public Dictionary<string, ColorBorder> Borders { get; private set; }
+
+        public Dictionary<string, ISymbolIcon> Borders { get; private set; }
 
         public SymbolProgress()
         {
-            Borders = new Dictionary<string, ColorBorder>();
             InitializeComponent();
-        }
-
-        private void UniformGrid_Initialized(object sender, EventArgs e)
-        {
-            foreach (string str in HIRAGANA)
+            List<string> list = new List<string>();
+            list.AddRange(new String[] { "や", "ゆ", "わ", "ん" }); //to add some spaces in the grid after these symbols
+            Borders = new Dictionary<string, ISymbolIcon>();
+            foreach (HiraSyllable syll in (from sylls
+                                           in Hiragana.Alphabet
+                                           where sylls.Flags.HasFlag(SymbolFlags.None)
+                                           select sylls))
             {
-                grid.Children.Add(NewBorderedButtonThing(str));
-            }
-        }
-
-        private Border NewBorderedButtonThing(string str)
-        {
-            var border = new ColorBorder();
-            var box = new Viewbox();
-            var lbl = new TextBlock();
-            border.Style = FindResource("StdBorder") as Style;
-            border.Margin = new Thickness(0);
-            border.Padding = new Thickness(0);
-            if (String.Compare(EMPTY, str) != 0)
-            {
+                string str = syll.Characters;
+                BlinkingBorder border = new BlinkingBorder(syll.Characters);
                 border.PreviewMouseDown += Border_PreviewMouseDown;
                 Borders[str] = border;
+                grid.Children.Add(border);
+                if (list.Contains(str)) grid.Children.Add(new BlinkingBorder(""));
             }
-            box.Margin = new Thickness(0);
-            lbl.Margin = new Thickness(0);
-
-            lbl.Text = str;
-            box.Child = lbl;
-            border.Child = box;
-            return border;
         }
 
         private void Border_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            string str = ((TextBlock)((Viewbox)(((ColorBorder)sender).Child)).Child).Text;
+            string str = ((BlinkingBorder)sender).GetText();
             if (OnSymbolClick != null) OnSymbolClick(str, new EventArgs());
         }
-    }
+    }//END class SymbolProgress
 
 
 
 
 
 
-    public class ColorBorder : Border
+    public class BlinkingBorder : Border, ISymbolIcon
     {
         private Color color;
         public Color Color
         {
             get { return color; }
-            set { setColor(value); }
+            set { color = value; Background = new SolidColorBrush(Color); }
         }
 
-        public void setColor(Color color)
-        {
-            this.color = color;
-            Background = new SolidColorBrush(Color);
-        }
-        public ColorBorder() : base()
+        public BlinkingBorder(String str) : base()
         {
             Color = Color.FromArgb(0, 0, 0, 0);
             Background = new SolidColorBrush(color);
+            Style = FindResource("StdBorder") as Style;
+            Margin = new Thickness(0);
+            Padding = new Thickness(0);
+
+            var box = new Viewbox();
+            var lbl = new TextBlock();
+            box.Margin = new Thickness(0);
+            lbl.Margin = new Thickness(0);
+
+            lbl.Text = str;
+            box.Child = lbl;
+            Child = box;
         }
+
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
-            Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            if (GetText() != SymbolProgress.EMPTY)
+                Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
+
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
-            Background = new SolidColorBrush(Color);
+            if (GetText() != SymbolProgress.EMPTY)
+                Background = new SolidColorBrush(Color);
         }
-        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
+
+        public string GetText()
         {
-            base.OnPreviewMouseLeftButtonUp(e);
+            return ((TextBlock)((Viewbox)Child).Child).Text;
         }
-    }
-}
+    }//END class ColorBorder
+
+
+
+    public interface ISymbolIcon
+    {
+        Color Color { get; set; }
+        string GetText();
+    }//END interface ISymbolIcon
+}//END namespace

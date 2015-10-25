@@ -22,18 +22,7 @@ namespace KanaFrame
     /// </summary>
     public partial class MainWindow : Window, INavigate
     {
-        private static INavigate navigation;
-        public static INavigate Navigation
-        {
-            get
-            {
-                return navigation;
-            }
-            protected set
-            {
-                navigation = value;
-            }
-        }
+        public static INavigate Navigation { get; protected set; }
 
         private KanaPage page;
 

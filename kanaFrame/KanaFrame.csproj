@@ -98,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\de\Kana\GUI\Common\Settings.cs" />
+    <Compile Include="src\de\Kana\GUI\Symbol\Hiragana.cs" />
+    <Compile Include="src\de\Kana\GUI\Symbol\Progress.cs" />
+    <Compile Include="src\de\Kana\GUI\Symbol\Symbol.cs" />
     <Compile Include="src\de\Kana\GUI\Symbol\SymbolFlow.xaml.cs">
       <DependentUpon>SymbolFlow.xaml</DependentUpon>
     </Compile>
@@ -107,16 +111,17 @@
     <Compile Include="src\de\Kana\GUI\Symbol\SymbolProgress.xaml.cs">
       <DependentUpon>SymbolProgress.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\de\Kana\GUI\Symbol\SymbolSettings.cs" />
     <Page Include="src\de\Kana\GUI\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="src\de\Kana\GUI\Common\Components.cs" />
+    <Compile Include="src\de\Kana\GUI\Common\TranslationBox.cs" />
     <Compile Include="src\de\Kana\GUI\Main\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\Common\PageCommons.cs" />
+    <Compile Include="src\de\Kana\GUI\Common\PageBase.cs" />
     <Compile Include="src\de\Kana\GUI\Main\PageMain.xaml.cs">
       <DependentUpon>PageMain.xaml</DependentUpon>
     </Compile>
