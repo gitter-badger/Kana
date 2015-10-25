@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using Kana.Symbol;
+
 namespace KanaFrame
 {
     /// <summary>
@@ -21,13 +23,36 @@ namespace KanaFrame
     public partial class PageSymbol : ContentPage
     {
         private SettingsPage _pageSymbolSettings;
+        private UserProgress userProgress;
 
         public PageSymbol()
         {
             InitializeComponent();
+            userProgress = new UserProgress(SymbolUtils.Hiragana);
             _pageSymbolSettings = new PageSymbolSettings(this);
+            progress.OnSymbolClick += Progress_OnSymbolClick;
+            foreach (var item in userProgress.Progress)
+            {
+                userProgress[item.Key].OnChange += PageSymbol_OnChange;
+            }
         }
 
+        private void PageSymbol_OnChange(object sender, EventArgs e)
+        {
+            var item = (Progress)sender;
+            ColorBorder border = progress.Borders[item.Symbol.Characters];
+            border.setColor(item.Enabled ? Color.FromRgb(50, 100, 150) : Color.FromArgb(0, 0, 0, 0));
+        }
+
+        private void Progress_OnSymbolClick(object sender, EventArgs e)
+        {
+            foreach (var item in SymbolProgress.HIRAGANA)
+                if (String.Compare(item, SymbolProgress.EMPTY) != 0)
+                {
+                    userProgress[item].Enabled = true;
+                    if (String.Compare((string)sender, item) == 0) break;
+                }
+        }
 
         public override void ApplySettings(Dictionary<string, string> settings)
         {
@@ -67,6 +92,11 @@ namespace KanaFrame
                     MainWindow.Navigation.Navigate(_pageSymbolSettings);
             else
                 box.Focus();
+        }
+
+        private void box_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

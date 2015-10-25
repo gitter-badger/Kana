@@ -22,6 +22,8 @@ namespace KanaFrame
     {
         public const string MODE_MATCH = "MATCH";
         public const string MODE_FLOW = "FLOW";
+        public const string OPTION_KEY_MARKS = "MARKS";
+        public const string OPTION_KEY_LEARNING = "LEARNING";
 
         private ContentPage _parent;
 
@@ -30,12 +32,15 @@ namespace KanaFrame
             InitializeComponent();
             this._parent = _parent;
             currentSettings = GetDefaultSettings();
+            SetGUI();
         }
 
         protected override void ReadGUI()
         {
             if ((bool)rbtnMatch.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_MATCH;
             else if ((bool)rbtnFlow.IsChecked) currentSettings[Settings.MODE_KEY] = MODE_FLOW;
+            currentSettings[OPTION_KEY_LEARNING] = (chboxLeaning.IsChecked == true) ? Settings.OPTION_TRUE : Settings.OPTION_FALSE;
+            currentSettings[OPTION_KEY_MARKS] = (chboxMarks.IsChecked == true) ? Settings.OPTION_TRUE : Settings.OPTION_FALSE;
         }
 
         protected override void SetGUI()
@@ -45,6 +50,8 @@ namespace KanaFrame
                 case MODE_MATCH: rbtnMatch.IsChecked = true; break;
                 case MODE_FLOW: rbtnFlow.IsChecked = true; break;
             }
+            chboxLeaning.IsChecked = Settings.ToBool(currentSettings[OPTION_KEY_LEARNING]);
+            chboxMarks.IsChecked = Settings.ToBool(currentSettings[OPTION_KEY_MARKS]);
         }
 
         public override void DefaultSettings(bool apply)
@@ -58,6 +65,8 @@ namespace KanaFrame
         {
             Dictionary<string, string> result = new Dictionary<string, string>();
             result[Settings.MODE_KEY] = MODE_MATCH;
+            result[OPTION_KEY_LEARNING] = Settings.OPTION_TRUE;
+            result[OPTION_KEY_MARKS] = Settings.OPTION_FALSE;
             return result;
         }
 

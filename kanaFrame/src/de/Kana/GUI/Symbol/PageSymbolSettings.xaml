@@ -7,30 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="PageSymbolSettings">
-    <StackPanel>
-        <Border Style="{StaticResource StdBorder}" Margin="5">
-            <StackPanel>
-                <StackPanel HorizontalAlignment="Left">
-                    <Label Style="{StaticResource HeaderLabel2}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
-                    <Separator DockPanel.Dock="Top" />
-                </StackPanel>
-                <RadioButton x:Name="rbtnMatch" Margin="5" IsChecked="True">Match</RadioButton>
-                <RadioButton x:Name="rbtnFlow" Margin="5">Flow</RadioButton>
-            </StackPanel>
-        </Border>
-
-        <Border Style="{StaticResource StdBorder}" Margin="5">
-            <StackPanel>
-                <StackPanel HorizontalAlignment="Left">
-                    <Label Style="{StaticResource HeaderLabel2}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
-                    <Separator DockPanel.Dock="Top" />
-                </StackPanel>
-                <CheckBox x:Name="chboxLeaning" Margin="5" Content="Progressive Learning"/>
-                <CheckBox x:Name="chboxMarks" Margin="5" Content="Use Diacritical Marks"/>
-            </StackPanel>
-        </Border>
-
-        <Border Style="{StaticResource StdBorder}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5">
+    <DockPanel LastChildFill="False">
+        <Border Style="{StaticResource StdBorder}" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="5">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btnCancel" Content="Cancel" Click="btnCancel_Click"/>
@@ -38,5 +16,30 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-    </StackPanel>
+
+
+        <Border Style="{StaticResource StdBorder}" Margin="5" DockPanel.Dock="Top">
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel2}" Content="テストー　タイプー" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <RadioButton x:Name="rbtnMatch" Margin="5">Match</RadioButton>
+                <RadioButton x:Name="rbtnFlow" Margin="5">Flow</RadioButton>
+            </StackPanel>
+        </Border>
+
+
+        <Border Style="{StaticResource StdBorder}" Margin="5" DockPanel.Dock="Top">
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel2}" Content="オプション" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <CheckBox x:Name="chboxLeaning" Margin="5" Content="Progressive Learning"/>
+                <CheckBox x:Name="chboxMarks" Margin="5" Content="Use Diacritical Marks"/>
+            </StackPanel>
+        </Border>
+
+    </DockPanel>
 </local:SettingsPage>

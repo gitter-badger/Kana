@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:KanaFrame"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Label>Match</Label>
-    </Grid>
+    <Viewbox>
+        <Label x:Name="lblContent">Match</Label>
+    </Viewbox>
 </UserControl>

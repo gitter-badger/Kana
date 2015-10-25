@@ -24,5 +24,10 @@ namespace KanaFrame
         {
             InitializeComponent();
         }
+
+        public void setText(string str)
+        {
+            lblContent.Content = str;
+        }
     }
 }
