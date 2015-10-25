@@ -46,11 +46,12 @@ namespace KanaFrame
 
         private void Progress_OnSymbolClick(object sender, EventArgs e)
         {
+            bool stat = true;
             foreach (var item in SymbolProgress.HIRAGANA)
                 if (String.Compare(item, SymbolProgress.EMPTY) != 0)
                 {
-                    userProgress[item].Enabled = true;
-                    if (String.Compare((string)sender, item) == 0) break;
+                    userProgress[item].Enabled = stat;
+                    if (String.Compare((string)sender, item) == 0) stat = false;
                 }
         }
 
