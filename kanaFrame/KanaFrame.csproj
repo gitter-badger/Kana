@@ -112,6 +112,13 @@
       <DependentUpon>SymbolProgress.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\de\Kana\GUI\Symbol\SymbolSettings.cs" />
+    <Compile Include="src\de\Kana\GUI\Vocabulary\VocabularyPage.xaml.cs">
+      <DependentUpon>VocabularyPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="src\de\Kana\GUI\Vocabulary\VocabularySettings.cs" />
+    <Compile Include="src\de\Kana\GUI\Vocabulary\VocabularySettingsPage.xaml.cs">
+      <DependentUpon>VocabularySettingsPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="src\de\Kana\GUI\Main\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -125,11 +132,11 @@
     <Compile Include="src\de\Kana\GUI\Main\PageMain.xaml.cs">
       <DependentUpon>PageMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\Symbol\PageSymbol.xaml.cs">
-      <DependentUpon>PageSymbol.xaml</DependentUpon>
+    <Compile Include="src\de\Kana\GUI\Symbol\SymbolPage.xaml.cs">
+      <DependentUpon>SymbolPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="src\de\Kana\GUI\Symbol\PageSymbolSettings.xaml.cs">
-      <DependentUpon>PageSymbolSettings.xaml</DependentUpon>
+    <Compile Include="src\de\Kana\GUI\Symbol\SymbolSettingsPage.xaml.cs">
+      <DependentUpon>SymbolSettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="src\de\Kana\GUI\Main\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -139,11 +146,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="src\de\Kana\GUI\Symbol\PageSymbol.xaml">
+    <Page Include="src\de\Kana\GUI\Symbol\SymbolPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="src\de\Kana\GUI\Symbol\PageSymbolSettings.xaml">
+    <Page Include="src\de\Kana\GUI\Symbol\SymbolSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +165,14 @@
     <Page Include="src\de\Kana\GUI\Symbol\SymbolProgress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\de\Kana\GUI\Vocabulary\VocabularyPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="src\de\Kana\GUI\Vocabulary\VocabularySettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

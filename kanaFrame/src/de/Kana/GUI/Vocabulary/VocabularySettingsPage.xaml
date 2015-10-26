@@ -1,0 +1,61 @@
+﻿<local:SettingsPage x:Class="KanaFrame.VocabularySettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KanaFrame"
+      mc:Ignorable="d" 
+      d:DesignHeight="400" d:DesignWidth="300"
+      Title="PageSymbolSettings">
+    <DockPanel LastChildFill="False">
+        <Border Style="{StaticResource StdBorder}" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Margin="5">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnCancel" Content="Cancel" Click="btnCancel_Click"/>
+                    <Button x:Name="btnOk" Content="OK" IsDefault="True" Click="btnOk_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+
+        <Border Style="{StaticResource StdBorder}" Margin="5" DockPanel.Dock="Top" Padding="0">
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel2}" Content="Titel1" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <RadioButton x:Name="rbtn2" Margin="5">Radiobutton1</RadioButton>
+                <RadioButton x:Name="rbtn1" Margin="5">Radiobutton2</RadioButton>
+            </StackPanel>
+        </Border>
+
+
+        <Border Style="{StaticResource StdBorder}" Margin="5" DockPanel.Dock="Top" Padding="0">
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel2}" Content="Titel2" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <CheckBox x:Name="chbox1" Margin="5" Content="Checkbox1"/>
+            </StackPanel>
+        </Border>
+
+        <Border Style="{StaticResource StdBorder}" Margin="5" DockPanel.Dock="Top" Padding="0">
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Style="{StaticResource HeaderLabel2}" Content="Titel3" HorizontalAlignment="Left"/>
+                    <Separator DockPanel.Dock="Top" />
+                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0">Some Text: </Label>
+                    <TextBox x:Name="box" Grid.Column="1" Margin="5"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+    </DockPanel>
+</local:SettingsPage>

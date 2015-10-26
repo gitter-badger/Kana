@@ -17,7 +17,7 @@
                     <Style TargetType="Button" BasedOn="{StaticResource MainBtn}"/>
                 </UniformGrid.Resources>
                     <Button x:Name="btnSymbol" Click="btnSymbol_Click" Content="Symbol"/>
-                    <Button x:Name="btnVocabulary" Content="Vocabulary"/>
+                    <Button x:Name="btnVocabulary" Content="Vocabulary" Click="btnVocabulary_Click"/>
                     <Button x:Name="btnKanji" Content="Kanji"/>
                 </UniformGrid>
             </Viewbox>

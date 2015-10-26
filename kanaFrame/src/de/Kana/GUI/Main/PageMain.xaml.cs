@@ -21,16 +21,23 @@ namespace KanaFrame
     public partial class PageMain : MenuPage
     {
         private ContentPage _pageSymbol;
+        private ContentPage _pageVocabulary;
 
         public PageMain()
         {
             InitializeComponent();
             _pageSymbol = new SymbolPage();
+            _pageVocabulary = new VocabularyPage();
         }
 
         private void btnSymbol_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Navigation.Navigate(_pageSymbol);
+        }
+
+        private void btnVocabulary_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Navigation.Navigate(_pageVocabulary);
         }
     }
 }
