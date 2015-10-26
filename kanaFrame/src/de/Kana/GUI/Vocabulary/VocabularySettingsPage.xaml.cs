@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace KanaFrame
 {
     /// <summary>
-    /// Interaction logic for PageSymbolSettings.xaml
+    /// Interaction logic for VocabularySettingsPage.xaml
     /// </summary>
     public partial class VocabularySettingsPage : SettingsPage
     {

@@ -17,7 +17,7 @@ using System.Threading;
 namespace KanaFrame
 {
     /// <summary>
-    /// Interaction logic for PageSymbol.xaml
+    /// Interaction logic for VocabularyPage.xaml
     /// </summary>
     public partial class VocabularyPage : ContentPage
     {
