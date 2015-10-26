@@ -27,8 +27,6 @@ namespace KanaFrame
         {
             InitializeComponent();
             this._parent = _parent;
-            this.settings = (settings != null) ? settings.Clone() : new SymbolSettings();
-            SetGUI();
         }
 
         public override void HandleKeyDown(KeyEventArgs e)
@@ -40,9 +38,10 @@ namespace KanaFrame
 
         public override void HandleOnNavigate(KanaPage last)
         {
-            settings = _parent.Settings != null
-                ? (SymbolSettings)_parent.Settings.Clone()
+            settings = _parent.Options != null
+                ? _parent.Options.Clone()
                 : new SymbolSettings();
+            SetGUI();
         }
 
         protected override void ReadGUI()

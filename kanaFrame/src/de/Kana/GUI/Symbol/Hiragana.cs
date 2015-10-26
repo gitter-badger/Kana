@@ -8,8 +8,13 @@ namespace KanaFrame
 {
     public class Hiragana
     {
-        private static LinkedList<HiraSyllable> alphabet { get; }
+        private static LinkedList<HiraSyllable> alphabet;
         public static IEnumerable<HiraSyllable> Alphabet { get { return alphabet; } }
+        private static IEnumerable<HiraSyllable> stdSet;
+        public static IEnumerable<HiraSyllable> StdSet { get { return stdSet; } private set { stdSet = value; } }
+        private static Dictionary<string, HiraSyllable> stdMap;
+        public static Dictionary<string, HiraSyllable> StdMap { get { return stdMap; } private set { stdMap = value; } }
+
         static Hiragana()
         {
             alphabet = new LinkedList<HiraSyllable>();
@@ -59,6 +64,18 @@ namespace KanaFrame
             alphabet.AddLast(new HiraSyllable("わ", "wa", SymbolFlags.None));
             alphabet.AddLast(new HiraSyllable("ん", "n", SymbolFlags.None));
             alphabet.AddLast(new HiraSyllable("を", "wo", SymbolFlags.None));
+            StdSet = from sylls
+                     in Alphabet
+                     where sylls.Flags.HasFlag(SymbolFlags.None)
+                     select sylls;
+            StdMap = StdSet.ToDictionary(p => p.Characters);
+        }
+
+        public static bool StartsWithStdHira(string str)
+        {
+            foreach (char c in str)
+                return (StdMap.ContainsKey(str)) ? true : false;
+            return false;
         }
     }
 }

@@ -15,7 +15,7 @@
                     <Button x:Name="btnSettings" Content="Settings" Click="btnSettings_Click"/>
                 </StackPanel>
             </Border>
-            <local:TranslationBox x:Name="box" DockPanel.Dock="Bottom" Margin="10" Height="40" />
+            <local:TranslationBox x:Name="box" DockPanel.Dock="Bottom" Margin="10" Height="40" Translation="box_Translation"/>
 
             <UniformGrid Rows="1" Columns="2">
                 <Grid>

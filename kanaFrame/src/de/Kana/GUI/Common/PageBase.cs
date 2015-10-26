@@ -26,7 +26,7 @@ namespace KanaFrame
 
     public abstract class ContentPage : KanaPage
     {
-        public Settings Settings { get; }
+        public Settings Options { get; }
         public ContentPage() { }
         public abstract void ApplySettings(Settings settings);
     }

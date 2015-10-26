@@ -18,9 +18,8 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for SymbolMatch.xaml
     /// </summary>
-    public partial class SymbolMatch : UserControl, SymbolMatchPublic
+    public partial class SymbolMatch : UserControl
     {
-        public SymbolMatchPublic p { get; }
         public HiraSyllable Symbol { get; protected set; }
         public string Text { get { return text.Text; } set { text.Text = value; } }
         private HiraSyllable[] Symbols { get; set; }
@@ -30,7 +29,6 @@ namespace KanaFrame
         {
             InitializeComponent();
             random = new Random();
-            p = this;
         }
 
         public void Next()
@@ -56,11 +54,4 @@ namespace KanaFrame
         }
 
     }//END class SymbolMatch
-
-    public interface SymbolMatchPublic
-    {
-        void Next();
-        void SetUserProgress(UserProgress value);
-        void UpdatePool();
-    }
 }//END namespace

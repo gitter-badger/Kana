@@ -21,7 +21,7 @@ namespace KanaFrame
     /// </summary>
     public partial class PageSymbol : ContentPage
     {
-        public new SymbolSettings Settings { get { return settings; } }
+        public new SymbolSettings Options { get { return settings; } }
         private SymbolSettings settings;
         private UserProgress userProgress;
         private PageSymbolSettings _pageSymbolSettings;
@@ -35,16 +35,13 @@ namespace KanaFrame
             foreach (var item in userProgress.Progress)
                 item.OnChange += Progress_OnChange;
             string _init = "お";
-            foreach (var item in (from sylls
-                                  in Hiragana.Alphabet
-                                  where sylls.Flags.HasFlag(SymbolFlags.None)
-                                  select sylls.Characters))
+            foreach (var item in Hiragana.StdSet)
             {
-                userProgress[item].Enabled = true;
-                if (String.Compare(item, _init) == 0) break;
+                userProgress[item.Characters].Enabled = true;
+                if (String.Compare(item.Characters, _init) == 0) break;
 
             }
-            symbolMatch.p.SetUserProgress(userProgress);
+            symbolMatch.SetUserProgress(userProgress);
         }
 
         private void Progress_OnChange(object sender, EventArgs e)
@@ -57,21 +54,28 @@ namespace KanaFrame
         private void Progress_OnSymbolClick(object sender, EventArgs e)
         {
             bool stat = true;
-            foreach (var item in (from sylls
-                                  in Hiragana.Alphabet
-                                  where sylls.Flags.HasFlag(SymbolFlags.None)
-                                  select sylls.Characters))
-                if (String.Compare(item, SymbolProgress.EMPTY) != 0)
+            foreach (var item in Hiragana.StdSet)
+                if (String.Compare(item.Characters, SymbolProgress.EMPTY) != 0)
                 {
-                    userProgress[item].Enabled = stat;
-                    if (String.Compare((string)sender, item) == 0) stat = false;
+                    userProgress[item.Characters].Enabled = stat;
+                    if (String.Compare((string)sender, item.Characters) == 0) stat = false;
                 }
-            symbolMatch.p.UpdatePool();
+            symbolMatch.UpdatePool();
         }
 
         public override void ApplySettings(Settings settings)
         {
             this.settings = (SymbolSettings)settings;
+            if (settings.Equals(Settings.KEY_MODE, SymbolSettings.MODE_MATCH))
+            {
+                symbolMatch.Visibility = Visibility.Visible;
+                symbolFlow.Visibility = Visibility.Hidden;
+                symbolMatch.Next();
+            }
+            else
+            {
+
+            }
         }
 
         private void btnBack_Click(object sender, RoutedEventArgs e)
@@ -94,5 +98,29 @@ namespace KanaFrame
             else
                 box.Focus();
         }
+
+        private void box_Translation(object sender, RoutedEventArgs e)
+        {
+            Console.Out.WriteLine("Box: " + box.Text + " Match: " + symbolMatch.Text + " Hira=" + Hiragana.StartsWithStdHira(box.Text));
+            if (settings.Equals(Settings.KEY_MODE, SymbolSettings.MODE_MATCH))
+            {
+                if (Hiragana.StartsWithStdHira(box.Text))
+                {
+                    if (String.Compare(symbolMatch.Text, box.Text) == 0)
+                        userProgress[symbolMatch.Text].Correct();
+                    else
+                    {
+                        userProgress[symbolMatch.Text].Wrong();
+                        userProgress[box.Text].Wrong();
+                    }
+                    symbolMatch.Next();
+                    box.Text = "";
+                }
+            }
+            else
+            {
+
+            }
+        }//END box_Translation
     }//END class PageSymbol
 }//END namespace

@@ -31,10 +31,7 @@ namespace KanaFrame
             List<string> list = new List<string>();
             list.AddRange(new String[] { "や", "ゆ", "わ", "ん" }); //to add some spaces in the grid after these symbols
             Borders = new Dictionary<string, ISymbolIcon>();
-            foreach (HiraSyllable syll in (from sylls
-                                           in Hiragana.Alphabet
-                                           where sylls.Flags.HasFlag(SymbolFlags.None)
-                                           select sylls))
+            foreach (HiraSyllable syll in Hiragana.StdSet)
             {
                 string str = syll.Characters;
                 BlinkingBorder border = new BlinkingBorder(syll.Characters);

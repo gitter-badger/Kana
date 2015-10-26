@@ -12,24 +12,28 @@ namespace KanaFrame
     {
         private int prevL = 0;
         private bool textLock = false;
-
-        public TranslationBox()
-        {
-            TranslationEnabled = true;
-        }
-
-
         public bool TranslationEnabled
         {
             get { return (bool)GetValue(TranslationEnabledProperty); }
             set { SetValue(TranslationEnabledProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for TranslationEnabled.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TranslationEnabledProperty =
             DependencyProperty.Register("TranslationEnabled", typeof(bool), typeof(TranslationBox));
 
+        public static readonly RoutedEvent TranslationEvent =
+            EventManager.RegisterRoutedEvent("Translation", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationBox));
 
+        // Provide CLR accessors for the event
+        public event RoutedEventHandler Translation
+        {
+            add { AddHandler(TranslationEvent, value); }
+            remove { RemoveHandler(TranslationEvent, value); }
+        }
+
+        public TranslationBox()
+        {
+            TranslationEnabled = true;
+        }
 
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
@@ -55,6 +59,8 @@ namespace KanaFrame
             }
             prevL = Text.Length;
             textLock = false;
+            RoutedEventArgs newEventArgs = new RoutedEventArgs(TranslationEvent);
+            RaiseEvent(newEventArgs);
         }
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
