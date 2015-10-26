@@ -18,12 +18,12 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbolSettings.xaml
     /// </summary>
-    public partial class PageSymbolSettings : SettingsPage
+    public partial class SymbolSettingsPage : SettingsPage
     {
         private SymbolSettings settings;
-        private PageSymbol _parent;
+        private SymbolPage _parent;
 
-        public PageSymbolSettings(PageSymbol _parent)
+        public SymbolSettingsPage(SymbolPage _parent)
         {
             InitializeComponent();
             this._parent = _parent;

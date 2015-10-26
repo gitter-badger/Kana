@@ -19,17 +19,17 @@ namespace KanaFrame
     /// <summary>
     /// Interaction logic for PageSymbol.xaml
     /// </summary>
-    public partial class PageSymbol : ContentPage
+    public partial class SymbolPage : ContentPage
     {
         public new SymbolSettings Options { get { return settings; } }
         private SymbolSettings settings;
         private UserProgress userProgress;
-        private PageSymbolSettings _pageSymbolSettings;
+        private SymbolSettingsPage _pageSymbolSettings;
 
-        public PageSymbol()
+        public SymbolPage()
         {
             InitializeComponent();
-            _pageSymbolSettings = new PageSymbolSettings(this);
+            _pageSymbolSettings = new SymbolSettingsPage(this);
             userProgress = new UserProgress(Hiragana.Alphabet);
             symbolProgress.OnSymbolClick += Progress_OnSymbolClick;
             foreach (var item in userProgress.Progress)

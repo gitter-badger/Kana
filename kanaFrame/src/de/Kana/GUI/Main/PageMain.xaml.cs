@@ -25,7 +25,7 @@ namespace KanaFrame
         public PageMain()
         {
             InitializeComponent();
-            _pageSymbol = new PageSymbol();
+            _pageSymbol = new SymbolPage();
         }
 
         private void btnSymbol_Click(object sender, RoutedEventArgs e)
